@@ -1,36 +1,36 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { Slider } from "@/components/ui/slider"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  Play,
-  Pause,
-  RotateCcw,
-  Settings,
-  Code,
-  Zap,
   Activity,
-  CheckCircle,
   AlertCircle,
-  Layers,
+  CheckCircle,
+  Code,
   Cpu,
   Database,
-  Network,
   Eye,
+  Layers,
+  Network,
+  Pause,
+  Play,
+  RotateCcw,
+  Settings,
+  Zap,
 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
 
 interface BlueprintNode {
   id: string
   name: string
-  type: "event" | "function" | "branch" | "variable" | "output"
+  type: string
   x: number
   y: number
-  status: "idle" | "executing" | "completed" | "error"
+  status: string
   connections: string[]
   executionTime?: number
 }
@@ -40,11 +40,11 @@ interface ExecutionLog {
   nodeId: string
   nodeName: string
   timestamp: Date
-  status: "started" | "completed" | "error"
+  status: string
   message: string
 }
 
-export default function BlueprintNodeLayout() {
+const BlueprintNodeLayout = () => {
   const [nodes, setNodes] = useState<BlueprintNode[]>([
     {
       id: "start",
@@ -607,3 +607,5 @@ export default function BlueprintNodeLayout() {
     </div>
   )
 }
+
+export default BlueprintNodeLayout

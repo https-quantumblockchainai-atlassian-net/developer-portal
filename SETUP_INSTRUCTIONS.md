@@ -1,116 +1,76 @@
 # Thoth Guardian: Setup Instructions
 
-This guide provides detailed instructions on how to set up and run the Thoth Guardian Cybersecurity Shield platform locally for development and testing.
+This guide will walk you through setting up the Thoth Guardian web application on your local machine.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed on your system:
+Before you begin, ensure you have the following installed:
 
-*   **Node.js:** Version 18.x or higher. You can download it from [nodejs.org](https://nodejs.org/).
-*   **npm** (Node Package Manager) or **Yarn** or **pnpm**: These come bundled with Node.js or can be installed separately.
-    *   To install Yarn: `npm install -g yarn`
-    *   To install pnpm: `npm install -g pnpm`
-*   **Git:** For cloning the repository. You can download it from [git-scm.com](https://git-scm.com/).
+*   **Node.js**: Version 18.x or higher. You can download it from [nodejs.org](https://nodejs.org/).
+*   **npm** (Node Package Manager): Comes bundled with Node.js.
+*   **Git**: For cloning the repository. You can download it from [git-scm.com](https://git-scm.com/).
 
-## Step-by-Step Setup
+## 1. Clone the Repository
 
-### 1. Clone the Repository
-
-Open your terminal or command prompt and run the following command to clone the Thoth Guardian repository to your local machine:
+Open your terminal or command prompt and run the following command to clone the Thoth Guardian repository:
 
 \`\`\`bash
 git clone https://github.com/your-username/thoth-guardian.git
-\`\`\`
-
-Replace `https://github.com/your-username/thoth-guardian.git` with the actual repository URL if it's different.
-
-### 2. Navigate to the Project Directory
-
-Change your current directory to the newly cloned project folder:
-
-\`\`\`bash
 cd thoth-guardian
 \`\`\`
 
-### 3. Install Dependencies
+## 2. Install Dependencies
 
-Install all the necessary project dependencies. You can use npm, Yarn, or pnpm:
-
-**Using npm:**
+Navigate into the cloned project directory and install the necessary Node.js dependencies:
 
 \`\`\`bash
 npm install
 \`\`\`
 
-**Using Yarn:**
+This command will install all the packages listed in `package.json`, including Next.js, React, Tailwind CSS, Framer Motion, and shadcn/ui components.
+
+## 3. Configure Environment Variables (Optional)
+
+The project might use environment variables for certain features (e.g., API keys for external integrations). If there's a `.env.local.example` file, duplicate it and rename it to `.env.local`:
 
 \`\`\`bash
-yarn install
+cp .env.local.example .env.local
 \`\`\`
 
-**Using pnpm:**
+Then, open `.env.local` and fill in any required values. For this project, most functionalities are simulated client-side, so external API keys might not be strictly necessary for basic operation, but check the code for any specific `process.env.NEXT_PUBLIC_...` variables.
 
-\`\`\`bash
-pnpm install
-\`\`\`
+## 4. Run the Development Server
 
-This command will download and install all the packages listed in the `package.json` file.
-
-### 4. Configure Environment Variables (Optional, for advanced features)
-
-Some features might require environment variables (e.g., API keys for external services). While the core demo runs without them, if you plan to extend functionality, create a `.env.local` file in the root of your project:
-
-\`\`\`
-# Example .env.local content
-# NEXT_PUBLIC_YOUR_API_KEY=your_api_key_here
-# DATABASE_URL=your_database_connection_string
-\`\`\`
-
-**Note:** Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Do not store sensitive keys without this prefix if they are not meant for client-side use.
-
-### 5. Run the Development Server
-
-Start the Next.js development server. This will compile the application and make it accessible locally:
-
-**Using npm:**
+Once the dependencies are installed, you can start the development server:
 
 \`\`\`bash
 npm run dev
 \`\`\`
 
-**Using Yarn:**
+This will start the Next.js development server. You can now open your web browser and navigate to `http://localhost:3000` (or the port indicated in your terminal) to see the Thoth Guardian application running.
+
+The development server supports hot-reloading, so any changes you make to the code will automatically reflect in your browser.
+
+## 5. Build for Production (Optional)
+
+To create a production-optimized build of the application, run:
 
 \`\`\`bash
-yarn dev
+npm run build
 \`\`\`
 
-**Using pnpm:**
+This command compiles and optimizes your application for deployment. The output will be in the `.next` directory.
+
+## 6. Start Production Server (Optional)
+
+After building, you can start the production server locally to test the optimized build:
 
 \`\`\`bash
-pnpm dev
+npm run start
 \`\`\`
 
-The terminal will show output indicating that the server is running, typically on `http://localhost:3000`.
+This will serve the production build.
 
-### 6. Access the Application
+---
 
-Open your web browser and navigate to:
-
-\`\`\`
-http://localhost:3000
-\`\`\`
-
-You should now see the Thoth Guardian Cybersecurity Shield platform running in your browser.
-
-### 7. Explore and Develop
-
-You are now ready to explore the existing features and begin developing new components. Any changes you make to the source code will trigger a hot reload in your browser, allowing for a fast development workflow.
-
-## Common Issues & Troubleshooting
-
-*   **`command not found: next`**: Ensure `npm install` (or `yarn install`/`pnpm install`) completed successfully and that `next` is listed in your `package.json` dependencies.
-*   **Port already in use**: If port 3000 is already in use, Next.js will usually suggest another port. You can also specify a port manually: `npm run dev -- -p 4000`.
-*   **Build errors**: Check your terminal for specific error messages. Often, these are syntax errors or missing imports.
-*   **Missing components**: If you see errors related to `@/components/ui/` imports, ensure your `tsconfig.json` has the correct `paths` configuration for `@/`.
-
-If you encounter persistent issues, please refer to the `BEST_PRACTICES.md` or open a support ticket.
+You are now ready to explore and contribute to the Thoth Guardian project! If you encounter any issues, please refer to the `README.md` or `BEST_PRACTICES.md` for further guidance.

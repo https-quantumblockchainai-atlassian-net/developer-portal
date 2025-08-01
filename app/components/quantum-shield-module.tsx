@@ -438,7 +438,7 @@ export default function QuantumShieldModule() {
                     {[0, 1, 2, 3, 4, 5].map((i) => (
                       <motion.div
                         key={`line-${i}`}
-                        className="absolute top-1/2 left-1/2 w-20 h-px bg-gradient-to-r from-purple-400 to-cyan-400 opacity-60"
+                        className="absolute inset-0 w-20 h-px bg-gradient-to-r from-purple-400 to-cyan-400 opacity-60"
                         style={{
                           transformOrigin: "0 50%",
                           transform: `rotate(${i * 60}deg)`,

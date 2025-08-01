@@ -453,7 +453,7 @@ export default function MultiModalAnalysis() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     variant="outline"
-                    className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                    className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth bg-transparent"
                   >
                     <ImageIcon className="h-4 w-4 mr-2" />
                     Calibrate Vision
@@ -463,7 +463,7 @@ export default function MultiModalAnalysis() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     variant="outline"
-                    className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth"
+                    className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
                   >
                     <Mic className="h-4 w-4 mr-2" />
                     Audio Tuning
@@ -473,7 +473,7 @@ export default function MultiModalAnalysis() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     variant="outline"
-                    className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth"
+                    className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
                   >
                     <Network className="h-4 w-4 mr-2" />
                     Sync Streams
@@ -483,7 +483,7 @@ export default function MultiModalAnalysis() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     variant="outline"
-                    className="w-full border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 transition-smooth"
+                    className="w-full border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 transition-smooth bg-transparent"
                   >
                     <Zap className="h-4 w-4 mr-2" />
                     Boost Performance

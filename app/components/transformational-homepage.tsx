@@ -214,14 +214,14 @@ export default function TransformationalHomepage() {
             </Button>
             <Button
               variant="outline"
-              className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 px-8 py-3 text-lg transition-smooth"
+              className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 px-8 py-3 text-lg transition-smooth bg-transparent"
             >
               <Download className="h-5 w-5 mr-2" />
               Download SDK
             </Button>
             <Button
               variant="outline"
-              className="border-purple-500 text-purple-500 hover:bg-purple-500/10 px-8 py-3 text-lg transition-smooth"
+              className="border-purple-500 text-purple-500 hover:bg-purple-500/10 px-8 py-3 text-lg transition-smooth bg-transparent"
             >
               <ExternalLink className="h-5 w-5 mr-2" />
               Documentation
@@ -435,7 +435,7 @@ export default function TransformationalHomepage() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 px-8 py-3 text-lg transition-smooth"
+                  className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 px-8 py-3 text-lg transition-smooth bg-transparent"
                 >
                   <Users className="h-5 w-5 mr-2" />
                   Join Community

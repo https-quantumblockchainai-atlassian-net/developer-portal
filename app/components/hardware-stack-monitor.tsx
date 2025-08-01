@@ -392,7 +392,7 @@ export default function HardwareStackMonitor() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
-                className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth bg-transparent"
               >
                 <Thermometer className="h-4 w-4 mr-2" />
                 Thermal Management
@@ -402,7 +402,7 @@ export default function HardwareStackMonitor() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
-                className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth"
+                className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
               >
                 <Activity className="h-4 w-4 mr-2" />
                 Load Balancing
@@ -412,7 +412,7 @@ export default function HardwareStackMonitor() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
-                className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth"
+                className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 System Restart

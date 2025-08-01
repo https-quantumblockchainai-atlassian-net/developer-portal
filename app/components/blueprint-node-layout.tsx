@@ -1,38 +1,49 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Slider } from "@/components/ui/slider"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { Slider } from "@/components/ui/slider"
 import {
-  Activity,
-  AlertCircle,
-  CheckCircle,
-  Code,
-  Cpu,
-  Database,
-  Eye,
-  Layers,
-  Network,
-  Pause,
   Play,
+  Pause,
   RotateCcw,
   Settings,
+  Code,
   Zap,
+  Activity,
+  CheckCircle,
+  AlertCircle,
+  Layers,
+  Cpu,
+  Database,
+  Network,
+  Eye,
+  Share2,
+  Maximize2,
+  Sparkles,
+  Atom,
+  HeartHandshake,
 } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
 
 interface BlueprintNode {
   id: string
   name: string
-  type: string
+  type: "event" | "function" | "branch" | "variable" | "output"
   x: number
   y: number
-  status: string
+  status: "idle" | "executing" | "completed" | "error"
   connections: string[]
   executionTime?: number
+  // New properties for upgraded nodes
+  interoperability: string[] // Systems it can interact with
+  scalability: "low" | "medium" | "high" | "elastic" // How well it scales
+  transformationEffect: string // The core effect it has
+  quantumSignature?: string // Unique quantum identifier
+  divineAlignmentScore?: number // Score for alignment with divine principles (0-100)
 }
 
 interface ExecutionLog {
@@ -40,11 +51,11 @@ interface ExecutionLog {
   nodeId: string
   nodeName: string
   timestamp: Date
-  status: string
+  status: "started" | "completed" | "error"
   message: string
 }
 
-const BlueprintNodeLayout = () => {
+export default function BlueprintNodeLayout() {
   const [nodes, setNodes] = useState<BlueprintNode[]>([
     {
       id: "start",
@@ -54,6 +65,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["detect"],
+      interoperability: ["System Core"],
+      scalability: "high",
+      transformationEffect: "System Initialization",
+      quantumSignature: "Thoth-Genesis-001",
+      divineAlignmentScore: 95,
     },
     {
       id: "detect",
@@ -63,6 +79,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["branch"],
+      interoperability: ["AI Training Pipeline", "Quantum Shield Module"],
+      scalability: "elastic",
+      transformationEffect: "Anomaly Identification",
+      quantumSignature: "Emerald-Scan-Q002",
+      divineAlignmentScore: 92,
     },
     {
       id: "branch",
@@ -72,6 +93,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["data", "firewall", "ui"],
+      interoperability: ["Divine Alignment Orchestration"],
+      scalability: "medium",
+      transformationEffect: "Decision Routing",
+      quantumSignature: "Aura-Logic-B003",
+      divineAlignmentScore: 88,
     },
     {
       id: "data",
@@ -81,6 +107,11 @@ const BlueprintNodeLayout = () => {
       y: 100,
       status: "idle",
       connections: ["log"],
+      interoperability: ["Data Integrity Matrix"],
+      scalability: "high",
+      transformationEffect: "Data Restoration",
+      quantumSignature: "Chronos-Heal-D004",
+      divineAlignmentScore: 90,
     },
     {
       id: "firewall",
@@ -90,6 +121,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["log"],
+      interoperability: ["Threat Detection Panel", "Quantum Shield Module"],
+      scalability: "elastic",
+      transformationEffect: "Perimeter Fortification",
+      quantumSignature: "Aegis-Shield-F005",
+      divineAlignmentScore: 93,
     },
     {
       id: "ui",
@@ -99,6 +135,11 @@ const BlueprintNodeLayout = () => {
       y: 300,
       status: "idle",
       connections: ["log"],
+      interoperability: ["UMG Widget Mockup", "Feedback Loops System"],
+      scalability: "medium",
+      transformationEffect: "Interface Rejuvenation",
+      quantumSignature: "Lumin-Display-U006",
+      divineAlignmentScore: 85,
     },
     {
       id: "log",
@@ -108,6 +149,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["health"],
+      interoperability: ["Community Hub", "AI Communications Hub"],
+      scalability: "high",
+      transformationEffect: "Event Archiving",
+      quantumSignature: "Veritas-Log-L007",
+      divineAlignmentScore: 98,
     },
     {
       id: "health",
@@ -117,6 +163,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["check"],
+      interoperability: ["Hardware Stack Monitor"],
+      scalability: "medium",
+      transformationEffect: "System State Synchronization",
+      quantumSignature: "Vitality-Sync-H008",
+      divineAlignmentScore: 91,
     },
     {
       id: "check",
@@ -126,6 +177,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: ["heal", "pulse"],
+      interoperability: ["Aura AI Companion System"],
+      scalability: "high",
+      transformationEffect: "Diagnostic Evaluation",
+      quantumSignature: "Oracle-Check-C009",
+      divineAlignmentScore: 94,
     },
     {
       id: "heal",
@@ -135,6 +191,11 @@ const BlueprintNodeLayout = () => {
       y: 100,
       status: "idle",
       connections: ["output"],
+      interoperability: ["Niagara FX Healing States"],
+      scalability: "medium",
+      transformationEffect: "Core System Restoration",
+      quantumSignature: "Phoenix-Heal-R010",
+      divineAlignmentScore: 96,
     },
     {
       id: "pulse",
@@ -144,6 +205,11 @@ const BlueprintNodeLayout = () => {
       y: 300,
       status: "idle",
       connections: ["output"],
+      interoperability: ["Universal Laws Portal"],
+      scalability: "low", // A unique, focused effect
+      transformationEffect: "Energetic Recalibration",
+      quantumSignature: "Harmonic-Pulse-P011",
+      divineAlignmentScore: 99,
     },
     {
       id: "output",
@@ -153,6 +219,11 @@ const BlueprintNodeLayout = () => {
       y: 200,
       status: "idle",
       connections: [],
+      interoperability: ["All Modules"],
+      scalability: "elastic",
+      transformationEffect: "Process Finalization",
+      quantumSignature: "Cosmic-Closure-O012",
+      divineAlignmentScore: 100,
     },
   ])
 
@@ -195,15 +266,15 @@ const BlueprintNodeLayout = () => {
           nodeName: node.name,
           timestamp: new Date(),
           status: "started",
-          message: `Executing ${node.name}...`,
+          message: `Executing ${node.name} (Interoperability: ${node.interoperability.join(", ")}, Scalability: ${node.scalability}, Transformation: ${node.transformationEffect})...`,
         }
         setExecutionLogs((prev) => [startLog, ...prev])
 
         // Wait for execution time
         await new Promise((resolve) => setTimeout(resolve, executionSpeed[0]))
 
-        // Complete node execution
-        const success = Math.random() > 0.1 // 90% success rate
+        // Simulate success/failure based on divine alignment and quantum signature
+        const success = Math.random() < (node.divineAlignmentScore || 90) / 100 // Higher alignment, higher success
         const status = success ? "completed" : "error"
 
         setNodes((prev) => prev.map((n) => (n.id === nodeId ? { ...n, status, executionTime: undefined } : n)))
@@ -215,7 +286,9 @@ const BlueprintNodeLayout = () => {
           nodeName: node.name,
           timestamp: new Date(),
           status: success ? "completed" : "error",
-          message: success ? `${node.name} completed successfully` : `${node.name} encountered an error`,
+          message: success
+            ? `${node.name} completed successfully. Divine Alignment: ${node.divineAlignmentScore}%`
+            : `${node.name} encountered an error. Quantum Signature: ${node.quantumSignature}`,
         }
         setExecutionLogs((prev) => [completeLog, ...prev])
 
@@ -255,7 +328,7 @@ const BlueprintNodeLayout = () => {
 
     const statusOverrides = {
       executing: "border-cyan-400 bg-cyan-900/30 animate-pulse",
-      completed: "border-green-400 bg-green-900/30",
+      completed: "border-emerald-400 bg-emerald-900/30", // Changed to emerald for completion
       error: "border-red-400 bg-red-900/30",
     }
 
@@ -448,16 +521,44 @@ const BlueprintNodeLayout = () => {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className={`absolute w-32 h-12 rounded-lg border-2 ${getNodeColor(
+                      className={`absolute w-48 h-auto p-2 rounded-lg border-2 ${getNodeColor(
                         node.type,
                         node.status,
-                      )} flex items-center justify-center cursor-pointer hover:scale-105 transition-smooth`}
+                      )} flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-smooth text-center`}
                       style={{ left: node.x, top: node.y }}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 mb-1">
                         {getNodeIcon(node.type)}
                         <span className="text-xs font-medium text-white truncate">{node.name}</span>
                         {getStatusIcon(node.status)}
+                      </div>
+                      <div className="text-xs text-gray-400 mb-1">
+                        <span className="flex items-center justify-center">
+                          <Share2 className="h-3 w-3 mr-1" />
+                          {node.interoperability.length > 1
+                            ? `${node.interoperability[0]}...`
+                            : node.interoperability[0]}
+                        </span>
+                        <span className="flex items-center justify-center">
+                          <Maximize2 className="h-3 w-3 mr-1" />
+                          {node.scalability}
+                        </span>
+                        <span className="flex items-center justify-center">
+                          <Sparkles className="h-3 w-3 mr-1" />
+                          {node.transformationEffect}
+                        </span>
+                        {node.quantumSignature && (
+                          <span className="flex items-center justify-center">
+                            <Atom className="h-3 w-3 mr-1" />
+                            {node.quantumSignature}
+                          </span>
+                        )}
+                        {node.divineAlignmentScore !== undefined && (
+                          <span className="flex items-center justify-center">
+                            <HeartHandshake className="h-3 w-3 mr-1" />
+                            {node.divineAlignmentScore}% Divine
+                          </span>
+                        )}
                       </div>
                     </motion.div>
                   ))}
@@ -607,5 +708,3 @@ const BlueprintNodeLayout = () => {
     </div>
   )
 }
-
-export default BlueprintNodeLayout

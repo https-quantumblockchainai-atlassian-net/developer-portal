@@ -308,7 +308,7 @@ export default function TransformationalHomepage() {
                     <p className="text-gray-300 mb-4">{feature.description}</p>
                     <Button
                       variant="outline"
-                      className={`border-emerald-500 text-emerald-500 hover:bg-emerald-500/10 w-full transition-smooth`}
+                      className={`border-emerald-500 text-emerald-500 hover:bg-emerald-500/10 w-full transition-smooth bg-transparent`}
                     >
                       Explore <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>

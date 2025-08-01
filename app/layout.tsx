@@ -2,37 +2,30 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "./components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
+import { ThemeProvider } from "@/components/theme-provider"
+import { MultilingualProvider } from "./components/multilingual-provider" // Import the provider
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Thoth Emerald Cybersecurity Shield",
-  description: "AI-Powered Quantum-Enhanced Multi-Dimensional Security Ecosystem",
-  keywords: "cybersecurity, AI, quantum, machine learning, threat detection",
-  authors: [{ name: "Thoth Emerald Team" }],
-  openGraph: {
-    title: "Thoth Emerald Cybersecurity Shield",
-    description: "Next-generation AI cybersecurity platform",
-    type: "website",
-  },
+  title: "Thoth Guardian: UE5.7 Aura AI Shield",
+  description:
+    "Crystal Alchemist's Transformational Journey - UE5.7 • Aura AI • Quantum-Safe Polymath Intelligence • Epic Storytelling • Lions Gate Portal 888 • Divine Sovereignty",
     generator: 'v0.dev'
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
-          {children}
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
-  )
-}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <MultilingualProvider> { /* Wrap children with Mult

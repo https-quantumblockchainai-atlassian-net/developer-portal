@@ -1,232 +1,140 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
-
-interface Translation {
-  [key: string]: string | Translation
-}
-
-interface Language {
-  code: string
-  name: string
-  flag: string
-  translations: Translation
-}
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface MultilingualContextType {
-  currentLanguage: string
-  languages: Language[]
-  translate: (key: string, fallback?: string) => string
-  setLanguage: (code: string) => void
+  language: string
+  setLanguage: (lang: string) => void
+  translate: (key: string) => string
 }
 
 const MultilingualContext = createContext<MultilingualContextType | undefined>(undefined)
 
-const languages: Language[] = [
-  {
-    code: "en",
-    name: "English",
-    flag: "🇺🇸",
-    translations: {
-      dashboard: "Dashboard",
-      threatDetection: "Threat Detection",
-      quantumShield: "Quantum Shield",
-      aiTraining: "AI Training",
-      community: "Community",
-      settings: "Settings",
-      analytics: "Analytics",
-      welcome: "Welcome to Thoth Emerald",
-      systemStatus: "System Status",
-      allSystemsOperational: "All Systems Operational",
-      activeThreats: "Active Threats",
-      protectedAssets: "Protected Assets",
-      threatIntelligence: "Threat Intelligence",
-      quantumCoherence: "Quantum Coherence",
-      aiModelsActive: "AI Models Active",
-      globalUsers: "Global Users",
-      systemUptime: "System Uptime",
-      dataProcessed: "Data Processed",
-    },
+// Example translations (in a real app, this would be loaded dynamically)
+const translations: { [key: string]: { [lang: string]: string } } = {
+  welcome_message: {
+    en: "Welcome to Thoth Guardian",
+    es: "Bienvenido a Thoth Guardian",
+    fr: "Bienvenue à Thoth Guardian",
+    de: "Willkommen bei Thoth Guardian",
+    zh: "欢迎来到图特守护者",
+    ja: "トートガーディアンへようこそ",
+    ko: "토트 가디언에 오신 것을 환영합니다",
+    ar: "مرحبًا بك في حارس تحوت",
   },
-  {
-    code: "es",
-    name: "Español",
-    flag: "🇪🇸",
-    translations: {
-      dashboard: "Panel de Control",
-      threatDetection: "Detección de Amenazas",
-      quantumShield: "Escudo Cuántico",
-      aiTraining: "Entrenamiento IA",
-      community: "Comunidad",
-      settings: "Configuración",
-      analytics: "Analíticas",
-      welcome: "Bienvenido a Thoth Emerald",
-      systemStatus: "Estado del Sistema",
-      allSystemsOperational: "Todos los Sistemas Operativos",
-      activeThreats: "Amenazas Activas",
-      protectedAssets: "Activos Protegidos",
-      threatIntelligence: "Inteligencia de Amenazas",
-      quantumCoherence: "Coherencia Cuántica",
-      aiModelsActive: "Modelos IA Activos",
-      globalUsers: "Usuarios Globales",
-      systemUptime: "Tiempo de Actividad",
-      dataProcessed: "Datos Procesados",
-    },
+  shield_status: {
+    en: "Shield Status",
+    es: "Estado del Escudo",
+    fr: "Statut du Bouclier",
+    de: "Schildstatus",
+    zh: "护盾状态",
+    ja: "シールドステータス",
+    ko: "방패 상태",
+    ar: "حالة الدرع",
   },
-  {
-    code: "fr",
-    name: "Français",
-    flag: "🇫🇷",
-    translations: {
-      dashboard: "Tableau de Bord",
-      threatDetection: "Détection des Menaces",
-      quantumShield: "Bouclier Quantique",
-      aiTraining: "Formation IA",
-      community: "Communauté",
-      settings: "Paramètres",
-      analytics: "Analytiques",
-      welcome: "Bienvenue à Thoth Emerald",
-      systemStatus: "État du Système",
-      allSystemsOperational: "Tous les Systèmes Opérationnels",
-      activeThreats: "Menaces Actives",
-      protectedAssets: "Actifs Protégés",
-      threatIntelligence: "Intelligence des Menaces",
-      quantumCoherence: "Cohérence Quantique",
-      aiModelsActive: "Modèles IA Actifs",
-      globalUsers: "Utilisateurs Globaux",
-      systemUptime: "Temps de Fonctionnement",
-      dataProcessed: "Données Traitées",
-    },
+  active: {
+    en: "ACTIVE",
+    es: "ACTIVO",
+    fr: "ACTIF",
+    de: "AKTIV",
+    zh: "活跃",
+    ja: "アクティブ",
+    ko: "활성",
+    ar: "نشط",
   },
-  {
-    code: "de",
-    name: "Deutsch",
-    flag: "🇩🇪",
-    translations: {
-      dashboard: "Dashboard",
-      threatDetection: "Bedrohungserkennung",
-      quantumShield: "Quantenschild",
-      aiTraining: "KI-Training",
-      community: "Gemeinschaft",
-      settings: "Einstellungen",
-      analytics: "Analytik",
-      welcome: "Willkommen bei Thoth Emerald",
-      systemStatus: "Systemstatus",
-      allSystemsOperational: "Alle Systeme Betriebsbereit",
-      activeThreats: "Aktive Bedrohungen",
-      protectedAssets: "Geschützte Assets",
-      threatIntelligence: "Bedrohungsintelligenz",
-      quantumCoherence: "Quantenkohärenz",
-      aiModelsActive: "Aktive KI-Modelle",
-      globalUsers: "Globale Benutzer",
-      systemUptime: "Systemlaufzeit",
-      dataProcessed: "Verarbeitete Daten",
-    },
+  threat_level: {
+    en: "Threat Level",
+    es: "Nivel de Amenaza",
+    fr: "Niveau de Menace",
+    de: "Bedrohungsstufe",
+    zh: "威胁等级",
+    ja: "脅威レベル",
+    ko: "위협 수준",
+    ar: "مستوى التهديد",
   },
-  {
-    code: "zh",
-    name: "中文",
-    flag: "🇨🇳",
-    translations: {
-      dashboard: "仪表板",
-      threatDetection: "威胁检测",
-      quantumShield: "量子盾牌",
-      aiTraining: "AI训练",
-      community: "社区",
-      settings: "设置",
-      analytics: "分析",
-      welcome: "欢迎来到托特翡翠",
-      systemStatus: "系统状态",
-      allSystemsOperational: "所有系统正常运行",
-      activeThreats: "活跃威胁",
-      protectedAssets: "受保护资产",
-      threatIntelligence: "威胁情报",
-      quantumCoherence: "量子相干性",
-      aiModelsActive: "活跃AI模型",
-      globalUsers: "全球用户",
-      systemUptime: "系统正常运行时间",
-      dataProcessed: "已处理数据",
-    },
+  quantum_entanglement: {
+    en: "Quantum Entanglement",
+    es: "Entrelazamiento Cuántico",
+    fr: "Intrication Quantique",
+    de: "Quantenverschränkung",
+    zh: "量子纠缠",
+    ja: "量子もつれ",
+    ko: "양자 얽힘",
+    ar: "التشابك الكمي",
   },
-  {
-    code: "ja",
-    name: "日本語",
-    flag: "🇯🇵",
-    translations: {
-      dashboard: "ダッシュボード",
-      threatDetection: "脅威検出",
-      quantumShield: "量子シールド",
-      aiTraining: "AIトレーニング",
-      community: "コミュニティ",
-      settings: "設定",
-      analytics: "分析",
-      welcome: "トート・エメラルドへようこそ",
-      systemStatus: "システム状態",
-      allSystemsOperational: "全システム稼働中",
-      activeThreats: "アクティブな脅威",
-      protectedAssets: "保護された資産",
-      threatIntelligence: "脅威インテリジェンス",
-      quantumCoherence: "量子コヒーレンス",
-      aiModelsActive: "アクティブなAIモデル",
-      globalUsers: "グローバルユーザー",
-      systemUptime: "システム稼働時間",
-      dataProcessed: "処理されたデータ",
-    },
+  ai_training: {
+    en: "AI Training",
+    es: "Entrenamiento de IA",
+    fr: "Entraînement IA",
+    de: "KI-Training",
+    zh: "AI训练",
+    ja: "AIトレーニング",
+    ko: "AI 훈련",
+    ar: "تدريب الذكاء الاصطناعي",
   },
-]
+  threats_blocked: {
+    en: "Threats Blocked",
+    es: "Amenazas Bloqueadas",
+    fr: "Menaces Bloquées",
+    de: "Bedrohungen blockiert",
+    zh: "已阻止的威胁",
+    ja: "ブロックされた脅威",
+    ko: "차단된 위협",
+    ar: "التهديدات المحظورة",
+  },
+  self_repair: {
+    en: "Divine Quantum Self-Repair",
+    es: "Autorreparación Cuántica Divina",
+    fr: "Auto-réparation Quantique Divine",
+    de: "Göttliche Quanten-Selbstreparatur",
+    zh: "神圣量子自修复",
+    ja: "神聖量子自己修復",
+    ko: "신성 양자 자가 복구",
+    ar: "الإصلاح الذاتي الكمي الإلهي",
+  },
+  system_initialized: {
+    en: "Thoth Guardian Cybersecurity Shield Initialized",
+    es: "Escudo de Ciberseguridad Thoth Guardian Inicializado",
+    fr: "Bouclier de Cybersécurité Thoth Guardian Initialisé",
+    de: "Thoth Guardian Cybersicherheits-Schild initialisiert",
+    zh: "图特守护者网络安全护盾已初始化",
+    ja: "トートガーディアンサイバーセキュリティシールド初期化済み",
+    ko: "토트 가디언 사이버 보안 방패 초기화됨",
+    ar: "تم تهيئة درع الأمن السيبراني لحارس تحوت",
+  },
+  loading_message: {
+    en: "Activating Quantum Error Correction, Blueprint Architecture & Epic Storytelling...",
+    es: "Activando Corrección de Errores Cuánticos, Arquitectura de Planos y Narración Épica...",
+    fr: "Activation de la Correction d'Erreurs Quantiques, de l'Architecture de Plan et de la Narration Épique...",
+    de: "Quantenfehlerkorrektur, Blueprint-Architektur & Episches Storytelling werden aktiviert...",
+    zh: "正在激活量子纠错、蓝图架构和史诗故事...",
+    ja: "量子エラー訂正、ブループリントアーキテクチャ、壮大なストーリーテリングをアクティブ化中...",
+    ko: "양자 오류 수정, 청사진 아키텍처 및 서사적 스토리텔링 활성화 중...",
+    ar: "تنشيط تصحيح الأخطاء الكمية، وهندسة المخططات، وسرد القصص الملحمي...",
+  },
+}
 
-export function MultilingualProvider({ children }: { children: React.ReactNode }) {
-  const [currentLanguage, setCurrentLanguage] = useState("en")
+export function MultilingualProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState("en") // Default language
 
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("thoth-language")
-    if (savedLanguage && languages.find((lang) => lang.code === savedLanguage)) {
-      setCurrentLanguage(savedLanguage)
+  const translate = (key: string): string => {
+    const translation = translations[key]
+    if (translation && translation[language]) {
+      return translation[language]
     }
-  }, [])
-
-  const translate = (key: string, fallback?: string): string => {
-    const language = languages.find((lang) => lang.code === currentLanguage)
-    if (!language) return fallback || key
-
-    const keys = key.split(".")
-    let value: any = language.translations
-
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = value[k]
-      } else {
-        return fallback || key
-      }
-    }
-
-    return typeof value === "string" ? value : fallback || key
-  }
-
-  const setLanguage = (code: string) => {
-    setCurrentLanguage(code)
-    localStorage.setItem("thoth-language", code)
+    // Fallback to English or the key itself if translation not found
+    return translation?.en || key
   }
 
   return (
-    <MultilingualContext.Provider
-      value={{
-        currentLanguage,
-        languages,
-        translate,
-        setLanguage,
-      }}
-    >
-      {children}
-    </MultilingualContext.Provider>
+    <MultilingualContext.Provider value={{ language, setLanguage, translate }}>{children}</MultilingualContext.Provider>
   )
 }
 
-export function useTranslation() {
+export function useMultilingual() {
   const context = useContext(MultilingualContext)
   if (context === undefined) {
-    throw new Error("useTranslation must be used within a MultilingualProvider")
+    throw new Error("useMultilingual must be used within a MultilingualProvider")
   }
   return context
 }

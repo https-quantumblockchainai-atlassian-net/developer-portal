@@ -2,12 +2,38 @@
 
 ## Development Best Practices
 
-### Code Quality
+### Code Quality & Readability
 - **TypeScript First**: Use TypeScript for all new code to ensure type safety
 - **ESLint & Prettier**: Maintain consistent code formatting and catch potential issues
 - **Component Architecture**: Follow atomic design principles for React components
 - **Custom Hooks**: Extract reusable logic into custom hooks
 - **Error Boundaries**: Implement error boundaries for graceful error handling
+- **Clean Code**: Write code that is easy to understand, modify, and debug. Prioritize clarity over cleverness.
+- **Meaningful Naming**: Use descriptive and unambiguous names for variables, functions, components, and files.
+  - `calculateQuantumCoherence` instead of `calcQC`.
+  - `threatDetectionPanel.tsx` instead of `tdp.tsx`.
+- **Consistency**: Maintain a consistent coding style throughout the codebase (indentation, brace style, etc.). Utilize Prettier and ESLint for automated formatting and linting.
+- **Modularity**: Break down complex components and functions into smaller, reusable modules. Each module should have a single responsibility.
+- **Comments**: Use comments judiciously to explain *why* certain decisions were made, complex logic, or non-obvious behaviors. Avoid commenting on *what* the code does if it's self-evident.
+- **DRY (Don't Repeat Yourself):** Avoid duplicating code. Abstract common logic into reusable functions or components.
+
+### React & Next.js Development
+- **Functional Components & Hooks**: Prefer functional components with React Hooks for state management and side effects.
+- **Server Components (App Router)**: Leverage Next.js App Router's Server Components for data fetching and rendering static/server-side content to improve performance and reduce client-side bundle size.
+- **Client Components**: Use `'use client'` directive only when interactivity, browser APIs, or React Hooks are required.
+- **Data Fetching**:
+  - For Server Components: Use `fetch` API directly or a data fetching library that supports Server Components.
+  - For Client Components: Use `SWR` or `React Query` for efficient client-side data fetching, caching, and revalidation.
+- **Accessibility (A11y)**:
+  - Use semantic HTML elements.
+  - Ensure proper ARIA attributes for custom interactive components.
+  - Provide `alt` text for all meaningful images.
+  - Ensure keyboard navigability and focus management.
+- **Performance Optimization**:
+  - Lazy load components using `React.lazy` and `Suspense` for non-critical parts of the UI.
+  - Optimize image sizes and formats.
+  - Minimize re-renders using `React.memo`, `useCallback`, and `useMemo` where appropriate.
+- **State Management**: For global state, consider Zustand or Jotai for their simplicity and performance. Avoid over-engineering state management for simple cases.
 
 ### Security Development
 \`\`\`typescript
@@ -42,14 +68,7 @@ export async function POST(request: Request) {
 }
 \`\`\`
 
-### Performance Optimization
-- **Code Splitting**: Use dynamic imports for large components
-- **Memoization**: Implement React.memo and useMemo for expensive operations
-- **Virtual Scrolling**: Use virtual scrolling for large data sets
-- **Image Optimization**: Use Next.js Image component with proper sizing
-- **Bundle Analysis**: Regularly analyze bundle size and optimize
-
-## AI and Machine Learning Best Practices
+### AI and Machine Learning Best Practices
 
 ### Model Management
 \`\`\`typescript
@@ -384,7 +403,7 @@ services:
  *   useQuantumCorrelation: true,
  *   confidenceThreshold: 0.8
  * })
- * ```
+ * \`\`\`
  * 
  * @throws {ValidationError} When event data is invalid
  * @throws {QuantumError} When quantum analysis fails

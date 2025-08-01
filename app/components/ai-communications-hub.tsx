@@ -404,21 +404,21 @@ export default function AICommunicationsHub() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                  className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth bg-transparent"
                 >
                   <Network className="h-4 w-4 mr-2" />
                   Sync All Agents
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
                 >
                   <Globe className="h-4 w-4 mr-2" />
                   Global Broadcast
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth"
+                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Team Collaboration

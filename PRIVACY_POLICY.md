@@ -1,184 +1,65 @@
-# Privacy Policy - Thoth Emerald Cybersecurity Shield
+# Thoth Guardian: Privacy Policy
 
-*Last updated: January 2024*
+**Last Updated: August 1, 2025**
 
-## Introduction
+This Privacy Policy describes how Thoth Guardian ("we," "us," or "our") collects, uses, and discloses information when you use our Cybersecurity Shield platform and related services (collectively, the "Service").
 
-Thoth Emerald Cybersecurity Shield ("we," "our," or "us") is committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our cybersecurity platform.
+## 1. Information We Collect
 
-## Information We Collect
+We collect information to provide and improve our Service. The types of information we collect include:
 
-### Personal Information
-- **Account Information**: Name, email address, username, and password
-- **Profile Data**: Professional information, organization details, and preferences
-- **Contact Information**: Phone number, mailing address (if provided)
-- **Biometric Data**: Fingerprints, facial recognition data (with explicit consent)
+*   **Technical Data:** Information about your device and how you interact with the Service, such as IP address, browser type, operating system, unique device identifiers, and usage patterns. This may include data related to system performance, threat detection events, and AI model interactions.
+*   **Service Interaction Data:** Data generated through your use of the Service's features, such as blueprint execution logs, quantum state telemetry, AI communication logs, and feedback submissions. This data is primarily used for system optimization, self-healing algorithms, and enhancing the Service's core functionality.
+*   **Aggregated and Anonymized Data:** We may aggregate and anonymize data collected from your use of the Service for analytical purposes, research, and to improve our algorithms and features. This data cannot be used to identify you personally.
 
-### Technical Information
-- **System Data**: IP addresses, device information, browser type, and operating system
-- **Usage Analytics**: Platform interaction patterns, feature usage, and performance metrics
-- **Security Logs**: Access logs, authentication attempts, and security events
-- **AI Training Data**: Anonymized data used for improving our AI models
+**We do NOT collect personal identifying information (PII) such as your name, email address, or location unless explicitly provided by you for specific features (e.g., community forum participation, support requests).**
 
-### Cybersecurity Data
-- **Threat Intelligence**: Security events, attack patterns, and vulnerability data
-- **Network Information**: Traffic patterns, connection logs, and security assessments
-- **Quantum Data**: Quantum state information and cryptographic keys
+## 2. How We Use Your Information
 
-## How We Use Your Information
+We use the information we collect for the following purposes:
 
-### Primary Purposes
-- **Service Delivery**: Providing cybersecurity protection and platform functionality
-- **Account Management**: Creating and maintaining user accounts and profiles
-- **Security Enhancement**: Improving threat detection and prevention capabilities
-- **AI Development**: Training and optimizing our artificial intelligence models
+*   **To Provide and Maintain the Service:** Operating, maintaining, and improving the functionality of the Thoth Guardian Cybersecurity Shield, including its quantum, AI, and blockchain components.
+*   **System Optimization and Self-Healing:** Analyzing system performance, identifying anomalies, and enabling the Service's self-healing and adaptive learning capabilities.
+*   **Threat Detection and Mitigation:** Utilizing data to enhance our threat detection models, quantum-resistant encryption, and overall cybersecurity posture.
+*   **Research and Development:** Developing new features, improving existing algorithms, and conducting research into advanced cybersecurity, AI, and quantum computing.
+*   **Analytics:** Understanding how users interact with the Service to improve user experience and feature design.
+*   **Compliance and Legal Obligations:** Complying with applicable laws, regulations, and legal processes.
 
-### Secondary Purposes
-- **Analytics**: Understanding platform usage and improving user experience
-- **Communication**: Sending important updates, security alerts, and notifications
-- **Research**: Advancing cybersecurity research and quantum computing applications
-- **Compliance**: Meeting legal and regulatory requirements
+## 3. How We Share Your Information
 
-## Data Sharing and Disclosure
+We do not sell, rent, or trade your information with third parties for their marketing purposes. We may share information in the following circumstances:
 
-### We Do Not Sell Personal Information
-We do not sell, rent, or trade your personal information to third parties for commercial purposes.
+*   **With Service Providers:** We may share data with third-party vendors and service providers who perform services on our behalf, such as hosting, data analysis, and security services. These providers are obligated to protect your information and use it only for the purposes for which it was disclosed.
+*   **For Legal Reasons:** We may disclose information if required to do so by law or in the good faith belief that such action is necessary to comply with legal obligations, protect our rights or property, or ensure the safety of our users or the public.
+*   **Business Transfers:** In the event of a merger, acquisition, or sale of all or a portion of our assets, your information may be transferred as part of that transaction.
+*   **Aggregated or Anonymized Data:** We may share aggregated or anonymized data that cannot reasonably be used to identify you with third parties for various purposes, including research, analytics, and industry reporting.
 
-### Limited Sharing Scenarios
-- **Service Providers**: Trusted partners who assist in platform operations
-- **Legal Requirements**: When required by law, court order, or government request
-- **Security Threats**: Sharing threat intelligence to protect the broader community
-- **Business Transfers**: In case of merger, acquisition, or asset sale
+## 4. Data Security
 
-### Anonymized Data
-We may share anonymized, aggregated data for research and industry collaboration purposes.
+We implement robust security measures designed to protect your information from unauthorized access, alteration, disclosure, or destruction. These measures include:
 
-## Data Security and Protection
+*   Quantum-resistant encryption protocols.
+*   Multi-factor authentication for internal access.
+*   Regular security audits and vulnerability assessments.
+*   Access controls and data segregation.
 
-### Technical Safeguards
-- **Quantum Encryption**: Advanced quantum-resistant encryption algorithms
-- **Multi-Factor Authentication**: Biometric and token-based authentication systems
-- **Zero-Trust Architecture**: Continuous verification and least-privilege access
-- **AI-Powered Monitoring**: Real-time threat detection and response systems
+However, no method of transmission over the Internet or electronic storage is 100% secure. Therefore, while we strive to use commercially acceptable means to protect your information, we cannot guarantee its absolute security.
 
-### Organizational Measures
-- **Security Training**: Regular cybersecurity training for all personnel
-- **Access Controls**: Strict role-based access to personal information
-- **Incident Response**: Comprehensive data breach response procedures
-- **Regular Audits**: Periodic security assessments and compliance reviews
+## 5. Your Choices
 
-## International Data Transfers
+*   **Usage Data:** You may be able to adjust settings within the Service to limit the collection of certain usage data, where applicable.
+*   **Access and Correction:** If you provide any personal information (e.g., for community forums), you may have the right to access, update, or delete that information by contacting us.
 
-### Cross-Border Processing
-- Data may be processed in countries where our servers and partners are located
-- We ensure adequate protection through appropriate safeguards and agreements
-- EU data transfers comply with GDPR adequacy decisions and standard contractual clauses
+## 6. Children's Privacy
 
-### Quantum-Safe Protocols
-All international data transfers use quantum-resistant encryption protocols to ensure future-proof security.
+Our Service is not intended for individuals under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
 
-## Your Rights and Choices
+## 7. Changes to This Privacy Policy
 
-### Access and Control
-- **Data Access**: Request copies of your personal information
-- **Data Correction**: Update or correct inaccurate information
-- **Data Deletion**: Request deletion of your personal information
-- **Data Portability**: Receive your data in a machine-readable format
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes.
 
-### Privacy Controls
-- **Consent Management**: Withdraw consent for specific data processing activities
-- **Communication Preferences**: Opt-out of non-essential communications
-- **Biometric Data**: Disable biometric authentication features
-- **AI Training**: Opt-out of AI model training data usage
+## 8. Contact Us
 
-### Regional Rights
-- **GDPR Rights**: EU residents have additional rights under GDPR
-- **CCPA Rights**: California residents have rights under CCPA
-- **Other Jurisdictions**: Rights may vary based on local privacy laws
+If you have any questions about this Privacy Policy, please contact us at:
 
-## Data Retention
-
-### Retention Periods
-- **Account Data**: Retained while your account is active plus 7 years
-- **Security Logs**: Retained for 5 years for security and compliance purposes
-- **AI Training Data**: Anonymized data may be retained indefinitely
-- **Biometric Data**: Deleted within 30 days of account closure or opt-out
-
-### Secure Deletion
-All data deletion follows secure, cryptographically verified procedures to ensure complete removal.
-
-## Children's Privacy
-
-Our platform is not intended for users under 18 years of age. We do not knowingly collect personal information from children under 18. If we become aware of such collection, we will delete the information immediately.
-
-## Cookies and Tracking Technologies
-
-### Essential Cookies
-- **Authentication**: Maintaining secure login sessions
-- **Security**: Detecting and preventing security threats
-- **Functionality**: Enabling core platform features
-
-### Analytics Cookies
-- **Usage Analytics**: Understanding platform performance and user behavior
-- **A/B Testing**: Optimizing user experience through controlled experiments
-
-### Cookie Management
-You can control cookie preferences through your browser settings or our cookie management interface.
-
-## AI and Machine Learning Privacy
-
-### AI Model Training
-- Personal data used for AI training is anonymized and aggregated
-- You can opt-out of AI training data usage at any time
-- AI models are regularly audited for bias and privacy compliance
-
-### Automated Decision Making
-- We use AI for threat detection and security analysis
-- You have the right to request human review of automated decisions
-- AI decisions affecting your account can be appealed through our support system
-
-## Quantum Computing and Cryptography
-
-### Quantum Key Management
-- Quantum encryption keys are generated and stored using quantum-safe protocols
-- Key rotation follows industry best practices and regulatory requirements
-- Quantum entanglement data is processed in secure, isolated environments
-
-### Future-Proof Security
-Our cryptographic systems are designed to resist both classical and quantum computing attacks.
-
-## Updates to This Privacy Policy
-
-We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We will notify you of material changes through:
-- Email notifications to registered users
-- Prominent notices on our platform
-- Updated version dates and change logs
-
-## Contact Information
-
-### Privacy Officer
-**Email**: privacy@thoth-emerald.com  
-**Phone**: +1 (555) 123-4567  
-**Address**: 123 Quantum Street, Cyber City, CC 12345
-
-### Data Protection Officer (EU)
-**Email**: dpo@thoth-emerald.com  
-**Address**: Quantum Plaza, 456 Security Boulevard, London, UK
-
-### General Inquiries
-**Support**: support@thoth-emerald.com  
-**Security**: security@thoth-emerald.com  
-**Legal**: legal@thoth-emerald.com
-
-## Regulatory Compliance
-
-This Privacy Policy complies with:
-- General Data Protection Regulation (GDPR)
-- California Consumer Privacy Act (CCPA)
-- Health Insurance Portability and Accountability Act (HIPAA)
-- Federal Information Security Management Act (FISMA)
-- ISO 27001 and SOC 2 Type II standards
-
----
-
-*By using the Thoth Emerald Cybersecurity Shield platform, you acknowledge that you have read, understood, and agree to this Privacy Policy.*
+[support@thothguardian.com](mailto:support@thothguardian.com)

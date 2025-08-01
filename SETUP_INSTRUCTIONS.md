@@ -1,202 +1,116 @@
-# Thoth Emerald Cybersecurity Shield AI-Powered – Setup & Navigation Guide
+# Thoth Guardian: Setup Instructions
 
-Welcome to the **Thoth Emerald Cybersecurity Shield AI-Powered** app! This guide will help you install, configure, and navigate your sovereign AI agent in the Quantum Matrix content stack.
+This guide provides detailed instructions on how to set up and run the Thoth Guardian Cybersecurity Shield platform locally for development and testing.
 
----
+## Prerequisites
 
-## 🚀 1. Prerequisites
+Before you begin, ensure you have the following installed on your system:
 
-- **Node.js** v18+ (LTS recommended)
-- **npm** v8+ or **yarn** v1.22+
-- **Git** (latest version)
-- **Operating System**: Windows 10+, macOS 10.15+, or Linux (Ubuntu 20.04+)
-- **Hardware**: 8GB RAM min (16GB+ recommended), 10GB free storage, Multi-core CPU (Intel i5/AMD Ryzen 5+), GPU (optional, recommended for AI/ML acceleration)
+*   **Node.js:** Version 18.x or higher. You can download it from [nodejs.org](https://nodejs.org/).
+*   **npm** (Node Package Manager) or **Yarn** or **pnpm**: These come bundled with Node.js or can be installed separately.
+    *   To install Yarn: `npm install -g yarn`
+    *   To install pnpm: `npm install -g pnpm`
+*   **Git:** For cloning the repository. You can download it from [git-scm.com](https://git-scm.com/).
 
----
+## Step-by-Step Setup
 
-## ⚡ 2. Install & Setup
+### 1. Clone the Repository
 
-### Clone the Quantum Matrix Content Stack
+Open your terminal or command prompt and run the following command to clone the Thoth Guardian repository to your local machine:
 
 \`\`\`bash
-git clone https://github.com/q1blue/crystal-ai-content-stack.git
-cd crystal-ai-content-stack
+git clone https://github.com/your-username/thoth-guardian.git
 \`\`\`
 
-### Install All Dependencies
+Replace `https://github.com/your-username/thoth-guardian.git` with the actual repository URL if it's different.
+
+### 2. Navigate to the Project Directory
+
+Change your current directory to the newly cloned project folder:
 
 \`\`\`bash
-# Using npm
-npm install
+cd thoth-guardian
+\`\`\`
 
-# Or using yarn
+### 3. Install Dependencies
+
+Install all the necessary project dependencies. You can use npm, Yarn, or pnpm:
+
+**Using npm:**
+
+\`\`\`bash
+npm install
+\`\`\`
+
+**Using Yarn:**
+
+\`\`\`bash
 yarn install
 \`\`\`
 
----
-
-## 🧬 3. Environment Configuration
-
-Copy the example environment file and edit your secrets:
+**Using pnpm:**
 
 \`\`\`bash
-cp .env.example .env
-nano .env  # or use your preferred editor
+pnpm install
 \`\`\`
 
-Set required variables in `.env`:
-- **Database**: `NEON_DATABASE_URL`, `REDIS_URL`
-- **Authentication**: `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
-- **AI Services**: `OPENAI_API_KEY`, `HUGGINGFACE_API_KEY`
-- **Blockchain**: `SOLANA_RPC_URL`, `XRPL_SERVER`
-- **Quantum**: `QUANTUM_API_KEY`
-- **Security**: `ENCRYPTION_KEY`, `JWT_SECRET`
-- **External Services**: `VERCEL_TOKEN`, `GITHUB_TOKEN`
+This command will download and install all the packages listed in the `package.json` file.
 
-Example:
-\`\`\`env
-NEON_DATABASE_URL="your_database_connection_string"
-REDIS_URL="your_redis_connection_string"
-NEXTAUTH_SECRET="your_nextauth_secret"
-NEXTAUTH_URL="http://localhost:3000"
-OPENAI_API_KEY="your_openai_api_key"
-HUGGINGFACE_API_KEY="your_huggingface_api_key"
-SOLANA_RPC_URL="your_solana_rpc_endpoint"
-XRPL_SERVER="your_xrpl_server_url"
-QUANTUM_API_KEY="your_quantum_service_api_key"
-ENCRYPTION_KEY="your_32_character_encryption_key"
-JWT_SECRET="your_jwt_secret"
-VERCEL_TOKEN="your_vercel_deployment_token"
-GITHUB_TOKEN="your_github_access_token"
+### 4. Configure Environment Variables (Optional, for advanced features)
+
+Some features might require environment variables (e.g., API keys for external services). While the core demo runs without them, if you plan to extend functionality, create a `.env.local` file in the root of your project:
+
+\`\`\`
+# Example .env.local content
+# NEXT_PUBLIC_YOUR_API_KEY=your_api_key_here
+# DATABASE_URL=your_database_connection_string
 \`\`\`
 
----
+**Note:** Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Do not store sensitive keys without this prefix if they are not meant for client-side use.
 
-## 🏗️ 4. Build the Application
+### 5. Run the Development Server
 
-For development:
+Start the Next.js development server. This will compile the application and make it accessible locally:
 
-\`\`\`bash
-npm run build:dev
-\`\`\`
-
-For production:
-
-\`\`\`bash
-npm run build
-\`\`\`
-
----
-
-## 🤖 5. Start the Agent (Dev Mode)
+**Using npm:**
 
 \`\`\`bash
 npm run dev
 \`\`\`
 
-Visit [http://localhost:3000](http://localhost:3000) to access the main dashboard.
-
----
-
-## 🛡️ 6. Agent Features Overview
-
-- **24D Quantum Mindmap Visualization**
-- **Holographic Diagram Rendering**
-- **Auto-Sovereign AI Agent Operations**
-- **Matrix Content Stack Management**
-- **Quantum/Crystal Structure Integration**
-- **Multi-modal AI Reasoning & Analysis**
-- **Realtime Data Fusion & Analytics**
-
----
-
-## 🧩 7. Agent Navigation Menu
-
-- **Dashboard**: System status, quantum metrics, and agent activity
-- **Quantum Matrix**: Visualize mindmaps in 24D holographic space
-- **Crystal Structures**: Explore data lattices and topologies
-- **AI Agents**: Manage, deploy, and monitor sovereign agents
-- **Settings**: Platform config, integrations, and secrets
-
----
-
-## 🛠️ 8. Useful Scripts
+**Using Yarn:**
 
 \`\`\`bash
-npm test           # Run tests
-npm run lint       # Lint code
-npm run type-check # TypeScript check
-npm run format     # Format codebase
+yarn dev
 \`\`\`
 
----
+**Using pnpm:**
 
-## 🧪 9. Testing
+\`\`\`bash
+pnpm dev
+\`\`\`
 
-- **Unit Tests**: `npm test`, `npm run test:coverage`
-- **Integration**: `npm run test:integration`, `npm run test:e2e`
-- **Security**: `npm run test:security`
+The terminal will show output indicating that the server is running, typically on `http://localhost:3000`.
 
----
+### 6. Access the Application
 
-## 📈 10. Monitoring & Logging
+Open your web browser and navigate to:
 
-- **Monitor**: `npm run monitor`
-- **Logs**: `npm run logs`
-- **Performance**: `npm run perf:report`
-- **Health Check**: `npm run health:check`
-- **Config Validation**: `npm run config:validate`
+\`\`\`
+http://localhost:3000
+\`\`\`
 
----
+You should now see the Thoth Guardian Cybersecurity Shield platform running in your browser.
 
-## 🔐 11. Security Hardening
+### 7. Explore and Develop
 
-- **SSL/TLS**: `npm run ssl:generate`, `npm run ssl:test`
-- **Firewall**: `sudo ufw allow 22 80 443`
-- **Audit**: `npm audit`, `npx snyk test`, `npm run security:report`
+You are now ready to explore the existing features and begin developing new components. Any changes you make to the source code will trigger a hot reload in your browser, allowing for a fast development workflow.
 
----
+## Common Issues & Troubleshooting
 
-## 🛠️ 12. Troubleshooting
+*   **`command not found: next`**: Ensure `npm install` (or `yarn install`/`pnpm install`) completed successfully and that `next` is listed in your `package.json` dependencies.
+*   **Port already in use**: If port 3000 is already in use, Next.js will usually suggest another port. You can also specify a port manually: `npm run dev -- -p 4000`.
+*   **Build errors**: Check your terminal for specific error messages. Often, these are syntax errors or missing imports.
+*   **Missing components**: If you see errors related to `@/components/ui/` imports, ensure your `tsconfig.json` has the correct `paths` configuration for `@/`.
 
-- **Port in use**: `npx kill-port 3000` or `PORT=3001 npm run dev`
-- **Database**: `npm run db:test`, `npm run db:reset`, `npm run db:logs`
-- **Memory**: `NODE_OPTIONS="--max-old-space-size=8192" npm run dev`
-- **Debug**: `DEBUG=* npm run dev` or `DEBUG=thoth:* npm run dev`
-
----
-
-## 🧬 13. Advanced Platform Features
-
-- **Multi-Modal AI**: Text, image, audio, video, sensor fusion
-- **Quantum Shield**: Real-time quantum encryption & error correction
-- **Self-Healing Algorithms**: Automated anomaly detection & recovery
-- **Crystallized Structures**: Optimized multi-layer data organization
-- **Hardware Stack Monitor**: Real-time CPU, GPU, RAM, network analytics
-- **AI/ML Pipeline**: Automated model training, evaluation, deployment
-- **Blockchain Integration**: Solana, XRPL, Ethereum, zkEVM, ImmutableX
-- **Developer Hub**: SDKs, API docs, key management, CLI tools
-- **Community Hub**: Forums, events, open-source projects, Discord
-- **Quantum Time Travel Lab**: Temporal analysis & state saving
-
----
-
-## 📚 14. Documentation & Support
-
-- **Docs**: [https://docs.thoth-emerald.com](https://docs.thoth-emerald.com)
-- **Community**: [https://community.thoth-emerald.com](https://community.thoth-emerald.com)
-- **Discord**: [https://discord.gg/thoth-emerald](https://discord.gg/thoth-emerald)
-- **GitHub Issues**: [https://github.com/q1blue/crystal-ai-content-stack/issues](https://github.com/q1blue/crystal-ai-content-stack/issues)
-
----
-
-## 📝 15. Next Steps
-
-1. Customize your `.env` and configuration files.
-2. Integrate your AI agents and data sources.
-3. Build and extend the platform with new modules or mindmap features.
-4. Share your sovereign agent with the community!
-
----
-
-*For advanced integrations, troubleshooting, or support, see the full documentation and join our community forums for direct assistance.*
+If you encounter persistent issues, please refer to the `BEST_PRACTICES.md` or open a support ticket.

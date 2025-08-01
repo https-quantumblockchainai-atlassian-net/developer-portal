@@ -1,14 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
 import {
   Play,
@@ -20,11 +22,14 @@ import {
   Activity,
   CheckCircle,
   AlertCircle,
+  Layers,
   Cpu,
   Database,
   Network,
   Eye,
+  Sparkles,
   PlusCircle,
+  Info,
 } from "lucide-react"
 
 interface BlueprintNode {
@@ -642,4 +647,389 @@ export default function BlueprintNodeLayout() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="newNodeQuantumSignature\
+                <Label htmlFor="newNodeQuantumSignature">Quantum Signature</Label>
+                <Input
+                  id="newNodeQuantumSignature"
+                  value={newNodeQuantumSignature}
+                  onChange={(e) => setNewNodeQuantumSignature(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeDivineAlignmentScore">Divine Alignment Score</Label>
+                <Input
+                  id="newNodeDivineAlignmentScore"
+                  type="number"
+                  value={newNodeDivineAlignmentScore}
+                  onChange={(e) => setNewNodeDivineAlignmentScore(Number(e.target.value))}
+                  max={100}
+                  min={0}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeErrorType">Error Type</Label>
+                <Select
+                  value={newNodeErrorType}
+                  onValueChange={(value) => setNewNodeErrorType(value as BlueprintNode["errorType"])}
+                >
+                  <SelectTrigger id="newNodeErrorType">
+                    <SelectValue placeholder="Select error type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="data_corruption">Data Corruption</SelectItem>
+                    <SelectItem value="network_failure">Network Failure</SelectItem>
+                    <SelectItem value="logic_bug">Logic Bug</SelectItem>
+                    <SelectItem value="resource_exhaustion">Resource Exhaustion</SelectItem>
+                    <SelectItem value="quantum_decoherence">Quantum Decoherence</SelectItem>
+                    <SelectItem value="spiritual_dissonance">Spiritual Dissonance</SelectItem>
+                    <SelectItem value="external_interference">External Interference</SelectItem>
+                    <SelectItem value="temporal_anomaly">Temporal Anomaly</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeRepairMechanism">Repair Mechanism</Label>
+                <Input
+                  id="newNodeRepairMechanism"
+                  value={newNodeRepairMechanism}
+                  onChange={(e) => setNewNodeRepairMechanism(e.target.value)}
+                />
+              </div>
+            </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-6">
+              <Button onClick={handleAddNode} className="w-full bg-purple-600 hover:bg-purple-700 transition-smooth">
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Add Node to Blueprint
+              </Button>
+            </motion.div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Blueprint Visualization */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-cyan-400 flex items-center">
+              <Layers className="h-5 w-5 mr-2" />
+              Interactive Blueprint Visualization
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div
+              className="relative bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+              style={{ minHeight: "500px" }}
+            >
+              <div className="absolute inset-0 cyber-grid opacity-10"></div>
+
+              {/* Calculate SVG dimensions dynamically */}
+              {nodes.length > 0 && (
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  viewBox={`0 0 ${Math.max(...nodes.map((n) => n.x)) + 200} ${Math.max(...nodes.map((n) => n.y)) + 200}`}
+                >
+                  {/* Connection Lines */}
+                  {nodes.map((node) =>
+                    node.connections.map((connectionId) => {
+                      const targetNode = nodes.find((n) => n.id === connectionId)
+                      if (!targetNode) return null
+
+                      const startX = node.x
+                      const startY = node.y
+                      const endX = targetNode.x
+                      const endY = targetNode.y
+
+                      return (
+                        <motion.line
+                          key={`${node.id}-${connectionId}`}
+                          x1={startX}
+                          y1={startY}
+                          x2={endX}
+                          y2={endY}
+                          stroke={node.status === "executing" ? "#06b6d4" : "#64748b"}
+                          strokeWidth="2"
+                          strokeDasharray={node.status === "executing" ? "8,8" : "none"}
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 0.5, delay: 0.2 }}
+                          markerEnd="url(#arrowhead)"
+                        />
+                      )
+                    }),
+                  )}
+                  <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+                    </marker>
+                  </defs>
+                </svg>
+              )}
+
+              {/* Blueprint Nodes */}
+              {nodes.map((node) => (
+                <motion.div
+                  key={node.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className={`absolute p-3 rounded-lg shadow-lg cursor-pointer backdrop-blur-sm ${getNodeColor(node.type, node.status)}`}
+                  style={{
+                    left: node.x,
+                    top: node.y,
+                    transform: "translate(-50%, -50%)",
+                    minWidth: "192px", // w-48
+                    height: "auto",
+                  }}
+                  onClick={() => setSelectedNode(node)}
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    {getNodeIcon(node.type)}
+                    <Badge variant="outline" className="text-xs">
+                      {node.type.toUpperCase()}
+                    </Badge>
+                    {getStatusIcon(node.status)}
+                  </div>
+                  <div className="text-sm font-medium text-white leading-tight truncate w-full">{node.name}</div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    <span className="font-semibold">Effect:</span> {node.transformationEffect.substring(0, 30)}...
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    <span className="font-semibold">Alignment:</span> {node.divineAlignmentScore}%
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    <span className="font-semibold">Scalability:</span> {node.scalability}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Node Details Dialog */}
+      <Dialog open={!!selectedNode} onOpenChange={() => setSelectedNode(null)}>
+        <DialogContent className="sm:max-w-[600px] bg-slate-800 border-slate-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-emerald-400 flex items-center">
+              <Info className="h-5 w-5 mr-2" />
+              Node Details: {selectedNode?.name}
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Comprehensive properties and current status of the selected blueprint node.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedNode && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <p>
+                  <span className="font-semibold text-gray-300">ID:</span> {selectedNode.id}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Type:</span> {selectedNode.type.toUpperCase()}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Status:</span>{" "}
+                  <span
+                    className={
+                      selectedNode.status === "executing"
+                        ? "text-cyan-400"
+                        : selectedNode.status === "completed"
+                          ? "text-emerald-400"
+                          : selectedNode.status === "error"
+                            ? "text-red-400"
+                            : "text-gray-400"
+                    }
+                  >
+                    {selectedNode.status.toUpperCase()}
+                  </span>
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Position:</span> ({selectedNode.x}, {selectedNode.y})
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Scalability:</span>{" "}
+                  <Badge variant="outline" className="text-xs">
+                    {selectedNode.scalability.toUpperCase()}
+                  </Badge>
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Quantum Signature:</span>{" "}
+                  <span className="font-mono text-purple-400">{selectedNode.quantumSignature || "N/A"}</span>
+                </p>
+              </div>
+              <div className="space-y-2">
+                <p>
+                  <span className="font-semibold text-gray-300">Transformation Effect:</span>{" "}
+                  {selectedNode.transformationEffect}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Divine Alignment Score:</span>{" "}
+                  <span className="text-yellow-400">{selectedNode.divineAlignmentScore}%</span>
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Error Type:</span>{" "}
+                  <span className="text-red-400 capitalize">
+                    {selectedNode.errorType?.replace(/_/g, " ") || "None"}
+                  </span>
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Repair Mechanism:</span>{" "}
+                  {selectedNode.repairMechanism || "N/A"}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Connections:</span>{" "}
+                  {selectedNode.connections.length > 0 ? selectedNode.connections.join(", ") : "None"}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-300">Interoperability:</span>{" "}
+                  {selectedNode.interoperability.length > 0 ? selectedNode.interoperability.join(", ") : "None"}
+                </p>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end mt-6">
+            <Button onClick={() => setSelectedNode(null)} className="bg-slate-700 hover:bg-slate-600 text-white">
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Execution Log */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-purple-400 flex items-center">
+              <Code className="h-5 w-5 mr-2" />
+              Blueprint Execution Log
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64 overflow-y-auto bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
+              <AnimatePresence>
+                {executionLogs.map((log) => (
+                  <motion.div
+                    key={log.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className={`mb-1 ${
+                      log.status === "error"
+                        ? "text-red-400"
+                        : log.status === "completed"
+                          ? "text-emerald-400"
+                          : "text-gray-400"
+                    }`}
+                  >
+                    <span className="text-xs text-gray-500 mr-2">[{log.timestamp.toLocaleTimeString()}]</span>
+                    <span className="font-semibold">{log.nodeName}:</span> {log.message}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {executionLogs.length === 0 && (
+                <div className="text-center text-gray-500 py-8">
+                  No execution logs yet. Click "Execute Blueprint" to start.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* System Features */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-emerald-400 flex items-center">
+              <Sparkles className="h-5 w-5 mr-2" />
+              Blueprint System Capabilities
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">✨ Core Enhancements</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>Deep Interoperability with MetaHuman AI Companions & Ecosystems</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Dynamic Scalability for Quantum & AI Operations</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span>Profound Transformation Effects on System State</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    <span>Unique Quantum Signatures for Each Node</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    <span>Divine Alignment Score for Ethical & Optimal Performance</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">🛠️ Interactive Features</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                    <span>Detailed Node Property View (Dialog)</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
+                    <span>Dynamic Node Creation with Full Attribute Input</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                    <span>Simulated Error Types & Specific Repair Mechanisms</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                    <span>Enhanced Execution Logic with Divine Alignment Impact</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Responsive SVG Canvas for Dynamic Layouts</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 Divine Blueprint Vision</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  This blueprint system is not just a technical diagram; it's a living, evolving representation of the
+                  Thoth Guardian's core logic, infused with divine principles. Each node is a nexus of quantum
+                  intelligence, designed for profound interoperability and transformational impact across all
+                  ecosystems.
+                </p>
+                <p className="italic text-cyan-400">
+                  "Every connection is a thread of destiny. Every node, a point of divine truth."
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}

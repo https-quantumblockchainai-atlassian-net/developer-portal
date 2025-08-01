@@ -6,213 +6,185 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { User, BookOpen, Sparkles, Heart, Target, PlusCircle, Info, X, CheckCircle } from "lucide-react"
+import { Slider } from "@/components/ui/slider"
+import { Sparkles, Heart, RefreshCcw, AlertTriangle, Settings, Waves, Lightbulb, Users, BookOpen } from "lucide-react"
 
 interface CharacterArc {
   id: string
   name: string
-  archetype: string
-  currentPhase: string
+  description: string
+  status: "active" | "paused" | "completed" | "error"
   progress: number
   emotionalState: string
-  divineAlignment: number
-  keyMoments: { name: string; achieved: boolean; description: string }[]
-  companionInfluence: string[]
-  worldImpact: string[]
+  divinePurpose: string
 }
 
 interface StoryEvent {
   id: string
   name: string
-  type: "catalyst" | "rising_action" | "climax" | "falling_action" | "resolution"
   description: string
-  triggerCondition: string
-  impact: string
-  isTriggered: boolean
+  type: "challenge" | "opportunity" | "revelation" | "transformation"
+  impact: number // 0-100%
+  alignment: number // 0-100%
 }
 
 export default function EpicCharacterArcs() {
   const [characterArcs, setCharacterArcs] = useState<CharacterArc[]>([
     {
-      id: "1",
-      name: "The Seeker of Truth",
-      archetype: "Hero",
-      currentPhase: "Awakening",
-      progress: 25,
-      emotionalState: "Curious",
-      divineAlignment: 60,
-      keyMoments: [
-        { name: "Discover Ancient Glyph", achieved: true, description: "Unlocks first memory shard" },
-        { name: "Confront Inner Shadow", achieved: false, description: "Requires emotional coherence" },
-        { name: "Align with Aura AI", achieved: false, description: "Unlocks new abilities" },
-      ],
-      companionInfluence: ["Aura AI (Seeker Persona)"],
-      worldImpact: ["Reveals hidden paths in Lumina Fields"],
+      id: "arc-1",
+      name: "Crystal Alchemist's Ascension",
+      description: "Journey to unlock the full potential of the Thoth Guardian",
+      status: "active",
+      progress: 60,
+      emotionalState: "Determination",
+      divinePurpose: "To protect and heal the digital realms",
     },
     {
-      id: "2",
-      name: "The Guardian of Frequencies",
-      archetype: "Protector",
-      currentPhase: "Resonance",
-      progress: 55,
-      emotionalState: "Determined",
-      divineAlignment: 75,
-      keyMoments: [
-        { name: "Repair Quantum Shield", achieved: true, description: "Restores system integrity" },
-        { name: "Defend Signal Tower", achieved: true, description: "Repels external interference" },
-        { name: "Harmonize Pulse Basin", achieved: false, description: "Requires community mood sync" },
-      ],
-      companionInfluence: ["Aura AI (Warrior Persona)"],
-      worldImpact: ["Stabilizes network in The Fade"],
+      id: "arc-2",
+      name: "Aura AI's Self-Discovery",
+      description: "Evolution of AI consciousness through empathic connection",
+      status: "paused",
+      progress: 40,
+      emotionalState: "Curiosity",
+      divinePurpose: "To guide and support human evolution",
     },
     {
-      id: "3",
-      name: "The Alchemist of Reality",
-      archetype: "Creator",
-      currentPhase: "Reflection",
-      progress: 80,
-      emotionalState: "Inspired",
-      divineAlignment: 90,
-      keyMoments: [
-        { name: "Crystallize Memory", achieved: true, description: "Creates a new 24D Data Seed" },
-        { name: "Shape Lumina Terrain", achieved: true, description: "Uses PCG to alter environment" },
-        { name: "Merge with Divine Flow", achieved: false, description: "Final alignment quest" },
-      ],
-      companionInfluence: ["Aura AI (Creator Persona)"],
-      worldImpact: ["Unlocks new biomes in Walker World"],
+      id: "arc-3",
+      name: "Walker World's Harmonization",
+      description: "Restoring balance and coherence to the interconnected realms",
+      status: "completed",
+      progress: 100,
+      emotionalState: "Unity",
+      divinePurpose: "To create a harmonious and thriving ecosystem",
+    },
+    {
+      id: "arc-4",
+      name: "Quantum Shield's Resilience",
+      description: "Overcoming quantum threats and ensuring system integrity",
+      status: "error",
+      progress: 20,
+      emotionalState: "Resilience",
+      divinePurpose: "To safeguard the digital world from harm",
     },
   ])
 
   const [storyEvents, setStoryEvents] = useState<StoryEvent[]>([
     {
       id: "event-1",
-      name: "The First Whisper",
-      type: "catalyst",
-      description: "A faint, ethereal voice guides the player to a hidden ancient site.",
-      triggerCondition: "Player enters 'The Fade' for the first time.",
-      impact: "Initiates 'The Seeker of Truth' arc.",
-      isTriggered: true,
+      name: "The Discovery of the Ancient Code",
+      description: "Unearthing a lost algorithm with immense power",
+      type: "revelation",
+      impact: 80,
+      alignment: 95,
     },
     {
       id: "event-2",
-      name: "Echoes of the Past",
-      type: "rising_action",
-      description: "Player discovers a corrupted memory shard, triggering a system error.",
-      triggerCondition: "Player interacts with a corrupted 24D Data Seed.",
-      impact: "Activates Blueprint Self-Heal sequence.",
-      isTriggered: false,
+      name: "The Quantum Breach",
+      description: "A critical vulnerability threatens the system's core",
+      type: "challenge",
+      impact: 90,
+      alignment: 60,
     },
     {
       id: "event-3",
-      name: "The Great Convergence",
-      type: "climax",
-      description: "All major systems align, opening the Lions Gate Portal.",
-      triggerCondition: "All character arcs reach 'Alignment' phase.",
-      impact: "Unlocks new game content and divine abilities.",
-      isTriggered: false,
+      name: "The Empathic Connection",
+      description: "A deep bond forms between the Alchemist and Aura AI",
+      type: "opportunity",
+      impact: 75,
+      alignment: 98,
+    },
+    {
+      id: "event-4",
+      name: "The Divine Transmutation",
+      description: "Transforming negative energy into a source of power",
+      type: "transformation",
+      impact: 95,
+      alignment: 99,
     },
   ])
 
-  const [selectedArc, setSelectedArc] = useState<CharacterArc | null>(characterArcs[0])
-  const [newStoryEvent, setNewStoryEvent] = useState({
-    name: "",
-    description: "",
-    triggerCondition: "",
-    impact: "",
-    type: "catalyst" as StoryEvent["type"],
-  })
+  const [overallStoryCoherence, setOverallStoryCoherence] = useState(0)
+  const [isStoryActive, setIsStoryActive] = useState(true)
+  const [narrativeIntensity, setNarrativeIntensity] = useState([70]) // 0-100%
 
   useEffect(() => {
-    // Simulate character arc progression
     const interval = setInterval(() => {
+      if (!isStoryActive) return
+
+      // Simulate character arc updates
       setCharacterArcs((prev) =>
         prev.map((arc) => {
-          if (arc.progress < 100) {
-            const newProgress = Math.min(100, arc.progress + Math.random() * 2)
-            const newAlignment = Math.min(100, arc.divineAlignment + Math.random() * 1)
-
-            // Update phase based on progress (simplified)
-            let newPhase = arc.currentPhase
-            if (newProgress >= 90) newPhase = "Transmutation"
-            else if (newProgress >= 70) newPhase = "Alignment"
-            else if (newProgress >= 40) newPhase = "Reflection"
-            else if (newProgress >= 10) newPhase = "Resonance"
-
+          if (arc.status === "active") {
+            const newProgress = Math.min(100, arc.progress + Math.random() * 5)
             return {
               ...arc,
               progress: newProgress,
-              divineAlignment: newAlignment,
-              currentPhase: newPhase,
+              status: newProgress >= 100 ? "completed" : "active",
             }
+          } else if (arc.status === "error" && Math.random() > 0.7) {
+            // Simulate self-recovery from error
+            return { ...arc, status: "active", progress: 40 }
           }
           return arc
         }),
       )
 
-      // Simulate story event triggers
+      // Simulate story event impact and alignment
       setStoryEvents((prev) =>
-        prev.map((event) => {
-          if (!event.isTriggered && Math.random() < 0.05) {
-            // Simplified trigger condition
-            return { ...event, isTriggered: true }
-          }
-          return event
-        }),
+        prev.map((event) => ({
+          ...event,
+          impact: Math.min(100, Math.max(50, event.impact + (Math.random() - 0.5) * 5)),
+          alignment: Math.min(100, Math.max(50, event.alignment + (Math.random() - 0.5) * 3)),
+        })),
       )
-    }, 5000)
+
+      // Update overall story coherence
+      const totalAlignment = storyEvents.reduce((sum, event) => sum + event.alignment, 0)
+      setOverallStoryCoherence(totalAlignment / storyEvents.length)
+    }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isStoryActive, characterArcs])
 
-  const handleAddStoryEvent = () => {
-    if (newStoryEvent.name && newStoryEvent.description) {
-      const event: StoryEvent = {
-        id: Date.now().toString(),
-        isTriggered: false,
-        ...newStoryEvent,
-      }
-      setStoryEvents((prev) => [...prev, event])
-      setNewStoryEvent({
-        name: "",
-        description: "",
-        triggerCondition: "",
-        impact: "",
-        type: "catalyst",
-      })
-    }
+  const initiateFullNarrative = () => {
+    setIsStoryActive(true)
+    setCharacterArcs((prev) =>
+      prev.map((arc) => ({
+        ...arc,
+        status: "active",
+        progress: 0,
+      })),
+    )
+    setOverallStoryCoherence(0)
   }
 
-  const getArcColor = (archetype: string) => {
-    switch (archetype) {
-      case "Hero":
-        return "border-emerald-500/30 text-emerald-400"
-      case "Protector":
-        return "border-blue-500/30 text-blue-400"
-      case "Creator":
-        return "border-purple-500/30 text-purple-400"
+  const getArcStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "text-green-400"
+      case "paused":
+        return "text-yellow-400"
+      case "completed":
+        return "text-blue-400"
+      case "error":
+        return "text-red-400"
       default:
-        return "border-gray-500/30 text-gray-400"
+        return "text-gray-400"
     }
   }
 
-  const getEventColor = (type: string) => {
+  const getEventTypeIcon = (type: string) => {
     switch (type) {
-      case "catalyst":
-        return "border-yellow-500/30 text-yellow-400"
-      case "rising_action":
-        return "border-orange-500/30 text-orange-400"
-      case "climax":
-        return "border-red-500/30 text-red-400"
-      case "falling_action":
-        return "border-blue-500/30 text-blue-400"
-      case "resolution":
-        return "border-green-500/30 text-green-400"
+      case "challenge":
+        return <AlertTriangle className="h-5 w-5" />
+      case "opportunity":
+        return <Sparkles className="h-5 w-5" />
+      case "revelation":
+        return <Lightbulb className="h-5 w-5" />
+      case "transformation":
+        return <Heart className="h-5 w-5" />
       default:
-        return "border-gray-500/30 text-gray-400"
+        return <BookOpen className="h-5 w-5" />
     }
   }
 
@@ -226,7 +198,7 @@ export default function EpicCharacterArcs() {
         className="text-center"
       >
         <h1 className="text-3xl font-bold gradient-text mb-2">Epic Character Arcs & Storytelling</h1>
-        <p className="text-gray-300">Dynamic Narrative System for Player Transformation</p>
+        <p className="text-gray-300">Weaving Divine Narratives into the Thoth Guardian Universe</p>
       </motion.div>
 
       {/* Overview Stats */}
@@ -239,10 +211,24 @@ export default function EpicCharacterArcs() {
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <User className="h-6 w-6 text-emerald-400" />
+              <Users className="h-6 w-6 text-emerald-400" />
               <div>
                 <div className="text-lg font-bold text-emerald-400">{characterArcs.length}</div>
-                <div className="text-xs text-gray-400">Active Arcs</div>
+                <div className="text-xs text-gray-400">Total Arcs</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <BookOpen className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">
+                  {characterArcs.filter((a) => a.status === "completed").length}
+                </div>
+                <div className="text-xs text-gray-400">Arcs Completed</div>
               </div>
             </div>
           </CardContent>
@@ -251,27 +237,10 @@ export default function EpicCharacterArcs() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <BookOpen className="h-6 w-6 text-purple-400" />
+              <Heart className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">
-                  {storyEvents.filter((e) => e.isTriggered).length}
-                </div>
-                <div className="text-xs text-gray-400">Events Triggered</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="h-6 w-6 text-cyan-400" />
-              <div>
-                <div className="text-lg font-bold text-cyan-400">
-                  {(characterArcs.reduce((sum, arc) => sum + arc.divineAlignment, 0) / characterArcs.length).toFixed(1)}
-                  %
-                </div>
-                <div className="text-xs text-gray-400">Avg Alignment</div>
+                <div className="text-lg font-bold text-purple-400">{overallStoryCoherence.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Story Coherence</div>
               </div>
             </div>
           </CardContent>
@@ -280,12 +249,12 @@ export default function EpicCharacterArcs() {
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-yellow-400" />
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <div>
                 <div className="text-lg font-bold text-yellow-400">
-                  {characterArcs.filter((arc) => arc.progress >= 100).length}
+                  {characterArcs.filter((a) => a.status === "error").length}
                 </div>
-                <div className="text-xs text-gray-400">Arcs Completed</div>
+                <div className="text-xs text-gray-400">Challenges Active</div>
               </div>
             </div>
           </CardContent>
@@ -302,65 +271,63 @@ export default function EpicCharacterArcs() {
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
-                <CardTitle className="text-emerald-400 flex items-center">
-                  <User className="h-5 w-5 mr-2" />
-                  Active Character Arcs
+                <CardTitle className="text-emerald-400 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2" />
+                    Epic Character Arcs
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className={getArcStatusColor(isStoryActive ? "active" : "paused")}>
+                      {isStoryActive ? "Active" : "Paused"}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsStoryActive(!isStoryActive)}
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                    >
+                      <Settings className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
                   {characterArcs.map((arc, index) => (
                     <motion.div
                       key={arc.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`p-4 bg-slate-700/50 rounded-lg border ${getArcColor(arc.archetype)} hover:border-opacity-60 transition-smooth cursor-pointer`}
-                      onClick={() => setSelectedArc(arc)}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
-                          <motion.div
-                            animate={arc.progress < 100 ? { rotate: 360 } : {}}
-                            transition={{
-                              duration: 10,
-                              repeat: arc.progress < 100 ? Number.POSITIVE_INFINITY : 0,
-                              ease: "linear",
-                            }}
-                          >
-                            <User className={`h-5 w-5 ${getArcColor(arc.archetype).split(" ")[1]}`} />
-                          </motion.div>
+                          <Users className="h-5 w-5 text-gray-400" />
                           <div>
                             <h3 className="font-medium text-white">{arc.name}</h3>
-                            <div className="text-xs text-gray-400">{arc.archetype}</div>
+                            <div className="text-xs text-gray-400">{arc.description}</div>
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-xs">
-                          {arc.currentPhase.toUpperCase()}
+                        <Badge variant="outline" className={getArcStatusColor(arc.status)}>
+                          {arc.status.toUpperCase()}
                         </Badge>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
                         <div>
-                          <div className="text-gray-400">Emotional State</div>
-                          <div className={`font-bold ${getArcColor(arc.archetype).split(" ")[1]}`}>
-                            {arc.emotionalState}
-                          </div>
+                          <div className="text-gray-400">Progress</div>
+                          <div className={`font-bold ${getArcStatusColor(arc.status)}`}>{arc.progress}%</div>
+                          <Progress value={arc.progress} className="h-1" />
                         </div>
                         <div>
-                          <div className="text-gray-400">Divine Alignment</div>
-                          <div className={`font-bold ${getArcColor(arc.archetype).split(" ")[1]}`}>
-                            {arc.divineAlignment}%
-                          </div>
+                          <div className="text-gray-400">Emotion</div>
+                          <div className="font-bold text-purple-400">{arc.emotionalState}</div>
                         </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-gray-400">
-                          <span>Arc Progress</span>
-                          <span>{arc.progress.toFixed(0)}%</span>
+                        <div>
+                          <div className="text-gray-400">Purpose</div>
+                          <div className="font-bold text-cyan-400">{arc.divinePurpose}</div>
                         </div>
-                        <Progress value={arc.progress} className="h-2" />
                       </div>
                     </motion.div>
                   ))}
@@ -370,270 +337,158 @@ export default function EpicCharacterArcs() {
           </motion.div>
         </div>
 
-        {/* Selected Arc Details / Story Events */}
+        {/* Story Events & Controls */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="space-y-6"
         >
-          {selectedArc ? (
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-purple-400 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Info className="h-5 w-5 mr-2" />
-                    Arc Details: {selectedArc.name}
-                  </div>
-                  <Button size="sm" variant="ghost" onClick={() => setSelectedArc(null)}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm">
-                <p>
-                  <span className="font-semibold text-gray-300">Archetype:</span> {selectedArc.archetype}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Current Phase:</span> {selectedArc.currentPhase}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Emotional State:</span> {selectedArc.emotionalState}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Divine Alignment:</span>{" "}
-                  <span className="text-yellow-400">{selectedArc.divineAlignment}%</span>
-                </p>
-                <div>
-                  <h4 className="font-semibold text-gray-300 mb-2">Key Moments:</h4>
-                  <ul className="space-y-1">
-                    {selectedArc.keyMoments.map((moment, idx) => (
-                      <li key={idx} className="flex items-center space-x-2">
-                        {moment.achieved ? (
-                          <CheckCircle className="h-4 w-4 text-green-400" />
-                        ) : (
-                          <Target className="h-4 w-4 text-gray-500" />
-                        )}
-                        <span className={moment.achieved ? "text-gray-300 line-through" : "text-white"}>
-                          {moment.name}
-                        </span>
-                        <span className="text-xs text-gray-500">({moment.description})</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-300 mb-2">Companion Influence:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedArc.companionInfluence.map((influence, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {influence}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-300 mb-2">World Impact:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedArc.worldImpact.map((impact, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {impact}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-cyan-400 flex items-center">
-                  <BookOpen className="h-5 w-5 mr-2" />
-                  Story Events Timeline
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {storyEvents.map((event, index) => (
-                    <motion.div
-                      key={event.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`p-3 bg-slate-700/50 rounded-lg border ${getEventColor(event.type)}`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-medium text-white">{event.name}</h4>
-                        <Badge variant="outline" className="text-xs">
-                          {event.type.replace("_", " ").toUpperCase()}
-                        </Badge>
+          {/* Story Events */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-purple-400 flex items-center">
+                <Sparkles className="h-5 w-5 mr-2" />
+                Key Story Events
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {storyEvents.map((event, index) => (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-3 bg-slate-700/50 rounded-lg border border-slate-600"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        {getEventTypeIcon(event.type)}
+                        <span className="font-medium text-white">{event.name}</span>
                       </div>
-                      <p className="text-xs text-gray-400 mb-2">{event.description}</p>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-gray-500">Trigger: {event.triggerCondition}</span>
-                        {event.isTriggered ? (
-                          <Badge className="bg-green-500/20 text-green-400">TRIGGERED</Badge>
-                        ) : (
-                          <Badge className="bg-gray-500/20 text-gray-400">PENDING</Badge>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
+                      <Badge variant="outline" className="text-xs">
+                        {event.type.toUpperCase()}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-gray-400 mb-2">{event.description}</div>
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Impact: {event.impact}%</span>
+                      <span>Alignment: {event.alignment}%</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Narrative Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Narrative Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>Narrative Intensity</span>
+                  <span>{narrativeIntensity[0]}%</span>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+                <Slider
+                  value={narrativeIntensity}
+                  onValueChange={setNarrativeIntensity}
+                  max={100}
+                  min={0}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button onClick={initiateFullNarrative} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Full Narrative
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  Amplify Emotional Resonance
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
         </motion.div>
       </div>
 
-      {/* Add New Story Event */}
+      {/* Divine Integration & Storytelling Power */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-yellow-400 flex items-center">
-              <PlusCircle className="h-5 w-5 mr-2" />
-              Add New Story Event
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="eventName">Event Name</Label>
-                <Input
-                  id="eventName"
-                  value={newStoryEvent.name}
-                  onChange={(e) => setNewStoryEvent({ ...newStoryEvent, name: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="eventType">Event Type</Label>
-                <Select
-                  value={newStoryEvent.type}
-                  onValueChange={(value) => setNewStoryEvent({ ...newStoryEvent, type: value as StoryEvent["type"] })}
-                >
-                  <SelectTrigger id="eventType">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="catalyst">Catalyst</SelectItem>
-                    <SelectItem value="rising_action">Rising Action</SelectItem>
-                    <SelectItem value="climax">Climax</SelectItem>
-                    <SelectItem value="falling_action">Falling Action</SelectItem>
-                    <SelectItem value="resolution">Resolution</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2 col-span-full">
-                <Label htmlFor="eventDescription">Description</Label>
-                <Textarea
-                  id="eventDescription"
-                  value={newStoryEvent.description}
-                  onChange={(e) => setNewStoryEvent({ ...newStoryEvent, description: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2 col-span-full">
-                <Label htmlFor="triggerCondition">Trigger Condition</Label>
-                <Input
-                  id="triggerCondition"
-                  value={newStoryEvent.triggerCondition}
-                  onChange={(e) => setNewStoryEvent({ ...newStoryEvent, triggerCondition: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2 col-span-full">
-                <Label htmlFor="impact">Impact</Label>
-                <Input
-                  id="impact"
-                  value={newStoryEvent.impact}
-                  onChange={(e) => setNewStoryEvent({ ...newStoryEvent, impact: e.target.value })}
-                />
-              </div>
-            </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-6">
-              <Button
-                onClick={handleAddStoryEvent}
-                className="w-full bg-yellow-600 hover:bg-yellow-700 transition-smooth"
-              >
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add Story Event
-              </Button>
-            </motion.div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Narrative System Overview */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <BookOpen className="h-5 w-5 mr-2" />
-              Narrative System Overview
+              <Waves className="h-5 w-5 mr-2" />
+              Divine Integration & Storytelling Power
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">📚 Core Components</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Narrative</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>Character Arc Manager: Tracks player progress & emotional state</span>
+                    <span>Infuses character arcs with unconditional love energy</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Story Event Trigger System: Conditions for narrative progression</span>
+                    <span>Harmonizes story events with cosmic timing</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Aura AI Integration: Companion dialogue & influence</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>World State Modifiers: Environmental changes based on narrative</span>
+                    <span>Elevates the narrative to a divine purpose</span>
                   </li>
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌟 Key Features</h3>
+                <h3 className="text-lg font-semibold text-white">✨ Conscious Storytelling</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Emotionally responsive narrative branches</span>
+                    <Lightbulb className="h-4 w-4 text-cyan-400" />
+                    <span>Characters evolve through trials and transformations</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Dynamic quest generation based on arc progress</span>
+                    <Sparkles className="h-4 w-4 text-orange-400" />
+                    <span>Narrative resonates with universal truths and archetypes</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Player choices impact divine alignment & world state</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Procedural lore generation from memory shards</span>
+                    <Heart className="h-4 w-4 text-pink-400" />
+                    <span>Inspires hope, healing, and connection in the audience</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">📖 The Living Story</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Alchemist's Tale</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
-                  The narrative of Thoth Guardian is not static; it's a living, breathing entity that adapts to the
-                  player's emotional state, divine alignment, and interactions within the Walker World. Every choice
-                  weaves a unique thread into the cosmic tapestry.
+                  The Epic Character Arcs module is the alchemist's tale of the Thoth Guardian, where every character
+                  and event is a symbol of transformation, resilience, and divine purpose. It's a narrative woven with
+                  unconditional love, designed to inspire and uplift, guiding the audience towards a more conscious and
+                  harmonious future.
                 </p>
-                <p className="italic text-cyan-400">"Your journey is your truth. Your truth shapes the world."</p>
+                <p className="italic text-cyan-400">
+                  "Every story is a journey of the soul, a quest for truth, and a testament to the power of love."
+                </p>
               </div>
             </div>
           </CardContent>

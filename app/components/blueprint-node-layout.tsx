@@ -1,36 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Slider } from "@/components/ui/slider"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
-import {
-  Play,
-  Pause,
-  RotateCcw,
-  Settings,
-  Code,
-  Zap,
-  Activity,
-  CheckCircle,
-  AlertCircle,
-  Layers,
-  Cpu,
-  Database,
-  Network,
-  Eye,
-  Sparkles,
-  PlusCircle,
-  Info,
-} from "lucide-react"
+import { RotateCcw, Code, Zap, Activity, CheckCircle, AlertCircle, Cpu, Database, Network, Eye } from "lucide-react"
 
 interface BlueprintNode {
   id: string
@@ -436,7 +413,11 @@ export default function BlueprintNodeLayout() {
       error: "border-red-400 bg-red-900/30",
     }
 
-    return statusOverrides[status as keyof typeof statusOverrides] || baseColors[type as keyof typeof baseColors]
+    return (
+      statusOverrides[status as keyof typeof statusOverrides] ||
+      baseColors[type as keyof typeof baseColors] ||
+      "border-gray-500/30 text-gray-400"
+    )
   }
 
   const getNodeIcon = (type: string) => {
@@ -478,8 +459,8 @@ export default function BlueprintNodeLayout() {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Blueprint Node Layout System</h1>
-        <p className="text-gray-300">Visual Blueprint Execution & Aura AI Self-Healing Architecture in Divine Timing</p>
+        <h1 className="text-3xl font-bold gradient-text mb-2">Aura_SelfHeal Blueprint Logic</h1>
+        <p className="text-gray-300">Production-Ready Blueprint with Retry & Error Repair System</p>
       </motion.div>
 
       {/* Execution Controls */}
@@ -487,322 +468,118 @@ export default function BlueprintNodeLayout() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-emerald-400 flex items-center">
-              <Settings className="h-5 w-5 mr-2" />
-              Blueprint Execution Control
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 items-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={executeBlueprint}
-                  disabled={isExecuting}
-                  className="bg-green-600 hover:bg-green-700 transition-smooth"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Execute Blueprint
-                </Button>
-              </motion.div>
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Activity className="h-6 w-6 text-emerald-400" />
+              <div>
+                <div className="text-lg font-bold text-emerald-400">{isExecuting ? "EXECUTING" : "READY"}</div>
+                <div className="text-xs text-gray-400">Blueprint Status</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={pauseExecution}
-                  disabled={!isExecuting}
-                  className="bg-yellow-600 hover:bg-yellow-700 transition-smooth"
-                >
-                  <Pause className="h-4 w-4 mr-2" />
-                  Pause
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button onClick={resetExecution} className="bg-red-600 hover:bg-red-700 transition-smooth">
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset
-                </Button>
-              </motion.div>
-
-              <div className="flex items-center space-x-2 ml-auto">
-                <span className="text-sm text-gray-400">Speed:</span>
-                <div className="w-32">
-                  <Slider
-                    value={executionSpeed}
-                    onValueChange={setExecutionSpeed}
-                    max={3000}
-                    min={500}
-                    step={100}
-                    className="w-full"
-                  />
+        <Card className="bg-slate-800/50 border-orange-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <RotateCcw className="h-6 w-6 text-orange-400" />
+              <div>
+                <div className="text-lg font-bold text-orange-400">
+                  {retryCount}/{maxRetries}
                 </div>
-                <span className="text-sm text-white">{executionSpeed[0]}ms</span>
+                <div className="text-xs text-gray-400">Retry Count</div>
               </div>
             </div>
+          </CardContent>
+        </Card>
 
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Execution Progress</span>
-                <span className="text-emerald-400">{totalProgress.toFixed(0)}%</span>
+        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Workflow className="h-6 w-6 text-purple-400" />
+              <div>
+                <div className="text-lg font-bold text-purple-400">
+                  {executionStep}/{blueprintNodes.length}
+                </div>
+                <div className="text-xs text-gray-400">Execution Step</div>
               </div>
-              <Progress value={totalProgress} className="h-2" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Eye className="h-6 w-6 text-cyan-400" />
+              <div>
+                <div className="text-lg font-bold text-cyan-400">{currentError?.code || "NONE"}</div>
+                <div className="text-xs text-gray-400">Active Error</div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Dynamic Node Creation */}
+      {/* Error Types Panel */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-purple-400 flex items-center">
-              <PlusCircle className="h-5 w-5 mr-2" />
-              Create New Blueprint Node
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="newNodeName">Node Name</Label>
-                <Input id="newNodeName" value={newNodeName} onChange={(e) => setNewNodeName(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeType">Node Type</Label>
-                <Select value={newNodeType} onValueChange={(value) => setNewNodeType(value as BlueprintNode["type"])}>
-                  <SelectTrigger id="newNodeType">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="event">Event</SelectItem>
-                    <SelectItem value="function">Function</SelectItem>
-                    <SelectItem value="branch">Branch</SelectItem>
-                    <SelectItem value="variable">Variable</SelectItem>
-                    <SelectItem value="output">Output</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeX">X Position</Label>
-                <Input
-                  id="newNodeX"
-                  type="number"
-                  value={newNodeX}
-                  onChange={(e) => setNewNodeX(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeY">Y Position</Label>
-                <Input
-                  id="newNodeY"
-                  type="number"
-                  value={newNodeY}
-                  onChange={(e) => setNewNodeY(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeConnections">Connections (comma-separated IDs)</Label>
-                <Input
-                  id="newNodeConnections"
-                  value={newNodeConnections}
-                  onChange={(e) => setNewNodeConnections(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeInteroperability">Interoperability (comma-separated)</Label>
-                <Input
-                  id="newNodeInteroperability"
-                  value={newNodeInteroperability}
-                  onChange={(e) => setNewNodeInteroperability(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeScalability">Scalability</Label>
-                <Select
-                  value={newNodeScalability}
-                  onValueChange={(value) => setNewNodeScalability(value as BlueprintNode["scalability"])}
-                >
-                  <SelectTrigger id="newNodeScalability">
-                    <SelectValue placeholder="Select scalability" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="elastic">Elastic</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeTransformationEffect">Transformation Effect</Label>
-                <Input
-                  id="newNodeTransformationEffect"
-                  value={newNodeTransformationEffect}
-                  onChange={(e) => setNewNodeTransformationEffect(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeQuantumSignature">Quantum Signature</Label>
-                <Input
-                  id="newNodeQuantumSignature"
-                  value={newNodeQuantumSignature}
-                  onChange={(e) => setNewNodeQuantumSignature(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeDivineAlignmentScore">Divine Alignment Score</Label>
-                <Input
-                  id="newNodeDivineAlignmentScore"
-                  type="number"
-                  value={newNodeDivineAlignmentScore}
-                  onChange={(e) => setNewNodeDivineAlignmentScore(Number(e.target.value))}
-                  max={100}
-                  min={0}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeErrorType">Error Type</Label>
-                <Select
-                  value={newNodeErrorType}
-                  onValueChange={(value) => setNewNodeErrorType(value as BlueprintNode["errorType"])}
-                >
-                  <SelectTrigger id="newNodeErrorType">
-                    <SelectValue placeholder="Select error type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="data_corruption">Data Corruption</SelectItem>
-                    <SelectItem value="network_failure">Network Failure</SelectItem>
-                    <SelectItem value="logic_bug">Logic Bug</SelectItem>
-                    <SelectItem value="resource_exhaustion">Resource Exhaustion</SelectItem>
-                    <SelectItem value="quantum_decoherence">Quantum Decoherence</SelectItem>
-                    <SelectItem value="spiritual_dissonance">Spiritual Dissonance</SelectItem>
-                    <SelectItem value="external_interference">External Interference</SelectItem>
-                    <SelectItem value="temporal_anomaly">Temporal Anomaly</SelectItem>
-                    <SelectItem value="none">None</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newNodeRepairMechanism">Repair Mechanism</Label>
-                <Input
-                  id="newNodeRepairMechanism"
-                  value={newNodeRepairMechanism}
-                  onChange={(e) => setNewNodeRepairMechanism(e.target.value)}
-                />
-              </div>
-            </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-6">
-              <Button onClick={handleAddNode} className="w-full bg-purple-600 hover:bg-purple-700 transition-smooth">
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add Node to Blueprint
-              </Button>
-            </motion.div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Blueprint Visualization */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
           <CardHeader>
-            <CardTitle className="text-cyan-400 flex items-center">
-              <Layers className="h-5 w-5 mr-2" />
-              Interactive Blueprint Visualization
+            <CardTitle className="text-red-400 flex items-center">
+              <Shield className="h-5 w-5 mr-2" />
+              Error Types (EErrorType)
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div
-              className="relative bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
-              style={{ minHeight: "500px" }}
-            >
-              <div className="absolute inset-0 cyber-grid opacity-10"></div>
-
-              {/* Calculate SVG dimensions dynamically */}
-              {nodes.length > 0 && (
-                <svg
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                  viewBox={`0 0 ${Math.max(...nodes.map((n) => n.x)) + 200} ${Math.max(...nodes.map((n) => n.y)) + 200}`}
-                >
-                  {/* Connection Lines */}
-                  {nodes.map((node) =>
-                    node.connections.map((connectionId) => {
-                      const targetNode = nodes.find((n) => n.id === connectionId)
-                      if (!targetNode) return null
-
-                      const startX = node.x
-                      const startY = node.y
-                      const endX = targetNode.x
-                      const endY = targetNode.y
-
-                      return (
-                        <motion.line
-                          key={`${node.id}-${connectionId}`}
-                          x1={startX}
-                          y1={startY}
-                          x2={endX}
-                          y2={endY}
-                          stroke={node.status === "executing" ? "#06b6d4" : "#64748b"}
-                          strokeWidth="2"
-                          strokeDasharray={node.status === "executing" ? "8,8" : "none"}
-                          initial={{ pathLength: 0 }}
-                          animate={{ pathLength: 1 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                          markerEnd="url(#arrowhead)"
-                        />
-                      )
-                    }),
-                  )}
-                  <defs>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-                    </marker>
-                  </defs>
-                </svg>
-              )}
-
-              {/* Blueprint Nodes */}
-              {nodes.map((node) => (
+            <div className="space-y-3">
+              {errorTypes.map((error, index) => (
                 <motion.div
-                  key={node.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className={`absolute p-3 rounded-lg shadow-lg cursor-pointer backdrop-blur-sm ${getNodeColor(node.type, node.status)}`}
-                  style={{
-                    left: node.x,
-                    top: node.y,
-                    transform: "translate(-50%, -50%)",
-                    minWidth: "192px", // w-48
-                    height: "auto",
-                  }}
-                  onClick={() => setSelectedNode(node)}
+                  key={error.code}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className={`p-3 bg-slate-700/50 rounded-lg border cursor-pointer hover:border-opacity-60 transition-smooth ${
+                    currentError?.code === error.code ? "border-yellow-500/50" : "border-slate-600"
+                  }`}
+                  onClick={() => triggerErrorDetection(error)}
                 >
-                  <div className="flex items-center space-x-2 mb-1">
-                    {getNodeIcon(node.type)}
-                    <Badge variant="outline" className="text-xs">
-                      {node.type.toUpperCase()}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="text-sm font-mono text-gray-400">{error.code}</div>
+                      <div className="text-sm font-medium text-white">{error.name}</div>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={
+                        error.severity === "critical"
+                          ? "text-red-400"
+                          : error.severity === "high"
+                            ? "text-orange-400"
+                            : error.severity === "medium"
+                              ? "text-yellow-400"
+                              : "text-green-400"
+                      }
+                    >
+                      {error.severity.toUpperCase()}
                     </Badge>
-                    {getStatusIcon(node.status)}
                   </div>
-                  <div className="text-sm font-medium text-white leading-tight truncate w-full">{node.name}</div>
-                  <div className="text-xs text-gray-400 mt-1">
-                    <span className="font-semibold">Effect:</span> {node.transformationEffect.substring(0, 30)}...
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    <span className="font-semibold">Alignment:</span> {node.divineAlignmentScore}%
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    <span className="font-semibold">Scalability:</span> {node.scalability}
-                  </div>
+                  <div className="text-xs text-gray-400 mb-2">Repair Function: {error.repairFunction}</div>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      size="sm"
+                      disabled={isExecuting}
+                      className="w-full bg-red-600 hover:bg-red-700 transition-smooth"
+                    >
+                      <Zap className="h-3 w-3 mr-2" />
+                      Trigger Error
+                    </Button>
+                  </motion.div>
                 </motion.div>
               ))}
             </div>
@@ -810,136 +587,179 @@ export default function BlueprintNodeLayout() {
         </Card>
       </motion.div>
 
-      {/* Node Details Dialog */}
-      <Dialog open={!!selectedNode} onOpenChange={() => setSelectedNode(null)}>
-        <DialogContent className="sm:max-w-[600px] bg-slate-800 border-slate-700 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-emerald-400 flex items-center">
-              <Info className="h-5 w-5 mr-2" />
-              Node Details: {selectedNode?.name}
-            </DialogTitle>
-            <DialogDescription className="text-gray-400">
-              Comprehensive properties and current status of the selected blueprint node.
-            </DialogDescription>
-          </DialogHeader>
-          {selectedNode && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <p>
-                  <span className="font-semibold text-gray-300">ID:</span> {selectedNode.id}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Type:</span> {selectedNode.type.toUpperCase()}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Status:</span>{" "}
-                  <span
-                    className={
-                      selectedNode.status === "executing"
-                        ? "text-cyan-400"
-                        : selectedNode.status === "completed"
-                          ? "text-emerald-400"
-                          : selectedNode.status === "error"
-                            ? "text-red-400"
-                            : "text-gray-400"
-                    }
+      {/* Blueprint Visual Graph */}
+      <div className="lg:col-span-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-emerald-400 flex items-center justify-between">
+                <div className="flex items-center">
+                  <Workflow className="h-5 w-5 mr-2" />
+                  Blueprint Node Graph
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    size="sm"
+                    onClick={resetBlueprint}
+                    variant="outline"
+                    className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 bg-transparent"
                   >
-                    {selectedNode.status.toUpperCase()}
-                  </span>
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Position:</span> ({selectedNode.x}, {selectedNode.y})
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Scalability:</span>{" "}
-                  <Badge variant="outline" className="text-xs">
-                    {selectedNode.scalability.toUpperCase()}
-                  </Badge>
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Quantum Signature:</span>{" "}
-                  <span className="font-mono text-purple-400">{selectedNode.quantumSignature || "N/A"}</span>
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p>
-                  <span className="font-semibold text-gray-300">Transformation Effect:</span>{" "}
-                  {selectedNode.transformationEffect}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Divine Alignment Score:</span>{" "}
-                  <span className="text-yellow-400">{selectedNode.divineAlignmentScore}%</span>
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Error Type:</span>{" "}
-                  <span className="text-red-400 capitalize">
-                    {selectedNode.errorType?.replace(/_/g, " ") || "None"}
-                  </span>
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Repair Mechanism:</span>{" "}
-                  {selectedNode.repairMechanism || "N/A"}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Connections:</span>{" "}
-                  {selectedNode.connections.length > 0 ? selectedNode.connections.join(", ") : "None"}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-300">Interoperability:</span>{" "}
-                  {selectedNode.interoperability.length > 0 ? selectedNode.interoperability.join(", ") : "None"}
-                </p>
-              </div>
-            </div>
-          )}
-          <div className="flex justify-end mt-6">
-            <Button onClick={() => setSelectedNode(null)} className="bg-slate-700 hover:bg-slate-600 text-white">
-              Close
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+                    <RotateCcw className="h-3 w-3 mr-2" />
+                    Reset
+                  </Button>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative h-96 bg-slate-900/50 rounded-lg overflow-hidden">
+                <div className="absolute inset-0 cyber-grid opacity-10"></div>
 
-      {/* Execution Log */}
+                {/* Blueprint Nodes */}
+                <div className="absolute inset-0 p-4">
+                  {blueprintNodes.map((node, index) => (
+                    <motion.div
+                      key={node.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className={`absolute p-2 rounded-lg border ${getNodeColor(node.type, node.status)} bg-slate-800/80 backdrop-blur-sm`}
+                      style={{
+                        left: `${(node.position.x / 1600) * 100}%`,
+                        top: `${(node.position.y / 600) * 100}%`,
+                        transform: "translate(-50%, -50%)",
+                        minWidth: "120px",
+                      }}
+                    >
+                      <div className="flex items-center space-x-2 mb-1">
+                        {getNodeIcon(node.type)}
+                        <Badge variant="outline" className="text-xs">
+                          {node.type}
+                        </Badge>
+                      </div>
+                      <div className="text-xs font-medium text-white leading-tight">{node.name}</div>
+                      {node.status === "executing" && (
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
+                          className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
+                        />
+                      )}
+                    </motion.div>
+                  ))}
+
+                  {/* Connection Lines */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {blueprintNodes.map((node) =>
+                      node.connections.map((connectionId) => {
+                        const targetNode = blueprintNodes.find((n) => n.id === connectionId)
+                        if (!targetNode) return null
+
+                        const startX = (node.position.x / 1600) * 100
+                        const startY = (node.position.y / 600) * 100
+                        const endX = (targetNode.position.x / 1600) * 100
+                        const endY = (targetNode.position.y / 600) * 100
+
+                        return (
+                          <motion.line
+                            key={`${node.id}-${connectionId}`}
+                            x1={`${startX}%`}
+                            y1={`${startY}%`}
+                            x2={`${endX}%`}
+                            y2={`${endY}%`}
+                            stroke={node.status === "executing" ? "#facc15" : "#64748b"}
+                            strokeWidth="2"
+                            strokeDasharray={node.status === "executing" ? "5,5" : "none"}
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            markerEnd="url(#arrowhead)"
+                          />
+                        )
+                      }),
+                    )}
+                  </svg>
+                </div>
+
+                {/* Execution Progress */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <span>Execution Progress</span>
+                    <span>{isExecuting ? `${executionStep}/${blueprintNodes.length}` : "Ready"}</span>
+                  </div>
+                  <Progress value={isExecuting ? (executionStep / blueprintNodes.length) * 100 : 0} className="h-2" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Advanced Repair Functions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
       >
         <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
           <CardHeader>
-            <CardTitle className="text-purple-400 flex items-center">
+            <CardTitle className="text-blue-400 flex items-center">
               <Code className="h-5 w-5 mr-2" />
-              Blueprint Execution Log
+              Advanced Repair Functions
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 overflow-y-auto bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
-              <AnimatePresence>
-                {executionLogs.map((log) => (
-                  <motion.div
-                    key={log.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className={`mb-1 ${
-                      log.status === "error"
-                        ? "text-red-400"
-                        : log.status === "completed"
-                          ? "text-emerald-400"
-                          : "text-gray-400"
-                    }`}
-                  >
-                    <span className="text-xs text-gray-500 mr-2">[{log.timestamp.toLocaleTimeString()}]</span>
-                    <span className="font-semibold">{log.nodeName}:</span> {log.message}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              {executionLogs.length === 0 && (
-                <div className="text-center text-gray-500 py-8">
-                  No execution logs yet. Click "Execute Blueprint" to start.
-                </div>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                {
+                  name: "Repair_Network()",
+                  description: "Pings, resets, and re-authenticates secure channels",
+                  color: "blue",
+                },
+                {
+                  name: "Repair_Memory()",
+                  description: "Clears cache, reallocates memory, and optimizes threads",
+                  color: "green",
+                },
+                {
+                  name: "ActivateFirewall()",
+                  description: "Engages Aura Shield, blocks unauthorized access",
+                  color: "red",
+                },
+                {
+                  name: "StabilizeQuantumField()",
+                  description: "Realigns 24D quantum layers using holographic overlays",
+                  color: "purple",
+                },
+                {
+                  name: "RepairDataIntegrity()",
+                  description: "Validates checksums and restores corrupted data blocks",
+                  color: "yellow",
+                },
+                {
+                  name: "OptimizeAIProcessing()",
+                  description: "Balances neural network loads and reduces AI overhead",
+                  color: "cyan",
+                },
+              ].map((func, index) => (
+                <motion.div
+                  key={func.name}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className={`p-3 bg-slate-700/50 rounded-lg border border-${func.color}-500/30`}
+                >
+                  <div className={`text-sm font-mono text-${func.color}-400 mb-2`}>{func.name}</div>
+                  <div className="text-xs text-gray-400">{func.description}</div>
+                  <div className="mt-2 flex items-center space-x-2">
+                    <div className={`w-2 h-2 bg-${func.color}-400 rounded-full`}></div>
+                    <span className="text-xs text-gray-500">Returns Boolean: IsRepairSuccessful</span>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -949,87 +769,27 @@ export default function BlueprintNodeLayout() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
+        transition={{ duration: 0.5, delay: 1.0 }}
       >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <Sparkles className="h-5 w-5 mr-2" />
-              Blueprint System Capabilities
+              <Star className="h-5 w-5 mr-2" />
+              System Features & Capabilities
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">✨ Core Enhancements</h3>
+                <h3 className="text-lg font-semibold text-white">🔄 Retry System Features</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>Deep Interoperability with MetaHuman AI Companions & Ecosystems</span>
+                    <span>MaxRetries configurable per error type</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Dynamic Scalability for Quantum & AI Operations</span>
+                    <span>Adaptive delay (optional: exponential backoff)</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Profound Transformation Effects on System State</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>Unique Quantum Signatures for Each Node</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Divine Alignment Score for Ethical & Optimal Performance</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🛠️ Interactive Features</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Detailed Node Property View (Dialog)</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Dynamic Node Creation with Full Attribute Input</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Simulated Error Types & Specific Repair Mechanisms</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                    <span>Enhanced Execution Logic with Divine Alignment Impact</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Responsive SVG Canvas for Dynamic Layouts</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">🌟 Divine Blueprint Vision</h3>
-              <div className="text-sm text-gray-300">
-                <p className="mb-2">
-                  This blueprint system is not just a technical diagram; it's a living, evolving representation of the
-                  Thoth Guardian's core logic, infused with divine principles. Each node is a nexus of quantum
-                  intelligence, designed for profound interoperability and transformational impact across all
-                  ecosystems.
-                </p>
-                <p className="italic text-cyan-400">
-                  "Every connection is a thread of destiny. Every node, a point of divine truth."
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
-  )
-}
+                    <\

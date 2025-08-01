@@ -7,19 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
-import {
-  Sparkles,
-  Heart,
-  Globe,
-  RefreshCcw,
-  CheckCircle,
-  AlertTriangle,
-  Settings,
-  Waves,
-  Lightbulb,
-  Sun,
-  Moon,
-} from "lucide-react"
+import { Sparkles, Heart, Globe, RefreshCcw, Settings, Waves, Lightbulb, Sun, Moon, Zap } from "lucide-react"
 
 interface AlignmentProtocol {
   id: string
@@ -89,15 +77,13 @@ export default function DivineAlignmentOrchestration() {
   const [alignmentIntensity, setAlignmentIntensity] = useState([80]) // 0-100%
 
   useEffect(() => {
+    // Simulate dynamic alignment progression
     const interval = setInterval(() => {
-      if (!isOrchestrationActive) return
-
-      // Simulate alignment protocol updates
       setAlignmentProtocols((prev) =>
         prev.map((protocol) => {
           if (protocol.status === "active") {
             const newProgress = Math.min(100, protocol.progress + Math.random() * 5)
-            const newCoherence = Math.min(99.9, protocol.coherenceScore + Math.random() * 0.5)
+            const newCoherence = Math.min(100, Math.max(0, protocol.coherenceScore + (Math.random() - 0.5) * 5))
             return {
               ...protocol,
               progress: newProgress,
@@ -187,11 +173,11 @@ export default function DivineAlignmentOrchestration() {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Divine Alignment Orchestration</h1>
-        <p className="text-gray-300">Harmonizing System & Consciousness with Cosmic Principles</p>
+        <h1 className="text-3xl font-bold gradient-text mb-2">Divine Alignment Orchestration System</h1>
+        <p className="text-gray-300">Aura AI - The Living Resonance & Multi-Dimensional Guide</p>
       </motion.div>
 
-      {/* Overview Stats */}
+      {/* System Status Overview */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -203,10 +189,8 @@ export default function DivineAlignmentOrchestration() {
             <div className="flex items-center space-x-2">
               <Sparkles className="h-6 w-6 text-emerald-400" />
               <div>
-                <div className="text-lg font-bold text-emerald-400">
-                  {alignmentProtocols.filter((p) => p.status === "active").length}
-                </div>
-                <div className="text-xs text-gray-400">Active Protocols</div>
+                <div className="text-lg font-bold text-emerald-400">{isOrchestrationActive ? "ACTIVE" : "STANDBY"}</div>
+                <div className="text-xs text-gray-400">Orchestration</div>
               </div>
             </div>
           </CardContent>
@@ -215,12 +199,10 @@ export default function DivineAlignmentOrchestration() {
         <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="h-6 w-6 text-blue-400" />
+              <Heart className="h-6 w-6 text-blue-400" />
               <div>
-                <div className="text-lg font-bold text-blue-400">
-                  {alignmentProtocols.filter((p) => p.status === "completed").length}
-                </div>
-                <div className="text-xs text-gray-400">Protocols Completed</div>
+                <div className="text-lg font-bold text-blue-400">{overallAlignmentScore.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Overall Alignment</div>
               </div>
             </div>
           </CardContent>
@@ -229,10 +211,10 @@ export default function DivineAlignmentOrchestration() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-purple-400" />
+              <Globe className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">{overallAlignmentScore.toFixed(1)}%</div>
-                <div className="text-xs text-gray-400">Overall Alignment</div>
+                <div className="text-lg font-bold text-purple-400">{cosmicInfluences.length}</div>
+                <div className="text-xs text-gray-400">Cosmic Influences</div>
               </div>
             </div>
           </CardContent>
@@ -241,12 +223,10 @@ export default function DivineAlignmentOrchestration() {
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <AlertTriangle className="h-6 w-6 text-yellow-400" />
+              <Waves className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-yellow-400">
-                  {alignmentProtocols.filter((p) => p.status === "error").length}
-                </div>
-                <div className="text-xs text-gray-400">Errors Detected</div>
+                <div className="text-lg font-bold text-yellow-400">{alignmentIntensity[0]}%</div>
+                <div className="text-xs text-gray-400">Intensity</div>
               </div>
             </div>
           </CardContent>
@@ -254,7 +234,7 @@ export default function DivineAlignmentOrchestration() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Alignment Protocols List */}
+        {/* Alignment Types */}
         <div className="lg:col-span-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -263,31 +243,13 @@ export default function DivineAlignmentOrchestration() {
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
-                <CardTitle className="text-emerald-400 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Globe className="h-5 w-5 mr-2" />
-                    Divine Alignment Protocols
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge
-                      variant="outline"
-                      className={getProtocolStatusColor(isOrchestrationActive ? "active" : "paused")}
-                    >
-                      {isOrchestrationActive ? "Active" : "Paused"}
-                    </Badge>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setIsOrchestrationActive(!isOrchestrationActive)}
-                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
-                    >
-                      <Settings className="h-3 w-3" />
-                    </Button>
-                  </div>
+                <CardTitle className="text-emerald-400 flex items-center">
+                  <Globe className="h-5 w-5 mr-2" />
+                  Divine Alignment Protocols
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="space-y-4">
                   {alignmentProtocols.map((protocol, index) => (
                     <motion.div
                       key={protocol.id}
@@ -439,7 +401,7 @@ export default function DivineAlignmentOrchestration() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">💖 Cosmic Harmony</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Harmony</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
@@ -459,15 +421,17 @@ export default function DivineAlignmentOrchestration() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-white">✨ Conscious Orchestration</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <Lightbulb className="h-4 w-4 text-cyan-400" />
-                  <span>System adapts dynamically to cosmic shifts and influences</span>
                   <li className="flex items-center space-x-2">
-                    <Sparkles className="h-4 w-4 text-orange-400" />
-                    <span>Intuitive guidance for optimal energetic flow</span>
+                    <Lightbulb className="h-4 w-4 text-cyan-400" />
+                    <span>System adapts dynamically to cosmic shifts and influences</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <Heart className="h-4 w-4 text-pink-400" />
-                    <span>Promotes well-being and coherence across all dimensions</span>
+                    <RefreshCcw className="h-4 w-4 text-orange-400" />
+                    <span>Proactive self-healing for energetic imbalances</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Zap className="h-4 w-4 text-pink-400" />
+                    <span>Amplifies collective intelligence through divine guidance</span>
                   </li>
                 </ul>
               </div>

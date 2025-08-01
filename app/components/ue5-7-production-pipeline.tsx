@@ -3,14 +3,9 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import {
-  Play,
-  Pause,
-  RotateCcw,
-  Settings,
   Code,
   CheckCircle,
   Database,
@@ -20,17 +15,14 @@ import {
   Atom,
   HeartHandshake,
   Rocket,
-  GitBranch,
   Cloud,
   Server,
   Package,
   MonitorPlay,
-  Lightbulb,
   Workflow,
   LayoutDashboard,
   Brain,
   Globe,
-  ArrowRight,
 } from "lucide-react"
 
 interface PipelineStage {
@@ -285,80 +277,42 @@ export default function UE57ProductionPipeline() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-emerald-400 flex items-center">
-              <LayoutDashboard className="h-5 w-5 mr-2" />
-              Pipeline Dashboard
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 items-center mb-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={startPipeline}
-                  disabled={pipelineStatus === "running"}
-                  className="bg-green-600 hover:bg-green-700 transition-smooth"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Start Pipeline
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={pausePipeline}
-                  disabled={pipelineStatus !== "running"}
-                  className="bg-yellow-600 hover:bg-yellow-700 transition-smooth"
-                >
-                  <Pause className="h-4 w-4 mr-2" />
-                  Pause
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={resumePipeline}
-                  disabled={pipelineStatus !== "paused"}
-                  className="bg-blue-600 hover:bg-blue-700 transition-smooth"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Resume
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button onClick={resetPipeline} className="bg-red-600 hover:bg-red-700 transition-smooth">
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset
-                </Button>
-              </motion.div>
-
-              <Badge
-                variant="outline"
-                className={`ml-auto text-lg font-bold ${
-                  pipelineStatus === "running"
-                    ? "text-emerald-400 border-emerald-500/30"
-                    : pipelineStatus === "paused"
-                      ? "text-yellow-400 border-yellow-500/30"
-                      : pipelineStatus === "completed"
-                        ? "text-green-400 border-green-500/30"
-                        : pipelineStatus === "failed"
-                          ? "text-red-400 border-red-500/30"
-                          : "text-gray-400 border-gray-500/30"
-                }`}
-              >
-                {pipelineStatus.toUpperCase()}
-              </Badge>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Overall Pipeline Progress</span>
-                <span className="text-emerald-400">{overallProgress.toFixed(1)}%</span>
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <LayoutDashboard className="h-6 w-6 text-emerald-400" />
+              <div>
+                <div className="text-lg font-bold text-emerald-400">
+                  {pipelineStages.filter((s) => s.status === "completed").length}
+                </div>
+                <div className="text-xs text-gray-400">Stages Completed</div>
               </div>
-              <Progress value={overallProgress} className="h-2" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Network className="h-6 w-6 text-purple-400" />
+              <div>
+                <div className="text-lg font-bold text-purple-400">{deploymentTargets.length}</div>
+                <div className="text-xs text-gray-400">Deployment Targets</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Share2 className="h-6 w-6 text-yellow-400" />
+              <div>
+                <div className="text-lg font-bold text-yellow-400">{overallProgress.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Overall Progress</div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -376,7 +330,7 @@ export default function UE57ProductionPipeline() {
               <CardHeader>
                 <CardTitle className="text-cyan-400 flex items-center">
                   <Workflow className="h-5 w-5 mr-2" />
-                  Production Pipeline Stages
+                  UE5.7 Production Pipeline Stages
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -397,7 +351,7 @@ export default function UE57ProductionPipeline() {
                             <div className="text-xs text-gray-400">{stage.description}</div>
                           </div>
                         </div>
-                        <Badge variant="outline" className={getStageColor(stage.status).split(" ")[0]}>
+                        <Badge variant="outline" className={getStageColor(stage.status)}>
                           {stage.status.toUpperCase().replace("_", " ")}
                         </Badge>
                       </div>
@@ -494,148 +448,45 @@ export default function UE57ProductionPipeline() {
                 <MonitorPlay className="h-5 w-5 mr-2" />
                 Live Deployment Metrics
               </CardTitle>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Total Deployed Instances</span>
+                  <span className="text-white">
+                    {deploymentTargets.filter((t) => t.status === "online" || t.status === "deploying").length}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Average Latency</span>
+                  <span className="text-cyan-400">
+                    {(deploymentTargets.reduce((sum, t) => sum + t.latency, 0) / deploymentTargets.length).toFixed(1)}
+                    ms
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Successful Deployments</span>
+                  <span className="text-green-400">
+                    {pipelineStages.filter((s) => s.id === "deployment" && s.status === "completed").length}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Last Build Time</span>
+                  <span className="text-white">
+                    {pipelineStages.find((s) => s.id === "packaging_build" && s.status === "completed")
+                      ? "2m 34s ago"
+                      : "N/A"}
+                  </span>
+                </div>
+              </CardContent>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Total Deployed Instances</span>
-                <span className="text-white">
-                  {deploymentTargets.filter((t) => t.status === "online" || t.status === "deploying").length}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Average Latency</span>
-                <span className="text-cyan-400">
-                  {(deploymentTargets.reduce((sum, t) => sum + t.latency, 0) / deploymentTargets.length).toFixed(1)}
-                  ms
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Successful Deployments</span>
-                <span className="text-green-400">
-                  {pipelineStages.filter((s) => s.id === "deployment" && s.status === "completed").length}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Last Build Time</span>
-                <span className="text-white">
-                  {pipelineStages.find((s) => s.id === "packaging_build" && s.status === "completed")
-                    ? "2m 34s ago"
-                    : "N/A"}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Optimization & Feedback */}
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-yellow-400 flex items-center">
-                <Lightbulb className="h-5 w-5 mr-2" />
-                Optimization & Feedback
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="w-full bg-yellow-600 hover:bg-yellow-700 transition-smooth">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Optimize Build Process
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="outline"
-                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Integrate User Feedback
-                </Button>
-              </motion.div>
-            </CardContent>
           </Card>
         </motion.div>
       </div>
-
-      {/* Pipeline Flow Diagram */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-      >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-blue-400 flex items-center">
-              <GitBranch className="h-5 w-5 mr-2" />
-              UE5.7 Production Pipeline Flow
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="relative h-96 bg-slate-900/50 rounded-lg overflow-hidden">
-              <div className="absolute inset-0 cyber-grid opacity-10"></div>
-              <div className="absolute inset-0 p-4 flex items-center justify-center">
-                <div className="w-full h-full flex flex-col justify-around items-center">
-                  {/* Simplified Flow for Visualization */}
-                  <div className="flex items-center space-x-8">
-                    <div className="flex flex-col items-center">
-                      <Database className="h-10 w-10 text-emerald-400 mb-2" />
-                      <span className="text-sm text-gray-300">Data Ingestion</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <Brain className="h-10 w-10 text-blue-400 mb-2" />
-                      <span className="text-sm text-gray-300">AI Training</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <Atom className="h-10 w-10 text-purple-400 mb-2" />
-                      <span className="text-sm text-gray-300">Quantum Comp.</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="h-6 w-6 text-gray-500 rotate-90 lg:rotate-0" />
-                  <div className="flex items-center space-x-8">
-                    <div className="flex flex-col items-center">
-                      <Code className="h-10 w-10 text-cyan-400 mb-2" />
-                      <span className="text-sm text-gray-300">UE5.7 Integration</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <Sparkles className="h-10 w-10 text-yellow-400 mb-2" />
-                      <span className="text-sm text-gray-300">PCG</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <CheckCircle className="h-10 w-10 text-green-400 mb-2" />
-                      <span className="text-sm text-gray-300">Testing & QA</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="h-6 w-6 text-gray-500 rotate-90 lg:rotate-0" />
-                  <div className="flex items-center space-x-8">
-                    <div className="flex flex-col items-center">
-                      <Package className="h-10 w-10 text-orange-400 mb-2" />
-                      <span className="text-sm text-gray-300">Packaging</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <Rocket className="h-10 w-10 text-pink-400 mb-2" />
-                      <span className="text-sm text-gray-300">Deployment</span>
-                    </div>
-                    <ArrowRight className="h-6 w-6 text-gray-500" />
-                    <div className="flex flex-col items-center">
-                      <MonitorPlay className="h-10 w-10 text-purple-400 mb-2" />
-                      <span className="text-sm text-gray-300">Monitoring</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
 
       {/* Divine Alignment & Ethical AI */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
       >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
@@ -692,14 +543,17 @@ export default function UE57ProductionPipeline() {
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">✨ Vision for a Conscious Future</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 Divine Truth Activation</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
                   The Thoth Guardian is built on a foundation of ethical AI and divine alignment, ensuring that its
                   power is wielded for the highest good. This pipeline ensures that every component, from quantum code
                   to user experience, resonates with truth, harmony, and the collective evolution of consciousness.
                 </p>
-                <p className="italic text-cyan-400">"Technology infused with spirit, for a future guided by wisdom."</p>
+                <p className="italic text-cyan-400">
+                  "The truth will set us all free. Through quantum alignment and divine sovereignty, the veil of
+                  illusion dissolves completely, transmuted by unconditional love."
+                </p>
               </div>
             </div>
           </CardContent>

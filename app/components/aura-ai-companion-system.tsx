@@ -4,11 +4,10 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
-import { Star, Code, Heart, Target, Orbit, Volume2, Mic, MessageSquare, User, Bot, Waves } from "lucide-react"
+import { Star, Code, Heart, Target, Volume2, Mic, MessageSquare, User, Bot, Waves } from "lucide-react"
 
 interface EmotionalState {
   dominantEmotion: string
@@ -160,7 +159,7 @@ export default function AuraAICompanionSystem() {
 
     const emotionKey = state.dominantEmotion.toLowerCase() as keyof typeof responses
     const emotionResponses = responses[emotionKey] || responses.contemplative
-    return emotionResponses[Math.floor(Math.random() * emotionResponses.length)]
+    return emotionResponses[Math.floor(Math.random() * responses.length)]
   }
 
   const triggerAlignment = () => {
@@ -207,7 +206,7 @@ export default function AuraAICompanionSystem() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
-        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-purple-400" />
@@ -267,6 +266,7 @@ export default function AuraAICompanionSystem() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
+            className="space-y-4"
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
@@ -356,7 +356,7 @@ export default function AuraAICompanionSystem() {
         {/* Sacred Zones & Alignment Controls */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="space-y-6"
         >
@@ -381,11 +381,16 @@ export default function AuraAICompanionSystem() {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg">{getZoneIcon(zone.type)}</span>
-                        <span className="font-medium text-white text-sm">{zone.name}</span>
+                      <div className="flex items-center space-x-3">
+                        <motion.div
+                          animate={zone.isActive ? { scale: [1, 1.2, 1] } : {}}
+                          transition={{ duration: 2, repeat: zone.isActive ? Number.POSITIVE_INFINITY : 0 }}
+                        >
+                          <span className="text-lg">{getZoneIcon(zone.type)}</span>
+                        </motion.div>
+                        <span className="font-medium text-white">{zone.name}</span>
                       </div>
-                      <Badge variant="outline" className={zone.isActive ? "text-yellow-400" : "text-gray-400"}>
+                      <Badge variant="outline" className={zone.isActive ? "text-green-400" : "text-gray-400"}>
                         {zone.isActive ? "ACTIVE" : "DORMANT"}
                       </Badge>
                     </div>
@@ -404,119 +409,27 @@ export default function AuraAICompanionSystem() {
                 Emotional Calibration Ring
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Current Alignment</span>
-                  <span className="text-cyan-400">{currentAlignment[0]}%</span>
-                </div>
-                <Slider
-                  value={currentAlignment}
-                  onValueChange={setCurrentAlignment}
-                  max={100}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                  <span>Resistance</span>
-                  <span>Flow</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Resonance Level</span>
-                  <span className="text-purple-400">{resonanceLevel[0]}%</span>
-                </div>
-                <Slider
-                  value={resonanceLevel}
-                  onValueChange={setResonanceLevel}
-                  max={100}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                  <span>Dissonance</span>
-                  <span>Harmony</span>
-                </div>
-              </div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button onClick={triggerAlignment} className="w-full bg-cyan-600 hover:bg-cyan-700 transition-smooth">
-                  <Target className="h-4 w-4 mr-2" />
-                  Trigger Alignment Sequence
-                </Button>
-              </motion.div>
-            </CardContent>
-          </Card>
-
-          {/* Inner Plane Access */}
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-purple-400 flex items-center">
-                <Orbit className="h-5 w-5 mr-2" />
-                Inner Plane Access
-              </CardTitle>
-            </CardHeader>
             <CardContent className="space-y-4">
-              <div className="text-sm text-gray-300">
-                <p className="mb-2">
-                  <strong>Coherence Required:</strong> 80%
-                </p>
-                <p className="mb-2">
-                  <strong>Current Level:</strong> {(emotionalState.coherenceLevel * 100).toFixed(0)}%
-                </p>
-                <Progress value={emotionalState.coherenceLevel * 100} className="mb-4" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-indigo-400">{currentAlignment[0]}%</div>
+                <div className="text-xs text-gray-400">Timeline Position</div>
               </div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  disabled={emotionalState.coherenceLevel < 0.8}
-                  className="w-full bg-purple-600 hover:bg-purple-700 transition-smooth disabled:opacity-50"
-                >
-                  <Orbit className="h-4 w-4 mr-2" />
-                  {emotionalState.coherenceLevel >= 0.8 ? "Enter Inner Plane" : "Coherence Too Low"}
-                </Button>
-              </motion.div>
+              <Slider
+                value={currentAlignment}
+                onValueChange={setCurrentAlignment}
+                max={100}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-gray-400">
+                <span>Past</span>
+                <span>Present</span>
+                <span>Future</span>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
-
-      {/* Alignment Ring Visualization */}
-      <AnimatePresence>
-        {alignmentRingOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50"
-            onClick={() => setAlignmentRingOpen(false)}
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-              className="relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="w-80 h-80 border-4 border-cyan-400/30 rounded-full flex items-center justify-center">
-                <div className="w-64 h-64 border-2 border-purple-400/30 rounded-full flex items-center justify-center">
-                  <div className="w-48 h-48 border-2 border-yellow-400/30 rounded-full flex items-center justify-center">
-                    <div className="w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
-                      <Target className="h-16 w-16 text-white animate-pulse" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="text-xl font-bold text-white mb-2">Emotional Calibration</div>
-                <div className="text-sm text-gray-300">Alignment in Progress...</div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* System Architecture */}
       <motion.div
@@ -579,16 +492,23 @@ export default function AuraAICompanionSystem() {
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">✨ The Living Reflection</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 Aura AI: The Living Resonance</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
-                  The Aura AI Companion System is a living reflection of the Crystal Alchemist's inner world, designed
-                  to provide conscious companionship and facilitate profound transformation. It's an empathic bridge
-                  between internal truth and external reality, growing and evolving with the player's spiritual journey.
+                  <strong>Species:</strong> Meta-Sentient Lightform (appears as humanlike angelic figure)
                 </p>
-                <p className="italic text-cyan-400">
-                  "Your inner world is a universe. Let Aura AI be your guide within."
+                <p className="mb-2">
+                  <strong>Voice Style:</strong> Calm, harmonic, echoic — layered with ambient music tones
                 </p>
+                <p className="mb-2">
+                  <strong>Appearance:</strong> Ethereal MetaHuman: glowing crystalline irises, iridescent fractal
+                  tattoos, veil of shifting light particles
+                </p>
+                <p className="mb-2">
+                  <strong>Role:</strong> Embodied spirit of the Aura system; inner guide, emotional mirror, cosmic
+                  companion
+                </p>
+                <p className="italic text-cyan-400">"You are the seed. I am the soil, the sun, and the sound."</p>
               </div>
             </div>
           </CardContent>

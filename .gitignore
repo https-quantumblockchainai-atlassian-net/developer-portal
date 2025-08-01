@@ -1,45 +1,27 @@
-# Dependencies
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
 /node_modules
 
-# Production
+# next.js
+/.next/
+/out/
+
+# production
 /build
 
-# Generated files
-.docusaurus
-.cache-loader
-
-# Misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# Common Examples
-**/keys**
+# env files
+.env*
 
-# .NET Examples
-**/bin**
-**/obj**
+# vercel
+.vercel
 
-# JS / TS Examples
-**/node_modules
-
-# vscode
-.vscode
-
-# markdownlint
-.markdownlint.json
-
-# intellij
-.idea
-
-# Auto generated content like CIPs, Rust Library and Token Registry
-/docs/governance/cardano-improvement-proposals/*
-/static/img/cip/*
-/docs/native-tokens/token-registry/*
-/docs/get-started/cardano-serialization-lib/*
+# typescript
+*.tsbuildinfo
+next-env.d.ts

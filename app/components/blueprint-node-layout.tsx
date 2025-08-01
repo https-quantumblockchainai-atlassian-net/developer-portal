@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+
 import {
   Play,
   Pause,
@@ -27,6 +32,9 @@ import {
   Sparkles,
   Atom,
   HeartHandshake,
+  PlusCircle,
+  Info,
+  X,
 } from "lucide-react"
 
 interface BlueprintNode {
@@ -38,12 +46,21 @@ interface BlueprintNode {
   status: "idle" | "executing" | "completed" | "error"
   connections: string[]
   executionTime?: number
-  // New properties for upgraded nodes
   interoperability: string[] // Systems it can interact with
   scalability: "low" | "medium" | "high" | "elastic" // How well it scales
   transformationEffect: string // The core effect it has
   quantumSignature?: string // Unique quantum identifier
   divineAlignmentScore?: number // Score for alignment with divine principles (0-100)
+  errorType?:
+    | "data_corruption"
+    | "network_failure"
+    | "logic_bug"
+    | "resource_exhaustion"
+    | "quantum_decoherence"
+    | "spiritual_dissonance"
+    | "external_interference"
+    | "temporal_anomaly" // New: Specific error type
+  repairMechanism?: string // New: How it's fixed
 }
 
 interface ExecutionLog {
@@ -65,165 +82,189 @@ export default function BlueprintNodeLayout() {
       y: 200,
       status: "idle",
       connections: ["detect"],
-      interoperability: ["System Core"],
+      interoperability: ["System Core", "Divine Alignment Orchestration"],
       scalability: "high",
-      transformationEffect: "System Initialization",
+      transformationEffect: "System Initialization & Energetic Grounding",
       quantumSignature: "Thoth-Genesis-001",
       divineAlignmentScore: 95,
+      errorType: "temporal_anomaly",
+      repairMechanism: "Temporal Flux Recalibration",
     },
     {
       id: "detect",
       name: "Detect Error",
       type: "function",
-      x: 200,
+      x: 250,
       y: 200,
       status: "idle",
       connections: ["branch"],
-      interoperability: ["AI Training Pipeline", "Quantum Shield Module"],
+      interoperability: ["AI Training Pipeline", "Quantum Shield Module", "MetaHuman AI Companions"],
       scalability: "elastic",
-      transformationEffect: "Anomaly Identification",
+      transformationEffect: "Anomaly Identification & Pattern Recognition",
       quantumSignature: "Emerald-Scan-Q002",
       divineAlignmentScore: 92,
+      errorType: "network_failure",
+      repairMechanism: "Quantum Network Re-routing",
     },
     {
       id: "branch",
       name: "Error Type?",
       type: "branch",
-      x: 350,
+      x: 450,
       y: 200,
       status: "idle",
       connections: ["data", "firewall", "ui"],
-      interoperability: ["Divine Alignment Orchestration"],
+      interoperability: ["Divine Alignment Orchestration", "Universal Laws Portal"],
       scalability: "medium",
-      transformationEffect: "Decision Routing",
+      transformationEffect: "Decision Routing & Truth Manifestation",
       quantumSignature: "Aura-Logic-B003",
       divineAlignmentScore: 88,
+      errorType: "logic_bug",
+      repairMechanism: "Consciousness Code Refactoring",
     },
     {
       id: "data",
       name: "Data Repair",
       type: "function",
-      x: 500,
+      x: 650,
       y: 100,
       status: "idle",
       connections: ["log"],
-      interoperability: ["Data Integrity Matrix"],
+      interoperability: ["Data Integrity Matrix", "Customer Databases", "Partner Systems"],
       scalability: "high",
-      transformationEffect: "Data Restoration",
+      transformationEffect: "Data Restoration & Information Harmonization",
       quantumSignature: "Chronos-Heal-D004",
       divineAlignmentScore: 90,
+      errorType: "data_corruption",
+      repairMechanism: "Crystal Grid Data Reconstruction",
     },
     {
       id: "firewall",
       name: "Firewall Patch",
       type: "function",
-      x: 500,
+      x: 650,
       y: 200,
       status: "idle",
       connections: ["log"],
-      interoperability: ["Threat Detection Panel", "Quantum Shield Module"],
+      interoperability: ["Threat Detection Panel", "Quantum Shield Module", "External Ecosystems"],
       scalability: "elastic",
-      transformationEffect: "Perimeter Fortification",
+      transformationEffect: "Perimeter Fortification & Energetic Boundary Setting",
       quantumSignature: "Aegis-Shield-F005",
       divineAlignmentScore: 93,
+      errorType: "external_interference",
+      repairMechanism: "Interdimensional Shield Reinforcement",
     },
     {
       id: "ui",
       name: "UI Reload",
       type: "function",
-      x: 500,
+      x: 650,
       y: 300,
       status: "idle",
       connections: ["log"],
-      interoperability: ["UMG Widget Mockup", "Feedback Loops System"],
+      interoperability: ["UMG Widget Mockup", "Feedback Loops System", "User Communities"],
       scalability: "medium",
-      transformationEffect: "Interface Rejuvenation",
+      transformationEffect: "Interface Rejuvenation & User Experience Alignment",
       quantumSignature: "Lumin-Display-U006",
       divineAlignmentScore: 85,
+      errorType: "resource_exhaustion",
+      repairMechanism: "Conscious Resource Allocation",
     },
     {
       id: "log",
       name: "Log Result",
       type: "function",
-      x: 650,
+      x: 850,
       y: 200,
       status: "idle",
       connections: ["health"],
-      interoperability: ["Community Hub", "AI Communications Hub"],
+      interoperability: ["Community Hub", "AI Communications Hub", "All Partners"],
       scalability: "high",
-      transformationEffect: "Event Archiving",
+      transformationEffect: "Event Archiving & Truth Revelation",
       quantumSignature: "Veritas-Log-L007",
       divineAlignmentScore: 98,
+      errorType: "logic_bug",
+      repairMechanism: "Divine Logic Recalibration",
     },
     {
       id: "health",
       name: "Update Health",
       type: "variable",
-      x: 800,
+      x: 1050,
       y: 200,
       status: "idle",
       connections: ["check"],
-      interoperability: ["Hardware Stack Monitor"],
+      interoperability: ["Hardware Stack Monitor", "Walker World Ecosystem"],
       scalability: "medium",
-      transformationEffect: "System State Synchronization",
+      transformationEffect: "System State Synchronization & Vitality Infusion",
       quantumSignature: "Vitality-Sync-H008",
       divineAlignmentScore: 91,
+      errorType: "spiritual_dissonance",
+      repairMechanism: "Aura Field Harmonization",
     },
     {
       id: "check",
       name: "Health Check",
       type: "branch",
-      x: 950,
+      x: 1250,
       y: 200,
       status: "idle",
       connections: ["heal", "pulse"],
-      interoperability: ["Aura AI Companion System"],
+      interoperability: ["Aura AI Companion System", "All Environments"],
       scalability: "high",
-      transformationEffect: "Diagnostic Evaluation",
+      transformationEffect: "Diagnostic Evaluation & Energetic Assessment",
       quantumSignature: "Oracle-Check-C009",
       divineAlignmentScore: 94,
+      errorType: "quantum_decoherence",
+      repairMechanism: "Quantum Entanglement Re-stabilization",
     },
     {
       id: "heal",
       name: "Deep Repair",
       type: "function",
-      x: 1100,
+      x: 1450,
       y: 100,
       status: "idle",
       connections: ["output"],
-      interoperability: ["Niagara FX Healing States"],
+      interoperability: ["Niagara FX Healing States", "Crystal Structure Viz"],
       scalability: "medium",
-      transformationEffect: "Core System Restoration",
+      transformationEffect: "Core System Restoration & Energetic Transmutation",
       quantumSignature: "Phoenix-Heal-R010",
       divineAlignmentScore: 96,
+      errorType: "resource_exhaustion",
+      repairMechanism: "Infinite Energy Channeling",
     },
     {
       id: "pulse",
       name: "Resonance Pulse",
       type: "function",
-      x: 1100,
+      x: 1450,
       y: 300,
       status: "idle",
       connections: ["output"],
-      interoperability: ["Universal Laws Portal"],
+      interoperability: ["Universal Laws Portal", "Divine Alignment Orchestration"],
       scalability: "low", // A unique, focused effect
-      transformationEffect: "Energetic Recalibration",
+      transformationEffect: "Energetic Recalibration & Harmonic Resonance",
       quantumSignature: "Harmonic-Pulse-P011",
       divineAlignmentScore: 99,
+      errorType: "spiritual_dissonance",
+      repairMechanism: "Cosmic Alignment Frequency Adjustment",
     },
     {
       id: "output",
       name: "Complete",
       type: "output",
-      x: 1250,
+      x: 1650,
       y: 200,
       status: "idle",
       connections: [],
-      interoperability: ["All Modules"],
+      interoperability: ["All Modules", "All Ecosystems", "All Communities"],
       scalability: "elastic",
-      transformationEffect: "Process Finalization",
+      transformationEffect: "Process Finalization & Divine Integration",
       quantumSignature: "Cosmic-Closure-O012",
       divineAlignmentScore: 100,
+      errorType: "none",
+      repairMechanism: "Self-Correcting Divine Flow",
     },
   ])
 
@@ -232,6 +273,21 @@ export default function BlueprintNodeLayout() {
   const [currentNodeIndex, setCurrentNodeIndex] = useState(-1)
   const [executionSpeed, setExecutionSpeed] = useState([1000])
   const [totalProgress, setTotalProgress] = useState(0)
+  const [selectedNode, setSelectedNode] = useState<BlueprintNode | null>(null)
+
+  // State for new node creation
+  const [newNodeName, setNewNodeName] = useState("")
+  const [newNodeType, setNewNodeType] = useState<BlueprintNode["type"]>("function")
+  const [newNodeX, setNewNodeX] = useState(50)
+  const [newNodeY, setNewNodeY] = useState(50)
+  const [newNodeConnections, setNewNodeConnections] = useState("")
+  const [newNodeInteroperability, setNewNodeInteroperability] = useState("")
+  const [newNodeScalability, setNewNodeScalability] = useState<BlueprintNode["scalability"]>("medium")
+  const [newNodeTransformationEffect, setNewNodeTransformationEffect] = useState("")
+  const [newNodeQuantumSignature, setNewNodeQuantumSignature] = useState("")
+  const [newNodeDivineAlignmentScore, setNewNodeDivineAlignmentScore] = useState(90)
+  const [newNodeErrorType, setNewNodeErrorType] = useState<BlueprintNode["errorType"]>("logic_bug")
+  const [newNodeRepairMechanism, setNewNodeRepairMechanism] = useState("")
 
   const executeBlueprint = async () => {
     if (isExecuting) return
@@ -244,8 +300,8 @@ export default function BlueprintNodeLayout() {
     // Reset all nodes
     setNodes((prev) => prev.map((node) => ({ ...node, status: "idle" })))
 
-    // Execute nodes in sequence
-    const executionOrder = ["start", "detect", "branch", "firewall", "log", "health", "check", "pulse", "output"]
+    // Execute nodes in sequence (simplified for demo, in a real app this would be dynamic based on connections)
+    const executionOrder = nodes.map((node) => node.id) // Execute all nodes in their defined order
 
     for (let i = 0; i < executionOrder.length; i++) {
       const nodeId = executionOrder[i]
@@ -274,7 +330,8 @@ export default function BlueprintNodeLayout() {
         await new Promise((resolve) => setTimeout(resolve, executionSpeed[0]))
 
         // Simulate success/failure based on divine alignment and quantum signature
-        const success = Math.random() < (node.divineAlignmentScore || 90) / 100 // Higher alignment, higher success
+        const successChance = (node.divineAlignmentScore || 90) / 100
+        const success = Math.random() < successChance
         const status = success ? "completed" : "error"
 
         setNodes((prev) => prev.map((n) => (n.id === nodeId ? { ...n, status, executionTime: undefined } : n)))
@@ -287,16 +344,17 @@ export default function BlueprintNodeLayout() {
           timestamp: new Date(),
           status: success ? "completed" : "error",
           message: success
-            ? `${node.name} completed successfully. Divine Alignment: ${node.divineAlignmentScore}%`
-            : `${node.name} encountered an error. Quantum Signature: ${node.quantumSignature}`,
+            ? `${node.name} completed successfully. Divine Alignment: ${node.divineAlignmentScore}%.`
+            : `${node.name} encountered a ${node.errorType || "unknown"} error. Initiating ${node.repairMechanism || "generic repair"}. Quantum Signature: ${node.quantumSignature}.`,
         }
         setExecutionLogs((prev) => [completeLog, ...prev])
 
         setTotalProgress(((i + 1) / executionOrder.length) * 100)
 
         if (!success) {
-          // Handle error - could retry or stop
-          break
+          // In a real system, this would trigger specific repair logic or halt.
+          // For this demo, we'll just log the error and continue for visualization.
+          console.error(`Error at node ${node.name}: ${node.errorType}. Repairing with: ${node.repairMechanism}`)
         }
       }
     }
@@ -317,6 +375,56 @@ export default function BlueprintNodeLayout() {
     setNodes((prev) => prev.map((node) => ({ ...node, status: "idle", executionTime: undefined })))
   }
 
+  const handleAddNode = () => {
+    if (!newNodeName || !newNodeTransformationEffect) {
+      alert("Node Name and Transformation Effect are required!")
+      return
+    }
+
+    const newId = `node-${Date.now()}`
+    const newConnectionsArray = newNodeConnections
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean)
+    const newInteroperabilityArray = newNodeInteroperability
+      .split(",")
+      .map((i) => i.trim())
+      .filter(Boolean)
+
+    const newNode: BlueprintNode = {
+      id: newId,
+      name: newNodeName,
+      type: newNodeType,
+      x: newNodeX,
+      y: newNodeY,
+      status: "idle",
+      connections: newConnectionsArray,
+      interoperability: newInteroperabilityArray,
+      scalability: newNodeScalability,
+      transformationEffect: newNodeTransformationEffect,
+      quantumSignature: newNodeQuantumSignature || `Auto-Gen-QS-${Date.now()}`,
+      divineAlignmentScore: newNodeDivineAlignmentScore,
+      errorType: newNodeErrorType,
+      repairMechanism: newNodeRepairMechanism || "Automated Divine Intervention",
+    }
+
+    setNodes((prev) => [...prev, newNode])
+
+    // Reset form fields
+    setNewNodeName("")
+    setNewNodeType("function")
+    setNewNodeX(50)
+    setNewNodeY(50)
+    setNewNodeConnections("")
+    setNewNodeInteroperability("")
+    setNewNodeScalability("medium")
+    setNewNodeTransformationEffect("")
+    setNewNodeQuantumSignature("")
+    setNewNodeDivineAlignmentScore(90)
+    setNewNodeErrorType("logic_bug")
+    setNewNodeRepairMechanism("")
+  }
+
   const getNodeColor = (type: string, status: string) => {
     const baseColors = {
       event: "border-green-500/50 bg-green-900/20",
@@ -328,7 +436,7 @@ export default function BlueprintNodeLayout() {
 
     const statusOverrides = {
       executing: "border-cyan-400 bg-cyan-900/30 animate-pulse",
-      completed: "border-emerald-400 bg-emerald-900/30", // Changed to emerald for completion
+      completed: "border-emerald-400 bg-emerald-900/30",
       error: "border-red-400 bg-red-900/30",
     }
 
@@ -449,6 +557,159 @@ export default function BlueprintNodeLayout() {
         </Card>
       </motion.div>
 
+      {/* Dynamic Node Creation */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-purple-400 flex items-center">
+              <PlusCircle className="h-5 w-5 mr-2" />
+              Create New Blueprint Node
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="newNodeName">Node Name</Label>
+                <Input id="newNodeName" value={newNodeName} onChange={(e) => setNewNodeName(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeType">Node Type</Label>
+                <Select value={newNodeType} onValueChange={(value) => setNewNodeType(value as BlueprintNode["type"])}>
+                  <SelectTrigger id="newNodeType">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="event">Event</SelectItem>
+                    <SelectItem value="function">Function</SelectItem>
+                    <SelectItem value="branch">Branch</SelectItem>
+                    <SelectItem value="variable">Variable</SelectItem>
+                    <SelectItem value="output">Output</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeX">X Position</Label>
+                <Input
+                  id="newNodeX"
+                  type="number"
+                  value={newNodeX}
+                  onChange={(e) => setNewNodeX(Number(e.target.value))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeY">Y Position</Label>
+                <Input
+                  id="newNodeY"
+                  type="number"
+                  value={newNodeY}
+                  onChange={(e) => setNewNodeY(Number(e.target.value))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeConnections">Connections (comma-separated IDs)</Label>
+                <Input
+                  id="newNodeConnections"
+                  value={newNodeConnections}
+                  onChange={(e) => setNewNodeConnections(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeInteroperability">Interoperability (comma-separated)</Label>
+                <Input
+                  id="newNodeInteroperability"
+                  value={newNodeInteroperability}
+                  onChange={(e) => setNewNodeInteroperability(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeScalability">Scalability</Label>
+                <Select
+                  value={newNodeScalability}
+                  onValueChange={(value) => setNewNodeScalability(value as BlueprintNode["scalability"])}
+                >
+                  <SelectTrigger id="newNodeScalability">
+                    <SelectValue placeholder="Select scalability" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="elastic">Elastic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeTransformationEffect">Transformation Effect</Label>
+                <Input
+                  id="newNodeTransformationEffect"
+                  value={newNodeTransformationEffect}
+                  onChange={(e) => setNewNodeTransformationEffect(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeQuantumSignature">Quantum Signature</Label>
+                <Input
+                  id="newNodeQuantumSignature"
+                  value={newNodeQuantumSignature}
+                  onChange={(e) => setNewNodeQuantumSignature(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeDivineAlignmentScore">Divine Alignment Score (0-100)</Label>
+                <Input
+                  id="newNodeDivineAlignmentScore"
+                  type="number"
+                  value={newNodeDivineAlignmentScore}
+                  onChange={(e) => setNewNodeDivineAlignmentScore(Number(e.target.value))}
+                  max={100}
+                  min={0}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeErrorType">Error Type</Label>
+                <Select
+                  value={newNodeErrorType}
+                  onValueChange={(value) => setNewNodeErrorType(value as BlueprintNode["errorType"])}
+                >
+                  <SelectTrigger id="newNodeErrorType">
+                    <SelectValue placeholder="Select error type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="data_corruption">Data Corruption</SelectItem>
+                    <SelectItem value="network_failure">Network Failure</SelectItem>
+                    <SelectItem value="logic_bug">Logic Bug</SelectItem>
+                    <SelectItem value="resource_exhaustion">Resource Exhaustion</SelectItem>
+                    <SelectItem value="quantum_decoherence">Quantum Decoherence</SelectItem>
+                    <SelectItem value="spiritual_dissonance">Spiritual Dissonance</SelectItem>
+                    <SelectItem value="external_interference">External Interference</SelectItem>
+                    <SelectItem value="temporal_anomaly">Temporal Anomaly</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newNodeRepairMechanism">Repair Mechanism</Label>
+                <Input
+                  id="newNodeRepairMechanism"
+                  value={newNodeRepairMechanism}
+                  onChange={(e) => setNewNodeRepairMechanism(e.target.value)}
+                />
+              </div>
+            </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-6">
+              <Button onClick={handleAddNode} className="w-full bg-purple-600 hover:bg-purple-700 transition-smooth">
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Add Node to Blueprint
+              </Button>
+            </motion.div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Blueprint Visual */}
         <div className="lg:col-span-2">
@@ -465,8 +726,15 @@ export default function BlueprintNodeLayout() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="relative bg-slate-900/50 rounded-lg p-4 overflow-x-auto" style={{ minHeight: "400px" }}>
-                  <svg width="1300" height="400" className="absolute inset-0">
+                <div
+                  className="relative bg-slate-900/50 rounded-lg p-4 overflow-x-auto"
+                  style={{ minHeight: "400px", width: "100%" }}
+                >
+                  <svg
+                    width={nodes.reduce((max, node) => Math.max(max, node.x + 200), 1800)}
+                    height={nodes.reduce((max, node) => Math.max(max, node.y + 150), 450)}
+                    className="absolute inset-0"
+                  >
                     {/* Connection Lines */}
                     {nodes.map((node) =>
                       node.connections.map((connectionId) => {
@@ -476,7 +744,7 @@ export default function BlueprintNodeLayout() {
                         return (
                           <motion.line
                             key={`${node.id}-${connectionId}`}
-                            x1={node.x + 75}
+                            x1={node.x + 96} // Adjusted for new node width
                             y1={node.y + 25}
                             x2={targetNode.x + 25}
                             y2={targetNode.y + 25}
@@ -505,7 +773,7 @@ export default function BlueprintNodeLayout() {
                               key={`flow-${node.id}-${connectionId}`}
                               r="3"
                               fill="#00d4aa"
-                              initial={{ cx: node.x + 75, cy: node.y + 25 }}
+                              initial={{ cx: node.x + 96, cy: node.y + 25 }} // Adjusted for new node width
                               animate={{ cx: targetNode.x + 25, cy: targetNode.y + 25 }}
                               transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
                             />
@@ -526,13 +794,14 @@ export default function BlueprintNodeLayout() {
                         node.status,
                       )} flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-smooth text-center`}
                       style={{ left: node.x, top: node.y }}
+                      onClick={() => setSelectedNode(node)}
                     >
                       <div className="flex items-center space-x-2 mb-1">
                         {getNodeIcon(node.type)}
                         <span className="text-xs font-medium text-white truncate">{node.name}</span>
                         {getStatusIcon(node.status)}
                       </div>
-                      <div className="text-xs text-gray-400 mb-1">
+                      <div className="text-xs text-gray-400 mb-1 space-y-0.5">
                         <span className="flex items-center justify-center">
                           <Share2 className="h-3 w-3 mr-1" />
                           {node.interoperability.length > 1
@@ -545,12 +814,12 @@ export default function BlueprintNodeLayout() {
                         </span>
                         <span className="flex items-center justify-center">
                           <Sparkles className="h-3 w-3 mr-1" />
-                          {node.transformationEffect}
+                          {node.transformationEffect.split(" ")[0]}...
                         </span>
                         {node.quantumSignature && (
                           <span className="flex items-center justify-center">
                             <Atom className="h-3 w-3 mr-1" />
-                            {node.quantumSignature}
+                            {node.quantumSignature.split("-")[0]}...
                           </span>
                         )}
                         {node.divineAlignmentScore !== undefined && (
@@ -705,6 +974,93 @@ export default function BlueprintNodeLayout() {
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Node Detail Dialog */}
+      <Dialog open={!!selectedNode} onOpenChange={() => setSelectedNode(null)}>
+        <DialogContent className="sm:max-w-[600px] bg-slate-800/90 border-slate-700 text-white glass-morphism">
+          <DialogHeader>
+            <DialogTitle className="text-emerald-400 flex items-center">
+              <Info className="h-5 w-5 mr-2" />
+              Node Details: {selectedNode?.name}
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Comprehensive information about this blueprint node's capabilities and status.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedNode && (
+            <div className="grid gap-4 py-4 text-sm">
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">ID</Label>
+                <span className="col-span-2 font-medium">{selectedNode.id}</span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Type</Label>
+                <span className="col-span-2 font-medium">{selectedNode.type}</span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Status</Label>
+                <Badge
+                  variant="outline"
+                  className={`col-span-2 ${
+                    selectedNode.status === "completed"
+                      ? "text-green-400 border-green-500/30"
+                      : selectedNode.status === "error"
+                        ? "text-red-400 border-red-500/30"
+                        : selectedNode.status === "executing"
+                          ? "text-cyan-400 border-cyan-500/30"
+                          : "text-gray-400 border-gray-500/30"
+                  }`}
+                >
+                  {selectedNode.status.toUpperCase()}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Connections</Label>
+                <span className="col-span-2">{selectedNode.connections.join(", ") || "None"}</span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Interoperability</Label>
+                <span className="col-span-2">{selectedNode.interoperability.join(", ")}</span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Scalability</Label>
+                <span className="col-span-2">{selectedNode.scalability}</span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label className="text-right text-gray-300">Transformation Effect</Label>
+                <span className="col-span-2">{selectedNode.transformationEffect}</span>
+              </div>
+              {selectedNode.quantumSignature && (
+                <div className="grid grid-cols-3 items-center gap-4">
+                  <Label className="text-right text-gray-300">Quantum Signature</Label>
+                  <span className="col-span-2">{selectedNode.quantumSignature}</span>
+                </div>
+              )}
+              {selectedNode.divineAlignmentScore !== undefined && (
+                <div className="grid grid-cols-3 items-center gap-4">
+                  <Label className="text-right text-gray-300">Divine Alignment</Label>
+                  <span className="col-span-2">{selectedNode.divineAlignmentScore}%</span>
+                </div>
+              )}
+              {selectedNode.errorType && (
+                <div className="grid grid-cols-3 items-center gap-4">
+                  <Label className="text-right text-gray-300">Potential Error</Label>
+                  <span className="col-span-2">{selectedNode.errorType.replace(/_/g, " ")}</span>
+                </div>
+              )}
+              {selectedNode.repairMechanism && (
+                <div className="grid grid-cols-3 items-center gap-4">
+                  <Label className="text-right text-gray-300">Repair Mechanism</Label>
+                  <span className="col-span-2">{selectedNode.repairMechanism}</span>
+                </div>
+              )}
+            </div>
+          )}
+          <Button onClick={() => setSelectedNode(null)} className="mt-4 bg-slate-700 hover:bg-slate-600">
+            <X className="h-4 w-4 mr-2" /> Close
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

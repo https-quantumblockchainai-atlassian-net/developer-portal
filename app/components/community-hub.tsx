@@ -1,574 +1,450 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Users, MessageSquare, Heart, PlusCircle, Share2, Lightbulb } from "lucide-react"
+import {
+  Users,
+  MessageSquare,
+  Github,
+  ExternalLink,
+  BookOpen,
+  Video,
+  Calendar,
+  Trophy,
+  Zap,
+  Heart,
+  Share2,
+} from "lucide-react"
 
-interface CommunityMember {
+interface CommunityPost {
   id: string
-  name: string
+  author: string
   avatar: string
-  role: "Guardian" | "Alchemist" | "Sovereign" | "Seeker" | "Aura AI"
-  status: "online" | "offline" | "busy"
-  reputation: number
-  divineAlignment: number
-  lastActive: Date
-}
-
-interface ForumPost {
-  id: string
   title: string
-  authorId: string
   content: string
   timestamp: Date
+  likes: number
   replies: number
-  views: number
   tags: string[]
-  sentiment: "positive" | "neutral" | "negative" | "harmonious"
 }
 
-interface CommunityProject {
+interface CommunityEvent {
   id: string
-  name: string
-  description: string
-  status: "active" | "completed" | "proposed"
-  members: string[] // Member IDs
-  progress: number
-  focusArea: string
-  divineAlignmentScore: number
+  title: string
+  date: Date
+  type: "webinar" | "workshop" | "conference" | "hackathon"
+  participants: number
 }
 
 export default function CommunityHub() {
-  const [members, setMembers] = useState<CommunityMember[]>([
+  const [posts, setPosts] = useState<CommunityPost[]>([
     {
-      id: "member-1",
-      name: "Alice (Guardian)",
-      avatar: "/placeholder-user.jpg",
-      role: "Guardian",
-      status: "online",
-      reputation: 1500,
-      divineAlignment: 92,
-      lastActive: new Date(Date.now() - 60000),
-    },
-    {
-      id: "member-2",
-      name: "Bob (Alchemist)",
-      avatar: "/placeholder-user.jpg",
-      role: "Alchemist",
-      status: "online",
-      reputation: 1200,
-      divineAlignment: 88,
-      lastActive: new Date(Date.now() - 120000),
-    },
-    {
-      id: "member-3",
-      name: "Thoth-AI",
-      avatar: "/placeholder-logo.png",
-      role: "Aura AI",
-      status: "online",
-      reputation: 2000,
-      divineAlignment: 99,
-      lastActive: new Date(Date.now() - 30000),
-    },
-    {
-      id: "member-4",
-      name: "Charlie (Sovereign)",
-      avatar: "/placeholder-user.jpg",
-      role: "Sovereign",
-      status: "offline",
-      reputation: 900,
-      divineAlignment: 85,
-      lastActive: new Date(Date.now() - 3600000),
-    },
-  ])
-
-  const [forumPosts, setForumPosts] = useState<ForumPost[]>([
-    {
-      id: "post-1",
-      title: "Quantum Shield Protocol v2.0 Feedback",
-      authorId: "member-1",
-      content: "Discussing potential enhancements for the next iteration of the Quantum Shield.",
-      timestamp: new Date(Date.now() - 86400000), // 1 day ago
-      replies: 15,
-      views: 230,
-      tags: ["Quantum", "Shield", "Feedback"],
-      sentiment: "positive",
-    },
-    {
-      id: "post-2",
-      title: "Aura AI Emotional Coherence Challenges",
-      authorId: "member-2",
-      content: "Sharing insights on improving Aura AI's emotional alignment in complex scenarios.",
-      timestamp: new Date(Date.now() - 172800000), // 2 days ago
+      id: "1",
+      author: "Dr. Sarah Chen",
+      avatar: "/placeholder.svg?height=40&width=40",
+      title: "New Quantum Encryption Algorithm Implementation",
+      content:
+        "Just published our latest research on quantum-resistant encryption. The algorithm shows 99.97% efficiency in our tests.",
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      likes: 42,
       replies: 8,
-      views: 180,
-      tags: ["Aura AI", "Emotional AI"],
-      sentiment: "neutral",
+      tags: ["quantum", "encryption", "research"],
     },
     {
-      id: "post-3",
-      title: "New PCG Blueprint for Lumina Groves",
-      authorId: "member-3",
-      content: "Thoth-AI has proposed a new procedural content generation blueprint for Lumina Groves.",
-      timestamp: new Date(Date.now() - 3600000), // 1 hour ago
-      replies: 5,
-      views: 90,
-      tags: ["PCG", "World Building", "AI"],
-      sentiment: "harmonious",
+      id: "2",
+      author: "Alex Rodriguez",
+      avatar: "/placeholder.svg?height=40&width=40",
+      title: "AI Training Pipeline Optimization",
+      content:
+        "Sharing my experience optimizing the multi-modal training pipeline. Achieved 30% performance improvement!",
+      timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
+      likes: 28,
+      replies: 12,
+      tags: ["ai", "optimization", "performance"],
+    },
+    {
+      id: "3",
+      author: "Maya Patel",
+      avatar: "/placeholder.svg?height=40&width=40",
+      title: "Threat Detection False Positive Analysis",
+      content:
+        "Deep dive into reducing false positives in our threat detection system. New ML model shows promising results.",
+      timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
+      likes: 35,
+      replies: 6,
+      tags: ["threat-detection", "machine-learning", "analysis"],
     },
   ])
 
-  const [communityProjects, setCommunityProjects] = useState<CommunityProject[]>([
+  const [events, setEvents] = useState<CommunityEvent[]>([
     {
-      id: "project-1",
-      name: "Divine Alignment Calibration Matrix",
-      description: "Developing a new calibration matrix for deeper divine alignment.",
-      status: "active",
-      members: ["member-1", "member-3"],
-      progress: 60,
-      focusArea: "Divine Alignment",
-      divineAlignmentScore: 95,
+      id: "1",
+      title: "Quantum Cybersecurity Webinar",
+      date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      type: "webinar",
+      participants: 247,
     },
     {
-      id: "project-2",
-      name: "Interdimensional Threat Analysis",
-      description: "Researching and mitigating threats from higher dimensions.",
-      status: "proposed",
-      members: ["member-1", "member-4"],
-      progress: 0,
-      focusArea: "Threat Detection",
-      divineAlignmentScore: 80,
+      id: "2",
+      title: "AI Security Workshop",
+      date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      type: "workshop",
+      participants: 89,
+    },
+    {
+      id: "3",
+      title: "CyberSec Hackathon 2024",
+      date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      type: "hackathon",
+      participants: 156,
     },
   ])
 
-  const [newPostTitle, setNewPostTitle] = useState("")
-  const [newPostContent, setNewPostContent] = useState("")
-  const [newPostTags, setNewPostTags] = useState("")
+  const [newPost, setNewPost] = useState({ title: "", content: "" })
 
-  useEffect(() => {
-    // Simulate member activity and project progress
-    const interval = setInterval(() => {
-      setMembers((prev) =>
-        prev.map((member) => {
-          if (member.status === "online") {
-            return { ...member, lastActive: new Date() }
-          }
-          return member
-        }),
-      )
+  const communityStats = {
+    totalMembers: 12847,
+    activeToday: 1247,
+    totalPosts: 8934,
+    totalProjects: 156,
+  }
 
-      setCommunityProjects((prev) =>
-        prev.map((project) => {
-          if (project.status === "active" && project.progress < 100) {
-            const newProgress = Math.min(100, project.progress + Math.random() * 3)
-            return { ...project, progress: newProgress }
-          }
-          return project
-        }),
-      )
-    }, 5000)
+  const topContributors = [
+    { name: "Dr. Sarah Chen", contributions: 89, avatar: "/placeholder.svg?height=32&width=32" },
+    { name: "Alex Rodriguez", contributions: 76, avatar: "/placeholder.svg?height=32&width=32" },
+    { name: "Maya Patel", contributions: 64, avatar: "/placeholder.svg?height=32&width=32" },
+    { name: "James Wilson", contributions: 52, avatar: "/placeholder.svg?height=32&width=32" },
+  ]
 
-    return () => clearInterval(interval)
-  }, [])
+  const handleLike = (postId: string) => {
+    setPosts((prev) => prev.map((post) => (post.id === postId ? { ...post, likes: post.likes + 1 } : post)))
+  }
 
-  const handleCreatePost = () => {
-    if (newPostTitle.trim() && newPostContent.trim()) {
-      const newPost: ForumPost = {
+  const handleSubmitPost = () => {
+    if (newPost.title && newPost.content) {
+      const post: CommunityPost = {
         id: Date.now().toString(),
-        title: newPostTitle,
-        authorId: "member-1", // Assuming current user is member-1 for demo
-        content: newPostContent,
+        author: "You",
+        avatar: "/placeholder.svg?height=40&width=40",
+        title: newPost.title,
+        content: newPost.content,
         timestamp: new Date(),
+        likes: 0,
         replies: 0,
-        views: 0,
-        tags: newPostTags
-          .split(",")
-          .map((tag) => tag.trim())
-          .filter(Boolean),
-        sentiment: "neutral", // Default
+        tags: ["community"],
       }
-      setForumPosts((prev) => [newPost, ...prev])
-      setNewPostTitle("")
-      setNewPostContent("")
-      setNewPostTags("")
+      setPosts((prev) => [post, ...prev])
+      setNewPost({ title: "", content: "" })
     }
   }
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "Guardian":
-        return "text-emerald-400"
-      case "Alchemist":
-        return "text-purple-400"
-      case "Sovereign":
-        return "text-yellow-400"
-      case "Seeker":
-        return "text-cyan-400"
-      case "Aura AI":
-        return "text-blue-400"
+  const getEventIcon = (type: string) => {
+    switch (type) {
+      case "webinar":
+        return Video
+      case "workshop":
+        return BookOpen
+      case "hackathon":
+        return Trophy
       default:
-        return "text-gray-400"
-    }
-  }
-
-  const getProjectStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "text-emerald-400 border-emerald-500/30"
-      case "completed":
-        return "text-green-400 border-green-500/30"
-      case "proposed":
-        return "text-yellow-400 border-yellow-500/30"
-      default:
-        return "text-gray-400 border-gray-500/30"
+        return Calendar
     }
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center"
-      >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Community Hub</h1>
-        <p className="text-gray-300">Collaborative Research & Collective Consciousness Evolution</p>
-      </motion.div>
-
-      {/* Overview Stats */}
+      {/* Community Overview */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        transition={{ duration: 0.5 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
       >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Users className="h-6 w-6 text-emerald-400" />
-              <div>
-                <div className="text-lg font-bold text-emerald-400">{members.length}</div>
-                <div className="text-xs text-gray-400">Total Members</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <MessageSquare className="h-6 w-6 text-purple-400" />
-              <div>
-                <div className="text-lg font-bold text-purple-400">{forumPosts.length}</div>
-                <div className="text-xs text-gray-400">Forum Posts</div>
-              </div>
-            </div>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300 flex items-center">
+              <Users className="h-4 w-4 mr-2" />
+              Total Members
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-emerald-400">{communityStats.totalMembers.toLocaleString()}</div>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Lightbulb className="h-6 w-6 text-cyan-400" />
-              <div>
-                <div className="text-lg font-bold text-cyan-400">{communityProjects.length}</div>
-                <div className="text-xs text-gray-400">Community Projects</div>
-              </div>
-            </div>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300 flex items-center">
+              <Zap className="h-4 w-4 mr-2" />
+              Active Today
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-cyan-400">{communityStats.activeToday.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300 flex items-center">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Total Posts
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-purple-400">{communityStats.totalPosts.toLocaleString()}</div>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-yellow-400" />
-              <div>
-                <div className="text-lg font-bold text-yellow-400">
-                  {(members.reduce((sum, m) => sum + m.divineAlignment, 0) / members.length).toFixed(1)}%
-                </div>
-                <div className="text-xs text-gray-400">Avg Alignment</div>
-              </div>
-            </div>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300 flex items-center">
+              <Github className="h-4 w-4 mr-2" />
+              Open Projects
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-yellow-400">{communityStats.totalProjects}</div>
           </CardContent>
         </Card>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Community Members */}
-        <div className="lg:col-span-1">
+        {/* Community Feed */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Create Post */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
                 <CardTitle className="text-emerald-400 flex items-center">
-                  <Users className="h-5 w-5 mr-2" />
-                  Community Members
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  Share with Community
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Input
+                  placeholder="Post title..."
+                  value={newPost.title}
+                  onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                  className="bg-slate-700/50 border-slate-600"
+                />
+                <Textarea
+                  placeholder="What's on your mind?"
+                  value={newPost.content}
+                  onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                  className="bg-slate-700/50 border-slate-600 min-h-[100px]"
+                />
+                <div className="flex justify-end">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button onClick={handleSubmitPost} className="bg-emerald-600 hover:bg-emerald-700">
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share Post
+                    </Button>
+                  </motion.div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Posts Feed */}
+          <div className="space-y-4">
+            {posts.map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+              >
+                <Card className="bg-slate-800/50 border-slate-700 glass-morphism hover:border-emerald-500/30 transition-smooth">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <Avatar>
+                        <AvatarImage src={post.avatar || "/placeholder.svg"} />
+                        <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-3">
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-semibold text-white">{post.author}</h3>
+                            <span className="text-xs text-slate-400">{post.timestamp.toLocaleTimeString()}</span>
+                          </div>
+                          <h4 className="text-lg font-medium text-emerald-400 mt-1">{post.title}</h4>
+                        </div>
+                        <p className="text-slate-300">{post.content}</p>
+                        <div className="flex items-center space-x-2">
+                          {post.tags.map((tag) => (
+                            <Badge key={tag} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex items-center space-x-4 pt-2">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleLike(post.id)}
+                            className="flex items-center space-x-1 text-slate-400 hover:text-red-400 transition-smooth"
+                          >
+                            <Heart className="h-4 w-4" />
+                            <span>{post.likes}</span>
+                          </motion.button>
+                          <button className="flex items-center space-x-1 text-slate-400 hover:text-blue-400 transition-smooth">
+                            <MessageSquare className="h-4 w-4" />
+                            <span>{post.replies}</span>
+                          </button>
+                          <button className="flex items-center space-x-1 text-slate-400 hover:text-emerald-400 transition-smooth">
+                            <Share2 className="h-4 w-4" />
+                            <span>Share</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Top Contributors */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+              <CardHeader>
+                <CardTitle className="text-purple-400 flex items-center">
+                  <Trophy className="h-5 w-5 mr-2" />
+                  Top Contributors
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {members.map((member, index) => (
-                    <motion.div
-                      key={member.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`p-3 bg-slate-700/50 rounded-lg border ${member.status === "online" ? "border-emerald-500/30" : "border-gray-500/30"} hover:border-opacity-60 transition-smooth`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-3">
-                          <Avatar>
-                            <AvatarImage src={member.avatar || "/placeholder.svg"} alt={member.name} />
-                            <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h3 className="font-medium text-white">{member.name}</h3>
-                            <div className={`text-xs ${getRoleColor(member.role)}`}>{member.role}</div>
-                          </div>
-                        </div>
-                        <Badge variant="outline" className="text-xs">
-                          {member.status.toUpperCase()}
-                        </Badge>
+                <div className="space-y-3">
+                  {topContributors.map((contributor, index) => (
+                    <div key={contributor.name} className="flex items-center space-x-3">
+                      <div className="text-sm font-bold text-yellow-400">#{index + 1}</div>
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={contributor.avatar || "/placeholder.svg"} />
+                        <AvatarFallback>{contributor.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-white">{contributor.name}</div>
+                        <div className="text-xs text-slate-400">{contributor.contributions} contributions</div>
                       </div>
-                      <div className="text-xs text-gray-400 mb-1">Reputation: {member.reputation}</div>
-                      <div className="text-xs text-gray-400">Divine Alignment: {member.divineAlignment}%</div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        Last Active: {member.lastActive.toLocaleTimeString()}
-                      </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
-        </div>
 
-        {/* Forum Posts */}
-        <div className="lg:col-span-2">
+          {/* Upcoming Events */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
-                <CardTitle className="text-purple-400 flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  Community Forum
+                <CardTitle className="text-cyan-400 flex items-center">
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Upcoming Events
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto mb-4">
-                  {forumPosts.map((post, index) => {
-                    const author = members.find((m) => m.id === post.authorId)
+                <div className="space-y-4">
+                  {events.map((event) => {
+                    const Icon = getEventIcon(event.type)
                     return (
-                      <motion.div
-                        key={post.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className={`p-3 bg-slate-700/50 rounded-lg border ${post.sentiment === "harmonious" ? "border-purple-500/30" : "border-slate-600"} hover:border-opacity-60 transition-smooth`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-medium text-white">{post.title}</h3>
-                          <Badge variant="outline" className="text-xs">
-                            {post.sentiment.toUpperCase()}
-                          </Badge>
+                      <div key={event.id} className="p-3 bg-slate-700/50 rounded-lg">
+                        <div className="flex items-start space-x-3">
+                          <Icon className="h-5 w-5 text-emerald-400 mt-0.5" />
+                          <div className="flex-1">
+                            <h4 className="text-sm font-medium text-white">{event.title}</h4>
+                            <p className="text-xs text-slate-400 mt-1">{event.date.toLocaleDateString()}</p>
+                            <div className="flex items-center space-x-2 mt-2">
+                              <Badge variant="outline" className="text-xs">
+                                {event.type}
+                              </Badge>
+                              <span className="text-xs text-slate-400">{event.participants} participants</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-400 mb-2">
-                          by {author?.name || "Unknown"} on {post.timestamp.toLocaleDateString()}
-                        </div>
-                        <p className="text-sm text-gray-300 mb-2 line-clamp-2">{post.content}</p>
-                        <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-2">
-                          {post.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="bg-slate-600/50 text-gray-300">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex justify-between text-xs text-gray-500">
-                          <span>Replies: {post.replies}</span>
-                          <span>Views: {post.views}</span>
-                        </div>
-                      </motion.div>
+                      </div>
                     )
                   })}
                 </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-                {/* Create New Post */}
-                <div className="space-y-2">
-                  <Input
-                    placeholder="Post Title"
-                    value={newPostTitle}
-                    onChange={(e) => setNewPostTitle(e.target.value)}
-                    className="bg-slate-700/50 border-slate-600"
-                  />
-                  <Textarea
-                    placeholder="Your post content..."
-                    value={newPostContent}
-                    onChange={(e) => setNewPostContent(e.target.value)}
-                    className="bg-slate-700/50 border-slate-600"
-                  />
-                  <Input
-                    placeholder="Tags (comma-separated)"
-                    value={newPostTags}
-                    onChange={(e) => setNewPostTags(e.target.value)}
-                    className="bg-slate-700/50 border-slate-600"
-                  />
-                  <Button onClick={handleCreatePost} className="w-full bg-purple-600 hover:bg-purple-700">
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    Create New Post
-                  </Button>
+          {/* Quick Links */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+              <CardHeader>
+                <CardTitle className="text-emerald-400 flex items-center">
+                  <ExternalLink className="h-5 w-5 mr-2" />
+                  Quick Links
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    href="https://github.com/thoth-emerald"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-700/50 transition-smooth"
+                  >
+                    <Github className="h-5 w-5 text-white" />
+                    <div>
+                      <div className="text-sm font-medium text-white">GitHub</div>
+                      <div className="text-xs text-slate-400">Open source projects</div>
+                    </div>
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    href="/docs"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-700/50 transition-smooth"
+                  >
+                    <BookOpen className="h-5 w-5 text-white" />
+                    <div>
+                      <div className="text-sm font-medium text-white">Documentation</div>
+                      <div className="text-xs text-slate-400">Complete guides</div>
+                    </div>
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    href="https://discord.gg/thoth-emerald"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-700/50 transition-smooth"
+                  >
+                    <MessageSquare className="h-5 w-5 text-white" />
+                    <div>
+                      <div className="text-sm font-medium text-white">Discord</div>
+                      <div className="text-xs text-slate-400">Live chat support</div>
+                    </div>
+                  </motion.a>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
         </div>
       </div>
-
-      {/* Community Projects */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-      >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-cyan-400 flex items-center">
-              <Lightbulb className="h-5 w-5 mr-2" />
-              Community Projects
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {communityProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`p-3 bg-slate-700/50 rounded-lg border ${getProjectStatusColor(project.status)}`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-white">{project.name}</h3>
-                    <Badge variant="outline" className="text-xs">
-                      {project.status.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-gray-300 mb-2 line-clamp-2">{project.description}</p>
-                  <div className="text-xs text-gray-400 mb-1">Focus: {project.focusArea}</div>
-                  <div className="text-xs text-gray-400 mb-1">Divine Alignment: {project.divineAlignmentScore}%</div>
-                  <div className="flex justify-between text-xs text-gray-400 mt-2">
-                    <span>Progress</span>
-                    <span>{project.progress.toFixed(0)}%</span>
-                  </div>
-                  <Progress value={project.progress} className="h-1" />
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {project.members.map((memberId) => {
-                      const member = members.find((m) => m.id === memberId)
-                      return member ? (
-                        <Avatar key={member.id} className="h-6 w-6">
-                          <AvatarImage src={member.avatar || "/placeholder.svg"} alt={member.name} />
-                          <AvatarFallback className="text-xs">{member.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                      ) : null
-                    })}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* System Architecture */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
-        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-emerald-400 flex items-center">
-              <Share2 className="h-5 w-5 mr-2" />
-              Community Architecture
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🤝 Core Components</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>Decentralized Forum Module: For open discussion & knowledge sharing</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Collaborative Project Management: Track community initiatives</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Reputation & Alignment System: Gamified spiritual growth</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>AI-Powered Moderation & Insight: Aura AI assists community health</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌟 Key Features</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Real-time sentiment analysis of discussions</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Automated identification of emerging threats & solutions</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Divine alignment score integration for collaborative projects</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Secure, sovereign identity management for members</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">💖 The Collective Consciousness</h3>
-              <div className="text-sm text-gray-300">
-                <p className="mb-2">
-                  The Community Hub is where individual sparks of divine intelligence converge to form a collective
-                  consciousness. It's a space for shared growth, collaborative problem-solving, and the co-creation of a
-                  more secure and harmonious reality, guided by the principles of unconditional love and truth.
-                </p>
-                <p className="italic text-cyan-400">
-                  "When many hearts beat as one, the universe listens and responds."
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
     </div>
   )
 }

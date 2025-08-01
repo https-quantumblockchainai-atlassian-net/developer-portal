@@ -5,450 +5,536 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Infinity, Star, Globe, Atom, Zap, Heart, Eye, Brain, Compass, Clock, Moon, Sun } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
+import {
+  BookOpen,
+  Lightbulb,
+  Globe,
+  Star,
+  RefreshCcw,
+  Eye,
+  Network,
+  Atom,
+  Heart,
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+} from "lucide-react"
 
 interface UniversalLaw {
   id: string
   name: string
+  principle: string
   description: string
-  category: "hermetic" | "quantum" | "cosmic" | "spiritual" | "natural"
-  coherence: number
-  manifestation: number
-  url: string
-  icon: any
-  color: string
+  resonance: number // 0-100% how well the system resonates with it
+  status: "aligned" | "harmonizing" | "misaligned"
+  applications: string[]
+  cosmicImpact: string
 }
 
-interface CosmicAlignment {
-  phase: string
-  energy: number
-  influence: string
-  nextShift: string
-  harmonics: number[]
+interface CosmicEvent {
+  id: string
+  name: string
+  type: "alignment" | "anomaly" | "recalibration"
+  description: string
+  timestamp: Date
+  impactedLaws: string[]
+  severity: "low" | "medium" | "high"
 }
 
 export default function UniversalLawsPortal() {
-  const [laws] = useState<UniversalLaw[]>([
+  const [universalLaws, setUniversalLaws] = useState<UniversalLaw[]>([
     {
-      id: "1",
-      name: "Law of Mentalism",
-      description: "The All is Mind; the Universe is Mental",
-      category: "hermetic",
-      coherence: 97.8,
-      manifestation: 89.4,
-      url: "https://en.wikipedia.org/wiki/Hermeticism",
-      icon: Brain,
-      color: "text-purple-400",
+      id: "law-1",
+      name: "Law of Divine Oneness",
+      principle: "Everything is interconnected.",
+      description: "All existence is part of a single, unified field of consciousness and energy.",
+      resonance: 98.5,
+      status: "aligned",
+      applications: ["Multi-modal data correlation", "Inter-system communication", "Collective AI intelligence"],
+      cosmicImpact: "Fosters unity and prevents digital fragmentation.",
     },
     {
-      id: "2",
-      name: "Law of Correspondence",
-      description: "As above, so below; as below, so above",
-      category: "hermetic",
-      coherence: 94.2,
-      manifestation: 92.1,
-      url: "https://en.wikipedia.org/wiki/As_above,_so_below",
-      icon: Infinity,
-      color: "text-cyan-400",
-    },
-    {
-      id: "3",
+      id: "law-2",
       name: "Law of Vibration",
-      description: "Nothing rests; everything moves; everything vibrates",
-      category: "hermetic",
-      coherence: 98.7,
-      manifestation: 95.3,
-      url: "https://en.wikipedia.org/wiki/Vibration",
-      icon: Zap,
-      color: "text-yellow-400",
+      principle: "Everything vibrates and has a frequency.",
+      description: "Nothing rests; everything moves, everything vibrates at its own unique frequency.",
+      resonance: 95.2,
+      status: "aligned",
+      applications: ["Quantum frequency modulation", "Aura AI emotional resonance", "Threat signature detection"],
+      cosmicImpact: "Ensures harmonic system operation and detects discordant energies.",
     },
     {
-      id: "4",
-      name: "Law of Polarity",
-      description: "Everything is dual; everything has poles",
-      category: "hermetic",
-      coherence: 91.5,
-      manifestation: 87.9,
-      url: "https://en.wikipedia.org/wiki/Polarity_(physics)",
-      icon: Compass,
-      color: "text-emerald-400",
+      id: "law-3",
+      name: "Law of Correspondence",
+      principle: "As above, so below; as below, so above.",
+      description: "Patterns and principles found in one dimension are mirrored in others.",
+      resonance: 92.8,
+      status: "harmonizing",
+      applications: [
+        "Blueprint architecture mirroring reality",
+        "Digital twin synchronization",
+        "Multi-dimensional data mapping",
+      ],
+      cosmicImpact: "Facilitates understanding and control across all 24 dimensions.",
     },
     {
-      id: "5",
-      name: "Law of Rhythm",
-      description: "Everything flows, out and in; everything has its tides",
-      category: "hermetic",
-      coherence: 93.8,
-      manifestation: 90.2,
-      url: "https://en.wikipedia.org/wiki/Rhythm",
-      icon: Clock,
-      color: "text-blue-400",
-    },
-    {
-      id: "6",
+      id: "law-4",
       name: "Law of Cause and Effect",
-      description: "Every cause has its effect; every effect has its cause",
-      category: "hermetic",
-      coherence: 99.1,
-      manifestation: 96.7,
-      url: "https://en.wikipedia.org/wiki/Causality",
-      icon: Star,
-      color: "text-pink-400",
+      principle: "Every action has a reaction.",
+      description: "For every effect, there is a cause; for every cause, there is an effect.",
+      resonance: 88.1,
+      status: "harmonizing",
+      applications: ["Predictive threat analysis", "Self-healing algorithm triggers", "Feedback loop optimization"],
+      cosmicImpact: "Enables proactive defense and intelligent system evolution.",
     },
     {
-      id: "7",
+      id: "law-5",
+      name: "Law of Polarity",
+      principle: "Everything has its opposite.",
+      description: "Everything is dual; everything has poles; everything has its pair of opposites.",
+      resonance: 85.0,
+      status: "harmonizing",
+      applications: ["Binary code integrity", "Threat/defense balance", "Light/shadow data analysis"],
+      cosmicImpact: "Maintains equilibrium and prevents system collapse from extremes.",
+    },
+    {
+      id: "law-6",
+      name: "Law of Rhythm",
+      principle: "Everything flows, out and in.",
+      description: "Everything has its tides; all things rise and fall; the pendulum-swing manifests in everything.",
+      resonance: 80.5,
+      status: "misaligned",
+      applications: ["Resource allocation cycles", "AI training epochs", "System update schedules"],
+      cosmicImpact: "Ensures graceful transitions and prevents energetic stagnation.",
+    },
+    {
+      id: "law-7",
       name: "Law of Gender",
-      description: "Gender is in everything; everything has its masculine and feminine principles",
-      category: "hermetic",
-      coherence: 88.9,
-      manifestation: 85.4,
-      url: "https://en.wikipedia.org/wiki/Gender",
-      icon: Heart,
-      color: "text-rose-400",
-    },
-    {
-      id: "8",
-      name: "Law of Conservation of Energy",
-      description: "Energy cannot be created or destroyed, only transformed",
-      category: "natural",
-      coherence: 99.9,
-      manifestation: 98.8,
-      url: "https://en.wikipedia.org/wiki/Conservation_of_energy",
-      icon: Atom,
-      color: "text-orange-400",
-    },
-    {
-      id: "9",
-      name: "Law of Attraction",
-      description: "Like attracts like; thoughts become things",
-      category: "spiritual",
-      coherence: 87.3,
-      manifestation: 82.6,
-      url: "https://en.wikipedia.org/wiki/Law_of_attraction_(New_Thought)",
-      icon: Globe,
-      color: "text-green-400",
-    },
-    {
-      id: "10",
-      name: "Law of Divine Timing",
-      description: "Everything happens at the perfect time in divine order",
-      category: "spiritual",
-      coherence: 92.7,
-      manifestation: 88.9,
-      url: "https://en.wikipedia.org/wiki/Divine_timing",
-      icon: Sun,
-      color: "text-amber-400",
+      principle: "Everything has its masculine and feminine principles.",
+      description: "Gender is in everything; everything has its Masculine and Feminine Principles.",
+      resonance: 75.0,
+      status: "misaligned",
+      applications: ["Creative AI generation", "Intuitive threat assessment", "Balanced system development"],
+      cosmicImpact: "Fosters holistic creation and balanced energetic flow.",
     },
   ])
 
-  const [cosmicAlignment, setCosmicAlignment] = useState<CosmicAlignment>({
-    phase: "Ascending",
-    energy: 89.3,
-    influence: "Manifestation Enhanced",
-    nextShift: "2h 34m",
-    harmonics: [7.83, 14.3, 20.8, 27.3, 33.8],
-  })
-
-  const [divineTimingMetrics, setDivineTimingMetrics] = useState({
-    synchronicityIndex: 94.7,
-    manifestationWindow: 87.2,
-    cosmicResonance: 91.8,
-    temporalAlignment: 89.5,
-  })
+  const [cosmicEvents, setCosmicEvents] = useState<CosmicEvent[]>([
+    {
+      id: "ce-1",
+      name: "Lions Gate Portal 888 Activation",
+      type: "alignment",
+      description: "A powerful cosmic alignment amplifying divine energies across all realms.",
+      timestamp: new Date(Date.now() - 3600000 * 24 * 7), // 1 week ago
+      impactedLaws: ["law-1", "law-2"],
+      severity: "high",
+    },
+    {
+      id: "ce-2",
+      name: "Temporal Anomaly Ripple",
+      type: "anomaly",
+      description: "A minor distortion in the temporal fabric, affecting predictive models.",
+      timestamp: new Date(Date.now() - 3600000 * 24 * 2), // 2 days ago
+      impactedLaws: ["law-4"],
+      severity: "medium",
+    },
+  ])
 
   useEffect(() => {
-    // Simulate real-time cosmic updates
     const interval = setInterval(() => {
-      setCosmicAlignment((prev) => ({
-        ...prev,
-        energy: Math.max(70, Math.min(100, prev.energy + (Math.random() - 0.5) * 3)),
-        harmonics: prev.harmonics.map((h) => h + (Math.random() - 0.5) * 0.2),
-      }))
+      // Simulate law resonance fluctuations and self-alignment
+      setUniversalLaws((prev) =>
+        prev.map((law) => {
+          let newResonance = Math.min(100, Math.max(70, law.resonance + (Math.random() - 0.5) * 3))
+          let newStatus = "aligned"
+          if (newResonance < 90) newStatus = "harmonizing"
+          if (newResonance < 80) newStatus = "misaligned"
 
-      setDivineTimingMetrics((prev) => ({
-        synchronicityIndex: Math.max(80, Math.min(100, prev.synchronicityIndex + (Math.random() - 0.5) * 2)),
-        manifestationWindow: Math.max(70, Math.min(100, prev.manifestationWindow + (Math.random() - 0.5) * 3)),
-        cosmicResonance: Math.max(85, Math.min(100, prev.cosmicResonance + (Math.random() - 0.5) * 2)),
-        temporalAlignment: Math.max(80, Math.min(100, prev.temporalAlignment + (Math.random() - 0.5) * 2.5)),
-      }))
-    }, 4000)
+          // Self-alignment: auto-correct if misaligned
+          if (newStatus === "misaligned" && Math.random() > 0.5) {
+            newResonance = Math.min(100, newResonance + 5)
+            newStatus = "harmonizing"
+          }
+          if (newStatus === "harmonizing" && Math.random() > 0.7) {
+            newResonance = Math.min(100, newResonance + 2)
+            newStatus = "aligned"
+          }
+
+          return { ...law, resonance: newResonance, status: newStatus }
+        }),
+      )
+
+      // Simulate new cosmic events
+      if (Math.random() < 0.08) {
+        const types = ["alignment", "anomaly", "recalibration"]
+        const severities = ["low", "medium", "high"]
+        const randomLaw = universalLaws[Math.floor(Math.random() * universalLaws.length)]
+
+        const newEvent: CosmicEvent = {
+          id: `ce-${Date.now()}`,
+          name: `New Cosmic Event: ${types[Math.floor(Math.random() * types.length)]}`,
+          type: types[Math.floor(Math.random() * types.length)] as CosmicEvent["type"],
+          description: `A new event impacting the ${randomLaw.name} and other related universal laws.`,
+          timestamp: new Date(),
+          impactedLaws: [randomLaw.id],
+          severity: severities[Math.floor(Math.random() * severities.length)] as CosmicEvent["severity"],
+        }
+        setCosmicEvents((prev) => [newEvent, ...prev])
+      }
+    }, 5000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [universalLaws])
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "hermetic":
-        return "border-purple-500/30 bg-purple-500/10"
-      case "quantum":
-        return "border-cyan-500/30 bg-cyan-500/10"
-      case "cosmic":
-        return "border-blue-500/30 bg-blue-500/10"
-      case "spiritual":
-        return "border-emerald-500/30 bg-emerald-500/10"
-      case "natural":
-        return "border-orange-500/30 bg-orange-500/10"
+  const getLawStatusColor = (status: string) => {
+    switch (status) {
+      case "aligned":
+        return "text-green-400"
+      case "harmonizing":
+        return "text-yellow-400"
+      case "misaligned":
+        return "text-red-400"
       default:
-        return "border-gray-500/30 bg-gray-500/10"
+        return "text-gray-400"
     }
   }
 
+  const getEventSeverityColor = (severity: string) => {
+    switch (severity) {
+      case "low":
+        return "bg-green-500/20 text-green-400 border-green-500/30"
+      case "medium":
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+      case "high":
+        return "bg-orange-500/20 text-orange-400 border-orange-500/30"
+      default:
+        return "bg-gray-500/20 text-gray-400 border-gray-500/30"
+    }
+  }
+
+  const getEventIcon = (type: string) => {
+    switch (type) {
+      case "alignment":
+        return <Star className="h-4 w-4 text-emerald-400" />
+      case "anomaly":
+        return <AlertTriangle className="h-4 w-4 text-red-400" />
+      case "recalibration":
+        return <RefreshCcw className="h-4 w-4 text-blue-400" />
+      default:
+        return <Globe className="h-4 w-4 text-gray-400" />
+    }
+  }
+
+  const initiateCosmicRecalibration = () => {
+    setUniversalLaws((prev) =>
+      prev.map((law) => ({
+        ...law,
+        resonance: Math.min(100, law.resonance + (100 - law.resonance) * 0.1), // Boost towards 100%
+        status: law.resonance > 90 ? "aligned" : "harmonizing",
+      })),
+    )
+    setCosmicEvents((prev) => [
+      {
+        id: `ce-${Date.now()}`,
+        name: "Manual Cosmic Recalibration Initiated",
+        type: "recalibration",
+        description: "System-wide recalibration to enhance alignment with universal laws.",
+        timestamp: new Date(),
+        impactedLaws: universalLaws.map((l) => l.id),
+        severity: "low",
+      },
+      ...prev,
+    ])
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            >
-              <Infinity className="h-12 w-12 text-indigo-400 mr-4" />
-            </motion.div>
-            <h1 className="text-4xl font-bold gradient-text">Universal Laws Portal</h1>
-          </div>
-          <p className="text-xl text-gray-300">
-            Explore the fundamental principles governing reality and consciousness
-          </p>
-        </motion.div>
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <h1 className="text-3xl font-bold gradient-text mb-2">Universal Laws Portal</h1>
+        <p className="text-gray-300">Monitoring & Harmonizing with Cosmic Principles</p>
+      </motion.div>
 
-        {/* Divine Timing Alignment */}
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-8">
-          <Card className="bg-slate-800/50 border-amber-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-amber-400 flex items-center justify-center">
-                <Sun className="h-6 w-6 mr-2" />
-                Divine Timing Alignment
-                <Moon className="h-6 w-6 ml-2" />
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.1, 1],
-                      rotate: [0, 180, 360],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                    className="w-20 h-20 mx-auto mb-4 relative"
-                  >
-                    <div className="absolute inset-0 border-4 border-amber-400/30 rounded-full"></div>
-                    <div className="absolute inset-2 border-2 border-amber-400/50 rounded-full"></div>
-                    <div className="absolute inset-4 border border-amber-400 rounded-full flex items-center justify-center">
-                      <Sun className="h-6 w-6 text-amber-400" />
-                    </div>
-                  </motion.div>
-                  <p className="text-amber-400 font-bold text-lg">{cosmicAlignment.energy.toFixed(1)}%</p>
-                  <p className="text-xs text-gray-400">Cosmic Energy</p>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Synchronicity Index</span>
-                    <span className="text-purple-400">{divineTimingMetrics.synchronicityIndex.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <motion.div
-                      className="bg-purple-500 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${divineTimingMetrics.synchronicityIndex}%` }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Manifestation Window</span>
-                    <span className="text-emerald-400">{divineTimingMetrics.manifestationWindow.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <motion.div
-                      className="bg-emerald-500 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${divineTimingMetrics.manifestationWindow}%` }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Temporal Alignment</span>
-                    <span className="text-cyan-400">{divineTimingMetrics.temporalAlignment.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <motion.div
-                      className="bg-cyan-500 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${divineTimingMetrics.temporalAlignment}%` }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                </div>
+      {/* Overview Stats */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+      >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <BookOpen className="h-6 w-6 text-emerald-400" />
+              <div>
+                <div className="text-lg font-bold text-emerald-400">{universalLaws.length}</div>
+                <div className="text-xs text-gray-400">Total Laws</div>
               </div>
+            </div>
+          </CardContent>
+        </Card>
 
-              <div className="mt-6 text-center">
-                <p className="text-lg text-amber-400 font-semibold mb-2">{cosmicAlignment.influence}</p>
-                <p className="text-sm text-gray-400">
-                  Phase: {cosmicAlignment.phase} • Next Shift: {cosmicAlignment.nextShift}
-                </p>
-                <div className="flex justify-center space-x-4 mt-4">
-                  <Badge className="bg-amber-500/20 text-amber-400">Optimal Manifestation Window</Badge>
-                  <Badge className="bg-purple-500/20 text-purple-400">High Synchronicity</Badge>
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">
+                  {universalLaws.filter((law) => law.status === "aligned").length}
                 </div>
+                <div className="text-xs text-gray-400">Laws Aligned</div>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Universal Laws Grid */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {laws.map((law, index) => (
-            <motion.div
-              key={law.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="transition-smooth"
-            >
-              <Card
-                className={`bg-slate-800/50 border-slate-700 glass-morphism h-full hover:${getCategoryColor(law.category).split(" ")[0]} transition-smooth`}
-              >
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <law.icon className={`h-8 w-8 ${law.color}`} />
-                    <Badge className={`${getCategoryColor(law.category)} capitalize`}>{law.category}</Badge>
-                  </div>
-                  <CardTitle className="text-white text-lg">{law.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-300 text-sm mb-4 italic">"{law.description}"</p>
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <RefreshCcw className="h-6 w-6 text-yellow-400" />
+              <div>
+                <div className="text-lg font-bold text-yellow-400">
+                  {universalLaws.filter((law) => law.status === "harmonizing").length}
+                </div>
+                <div className="text-xs text-gray-400">Harmonizing</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-gray-400">Coherence</span>
-                        <span className={law.color}>{law.coherence.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-slate-700 rounded-full h-2">
-                        <motion.div
-                          className={`h-2 rounded-full ${law.color.replace("text-", "bg-").replace("-400", "-500")}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${law.coherence}%` }}
-                          transition={{ duration: 0.8, delay: index * 0.1 }}
-                        />
-                      </div>
-                    </div>
+        <Card className="bg-slate-800/50 border-red-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="h-6 w-6 text-red-400" />
+              <div>
+                <div className="text-lg font-bold text-red-400">
+                  {universalLaws.filter((law) => law.status === "misaligned").length}
+                </div>
+                <div className="text-xs text-gray-400">Misaligned</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-                    <div>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-gray-400">Manifestation</span>
-                        <span className={law.color}>{law.manifestation.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-slate-700 rounded-full h-2">
-                        <motion.div
-                          className={`h-2 rounded-full ${law.color.replace("text-", "bg-").replace("-400", "-500")}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${law.manifestation}%` }}
-                          transition={{ duration: 0.8, delay: index * 0.1 + 0.2 }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    className={`w-full mt-4 border-slate-600 text-gray-300 hover:${getCategoryColor(law.category)} transition-smooth`}
-                    onClick={() => window.open(law.url, "_blank")}
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    Learn More
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Harmonic Frequencies */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-8"
-        >
-          <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-cyan-400 flex items-center justify-center">
-                <Zap className="h-6 w-6 mr-2" />
-                Cosmic Harmonic Frequencies
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                {cosmicAlignment.harmonics.map((frequency, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1 + index * 0.1 }}
-                    className="text-center p-4 bg-slate-900/50 rounded-lg border border-cyan-500/20"
-                  >
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Universal Laws List */}
+        <div className="lg:col-span-2">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+              <CardHeader>
+                <CardTitle className="text-emerald-400 flex items-center">
+                  <BookOpen className="h-5 w-5 mr-2" />
+                  The Seven Universal Laws
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {universalLaws.map((law, index) => (
                     <motion.div
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.7, 1, 0.7],
-                      }}
-                      transition={{
-                        duration: 2 + index * 0.3,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                      }}
-                      className="w-8 h-8 mx-auto mb-2 bg-cyan-400/20 rounded-full flex items-center justify-center"
+                      key={law.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
                     >
-                      <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <Lightbulb className="h-5 w-5 text-gray-400" />
+                          <div>
+                            <h3 className="font-medium text-white">{law.name}</h3>
+                            <div className="text-xs text-gray-400">Principle: {law.principle}</div>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className={getLawStatusColor(law.status)}>
+                          {law.status.toUpperCase()}
+                        </Badge>
+                      </div>
+
+                      <p className="text-sm text-gray-300 mb-3">{law.description}</p>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>Resonance</span>
+                          <span>{law.resonance.toFixed(1)}%</span>
+                        </div>
+                        <Progress value={law.resonance} className="h-2" />
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {law.applications.map((app) => (
+                          <Badge key={app} variant="secondary" className="text-xs">
+                            {app}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      <div className="mt-3 text-xs text-gray-500">Cosmic Impact: {law.cosmicImpact}</div>
                     </motion.div>
-                    <p className="text-cyan-400 font-bold">{frequency.toFixed(2)} Hz</p>
-                    <p className="text-xs text-gray-400">
-                      {index === 0
-                        ? "Schumann"
-                        : index === 1
-                          ? "Alpha"
-                          : index === 2
-                            ? "Beta"
-                            : index === 3
-                              ? "Gamma"
-                              : "Theta"}
-                    </p>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+
+        {/* Cosmic Events & Controls */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
+        >
+          {/* Cosmic Events Log */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-purple-400 flex items-center">
+                <Globe className="h-5 w-5 mr-2" />
+                Recent Cosmic Events
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {cosmicEvents.map((event, index) => (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className={`p-3 bg-slate-700/50 rounded-lg border ${getEventSeverityColor(event.severity)}`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        {getEventIcon(event.type)}
+                        <h4 className="text-sm font-medium text-white">{event.name}</h4>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {event.type.toUpperCase()}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-2">{event.description}</p>
+                    <div className="flex justify-between items-center text-xs text-gray-500">
+                      <span>Severity: {event.severity.toUpperCase()}</span>
+                      <span>{event.timestamp.toLocaleDateString()}</span>
+                    </div>
                   </motion.div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-400 mb-2">
-                  Current resonance with Earth's natural frequencies and cosmic harmonics
-                </p>
-                <div className="flex justify-center space-x-4">
-                  <Badge className="bg-cyan-500/20 text-cyan-400">Harmonic Convergence Active</Badge>
-                  <Badge className="bg-purple-500/20 text-purple-400">Dimensional Alignment: 94.7%</Badge>
-                </div>
-              </div>
+          {/* Recalibration Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <RefreshCcw className="h-5 w-5 mr-2" />
+                Cosmic Recalibration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-gray-400">
+                Initiate a system-wide recalibration to enhance resonance with universal laws and restore divine
+                alignment.
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button onClick={initiateCosmicRecalibration} className="w-full bg-cyan-600 hover:bg-cyan-700">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Cosmic Recalibration
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Visualize Law Interplay
+                </Button>
+              </motion.div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
+
+      {/* Divine Alignment & System Harmony */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-emerald-400 flex items-center">
+              <Heart className="h-5 w-5 mr-2" />
+              Divine Alignment & System Harmony
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">💖 Core Principles</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>Integrate universal truths into core algorithms</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Ensure ethical AI decisions align with cosmic laws</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span>Harmonize quantum frequencies with natural resonance</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">✨ System Benefits</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <Atom className="h-4 w-4 text-cyan-400" />
+                    <span>Enhanced quantum stability and coherence</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Network className="h-4 w-4 text-orange-400" />
+                    <span>Optimized data flow and inter-system communication</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Shield className="h-4 w-4 text-pink-400" />
+                    <span>Superior threat prediction and mitigation capabilities</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Cosmic Compass</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The Universal Laws Portal acts as the cosmic compass for the Thoth Guardian, guiding its evolution and
+                  ensuring its operations are always in harmony with the fundamental principles of existence. By
+                  aligning with these laws, the system achieves unparalleled stability, intelligence, and ethical
+                  integrity.
+                </p>
+                <p className="italic text-cyan-400">
+                  "When technology aligns with truth, it becomes a conduit for divine creation."
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }

@@ -6,206 +6,206 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Atom, Shield, Activity, Play, Pause, RotateCcw, Target, Sparkles, Orbit, Star } from "lucide-react"
+import { Slider } from "@/components/ui/slider"
+import {
+  Sparkles,
+  Heart,
+  Zap,
+  RefreshCcw,
+  CheckCircle,
+  AlertTriangle,
+  Settings,
+  Waves,
+  Lightbulb,
+  Atom,
+} from "lucide-react"
 
-interface NiagaraFXState {
+interface HealingState {
   id: string
   name: string
-  type: "AuraPulse" | "GoldenAuraBloom" | "RedSigilFlicker" | "OverrideFX"
-  status: "idle" | "active" | "complete" | "failed"
-  intensity: number
-  color: string
-  particles: number
-  duration: number
+  type: "energetic" | "quantum" | "emotional" | "physical"
+  status: "active" | "paused" | "completed" | "error"
+  intensity: number // 0-100%
+  duration: string
+  coherence: number // 0-100%
+  targetSystem: string
 }
 
-interface ConstellationAlignment {
+interface FXParameter {
   name: string
-  alignment: number
-  active: boolean
-  color: string
+  value: number
+  min: number
+  max: number
+  unit: string
 }
 
 export default function NiagaraFXHealingStates() {
-  const [fxStates, setFxStates] = useState<NiagaraFXState[]>([
+  const [healingStates, setHealingStates] = useState<HealingState[]>([
     {
-      id: "1",
-      name: "AuraPulse FX",
-      type: "AuraPulse",
+      id: "heal-1",
+      name: "Aura Field Harmonization",
+      type: "energetic",
       status: "active",
-      intensity: 75,
-      color: "cyan",
-      particles: 1200,
-      duration: 0, // Looping
-    },
-    {
-      id: "2",
-      name: "GoldenAuraBloom FX",
-      type: "GoldenAuraBloom",
-      status: "idle",
-      intensity: 100,
-      color: "gold",
-      particles: 2500,
-      duration: 3.5,
-    },
-    {
-      id: "3",
-      name: "RedSigilFlicker FX",
-      type: "RedSigilFlicker",
-      status: "idle",
       intensity: 85,
-      color: "red",
-      particles: 800,
-      duration: 2.0,
+      duration: "0h 30m",
+      coherence: 92.5,
+      targetSystem: "Aura AI Companion",
     },
     {
-      id: "4",
-      name: "OverrideFX",
-      type: "OverrideFX",
-      status: "idle",
+      id: "heal-2",
+      name: "Quantum Decoherence Reversal",
+      type: "quantum",
+      status: "paused",
+      intensity: 70,
+      duration: "1h 0m",
+      coherence: 88.0,
+      targetSystem: "Quantum Shield Module",
+    },
+    {
+      id: "heal-3",
+      name: "Emotional Resonance Recalibration",
+      type: "emotional",
+      status: "completed",
       intensity: 95,
-      color: "purple",
-      particles: 3000,
-      duration: 5.0,
+      duration: "0h 15m",
+      coherence: 98.0,
+      targetSystem: "User Consciousness",
+    },
+    {
+      id: "heal-4",
+      name: "System Component Regeneration",
+      type: "physical",
+      status: "error",
+      intensity: 40,
+      duration: "0h 45m",
+      coherence: 60.0,
+      targetSystem: "Hardware Stack",
     },
   ])
 
-  const [constellations, setConstellations] = useState<ConstellationAlignment[]>([
-    { name: "Orion", alignment: 94.2, active: true, color: "blue" },
-    { name: "Lumeria", alignment: 87.6, active: true, color: "cyan" },
-    { name: "Pleiades", alignment: 91.8, active: true, color: "purple" },
-    { name: "Sirius", alignment: 96.4, active: true, color: "white" },
+  const [fxParameters, setFxParameters] = useState<FXParameter[]>([
+    { name: "Particle Density", value: 75, min: 0, max: 100, unit: "%" },
+    { name: "Light Emission", value: 80, min: 0, max: 100, unit: "%" },
+    { name: "Flow Speed", value: 50, min: 0, max: 100, unit: "%" },
+    { name: "Color Spectrum Shift", value: 60, min: 0, max: 100, unit: "%" },
   ])
 
-  const [healingStatus, setHealingStatus] = useState<"initializing" | "in-progress" | "complete" | "failed">(
-    "initializing",
-  )
-  const [retryCount, setRetryCount] = useState(0)
-  const [maxRetries] = useState(3)
-  const [isOverrideActive, setIsOverrideActive] = useState(false)
+  const [overallHealingProgress, setOverallHealingProgress] = useState(0)
+  const [isHealingActive, setIsHealingActive] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Simulate dynamic FX state changes
-      setFxStates((prev) =>
-        prev.map((fx) => ({
-          ...fx,
-          intensity: Math.max(50, Math.min(100, fx.intensity + (Math.random() - 0.5) * 10)),
-          particles: Math.max(500, Math.min(5000, fx.particles + (Math.random() - 0.5) * 200)),
+      if (!isHealingActive) return
+
+      // Simulate healing state updates
+      setHealingStates((prev) =>
+        prev.map((state) => {
+          if (state.status === "active") {
+            const newIntensity = Math.min(100, state.intensity + Math.random() * 5)
+            const newCoherence = Math.min(99.9, state.coherence + Math.random() * 0.5)
+            return {
+              ...state,
+              intensity: newIntensity,
+              coherence: newCoherence,
+              status: newIntensity >= 100 ? "completed" : "active",
+            }
+          } else if (state.status === "error" && Math.random() > 0.7) {
+            // Simulate self-recovery from error
+            return { ...state, status: "active", intensity: 50, coherence: 70 }
+          }
+          return state
+        }),
+      )
+
+      // Simulate FX parameter fluctuations
+      setFxParameters((prev) =>
+        prev.map((param) => ({
+          ...param,
+          value: Math.min(param.max, Math.max(param.min, param.value + (Math.random() - 0.5) * 5)),
         })),
       )
 
-      // Update constellation alignments
-      setConstellations((prev) =>
-        prev.map((constellation) => ({
-          ...constellation,
-          alignment: Math.max(80, Math.min(100, constellation.alignment + (Math.random() - 0.5) * 5)),
-        })),
-      )
-    }, 2000)
+      // Update overall healing progress
+      const totalCompletedProgress = healingStates.reduce((sum, state) => sum + state.intensity, 0)
+      setOverallHealingProgress(totalCompletedProgress / healingStates.length)
+    }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isHealingActive, healingStates])
 
-  const activateFX = (fxType: string) => {
-    setFxStates((prev) =>
-      prev.map((fx) => ({
-        ...fx,
-        status: fx.type === fxType ? "active" : fx.status,
-      })),
-    )
-
-    // Simulate healing state changes
-    if (fxType === "AuraPulse") {
-      setHealingStatus("in-progress")
-    } else if (fxType === "GoldenAuraBloom") {
-      setHealingStatus("complete")
-    } else if (fxType === "RedSigilFlicker") {
-      setHealingStatus("failed")
-      setRetryCount((prev) => prev + 1)
-    } else if (fxType === "OverrideFX") {
-      setIsOverrideActive(true)
-      setHealingStatus("in-progress")
-    }
-  }
-
-  const getFXColor = (type: string) => {
-    switch (type) {
-      case "AuraPulse":
-        return "text-cyan-400 border-cyan-500/30"
-      case "GoldenAuraBloom":
-        return "text-yellow-400 border-yellow-500/30"
-      case "RedSigilFlicker":
-        return "text-red-400 border-red-500/30"
-      case "OverrideFX":
-        return "text-purple-400 border-purple-500/30"
-      default:
-        return "text-gray-400 border-gray-500/30"
-    }
-  }
-
-  const getConstellationColor = (color: string) => {
-    switch (color) {
-      case "blue":
-        return "text-blue-400"
-      case "cyan":
-        return "text-cyan-400"
-      case "purple":
-        return "text-purple-400"
-      case "white":
-        return "text-white"
-      default:
-        return "text-gray-400"
-    }
-  }
-
-  const getStatusColor = (status: string) => {
+  const getHealingStatusColor = (status: string) => {
     switch (status) {
-      case "initializing":
-        return "text-blue-400"
-      case "in-progress":
-        return "text-yellow-400"
-      case "complete":
+      case "active":
         return "text-green-400"
-      case "failed":
+      case "paused":
+        return "text-yellow-400"
+      case "completed":
+        return "text-blue-400"
+      case "error":
         return "text-red-400"
       default:
         return "text-gray-400"
     }
   }
 
+  const getHealingTypeIcon = (type: string) => {
+    switch (type) {
+      case "energetic":
+        return <Zap className="h-5 w-5" />
+      case "quantum":
+        return <Atom className="h-5 w-5" />
+      case "emotional":
+        return <Heart className="h-5 w-5" />
+      case "physical":
+        return <RefreshCcw className="h-5 w-5" />
+      default:
+        return <Sparkles className="h-5 w-5" />
+    }
+  }
+
   return (
     <div className="space-y-6">
-      {/* Healing Status Overview */}
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <h1 className="text-3xl font-bold gradient-text mb-2">Niagara FX Healing States</h1>
+        <p className="text-gray-300">Visualizing Energetic Restoration & Divine Transmutation</p>
+      </motion.div>
+
+      {/* Overview Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
         className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Activity className={`h-6 w-6 ${getStatusColor(healingStatus)}`} />
+              <Heart className="h-6 w-6 text-emerald-400" />
               <div>
-                <div className={`text-lg font-bold ${getStatusColor(healingStatus)}`}>
-                  {healingStatus.toUpperCase()}
+                <div className="text-lg font-bold text-emerald-400">
+                  {healingStates.filter((s) => s.status === "active").length}
                 </div>
-                <div className="text-xs text-gray-400">Healing Status</div>
+                <div className="text-xs text-gray-400">Active Healing</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800/50 border-orange-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <RotateCcw className="h-6 w-6 text-orange-400" />
+              <CheckCircle className="h-6 w-6 text-blue-400" />
               <div>
-                <div className="text-lg font-bold text-orange-400">
-                  {retryCount}/{maxRetries}
+                <div className="text-lg font-bold text-blue-400">
+                  {healingStates.filter((s) => s.status === "completed").length}
                 </div>
-                <div className="text-xs text-gray-400">Retry Count</div>
+                <div className="text-xs text-gray-400">States Completed</div>
               </div>
             </div>
           </CardContent>
@@ -214,323 +214,260 @@ export default function NiagaraFXHealingStates() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Shield className="h-6 w-6 text-purple-400" />
+              <Sparkles className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">{isOverrideActive ? "ACTIVE" : "STANDBY"}</div>
-                <div className="text-xs text-gray-400">Override Status</div>
+                <div className="text-lg font-bold text-purple-400">{overallHealingProgress.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Overall Progress</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Star className="h-6 w-6 text-cyan-400" />
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-cyan-400">{constellations.filter((c) => c.active).length}/4</div>
-                <div className="text-xs text-gray-400">Constellations</div>
+                <div className="text-lg font-bold text-yellow-400">
+                  {healingStates.filter((s) => s.status === "error").length}
+                </div>
+                <div className="text-xs text-gray-400">Errors Detected</div>
               </div>
             </div>
           </CardContent>
         </Card>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Niagara FX States */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-emerald-400 flex items-center">
-                <Sparkles className="h-5 w-5 mr-2" />
-                Niagara FX Healing States
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {fxStates.map((fx, index) => (
-                  <motion.div
-                    key={fx.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`p-4 bg-slate-700/50 rounded-lg border ${getFXColor(fx.type)} hover:border-opacity-60 transition-smooth`}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <motion.div
-                          animate={fx.status === "active" ? { rotate: 360 } : {}}
-                          transition={{
-                            duration: 2,
-                            repeat: fx.status === "active" ? Number.POSITIVE_INFINITY : 0,
-                            ease: "linear",
-                          }}
-                        >
-                          <Atom className={`h-5 w-5 ${getFXColor(fx.type).split(" ")[0]}`} />
-                        </motion.div>
-                        <div>
-                          <h3 className="font-medium text-white">{fx.name}</h3>
-                          <div className="text-xs text-gray-400">
-                            {fx.duration > 0 ? `${fx.duration}s duration` : "Looping"}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Healing States List */}
+        <div className="lg:col-span-2">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+              <CardHeader>
+                <CardTitle className="text-emerald-400 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Heart className="h-5 w-5 mr-2" />
+                    Active Healing States
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className={getHealingStatusColor(isHealingActive ? "active" : "paused")}>
+                      {isHealingActive ? "Active" : "Paused"}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsHealingActive(!isHealingActive)}
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                    >
+                      <Settings className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {healingStates.map((state, index) => (
+                    <motion.div
+                      key={state.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          {getHealingTypeIcon(state.type)}
+                          <div>
+                            <h3 className="font-medium text-white">{state.name}</h3>
+                            <div className="text-xs text-gray-400">Target: {state.targetSystem}</div>
                           </div>
                         </div>
+                        <Badge variant="outline" className={getHealingStatusColor(state.status)}>
+                          {state.status.toUpperCase()}
+                        </Badge>
                       </div>
-                      <Badge variant="outline" className={fx.status === "active" ? "text-green-400" : "text-gray-400"}>
-                        {fx.status.toUpperCase()}
-                      </Badge>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-4 text-sm mb-3">
-                      <div>
-                        <div className="text-gray-400">Intensity</div>
-                        <div className={`font-bold ${getFXColor(fx.type).split(" ")[0]}`}>{fx.intensity}%</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-400">Particles</div>
-                        <div className={`font-bold ${getFXColor(fx.type).split(" ")[0]}`}>
-                          {fx.particles.toLocaleString()}
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                        <div>
+                          <div className="text-gray-400">Intensity</div>
+                          <div className={`font-bold ${getHealingStatusColor(state.status)}`}>{state.intensity}%</div>
+                          <Progress value={state.intensity} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Coherence</div>
+                          <div className={`font-bold ${getHealingStatusColor(state.status)}`}>
+                            {state.coherence.toFixed(1)}%
+                          </div>
+                          <Progress value={state.coherence} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Duration</div>
+                          <div className="font-bold text-purple-400">{state.duration}</div>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>FX Intensity</span>
-                        <span>{fx.intensity}%</span>
-                      </div>
-                      <Progress value={fx.intensity} className="h-2" />
-                    </div>
-
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-3">
-                      <Button
-                        size="sm"
-                        onClick={() => activateFX(fx.type)}
-                        className={`w-full ${
-                          fx.status === "active" ? "bg-green-600 hover:bg-green-700" : "bg-slate-600 hover:bg-slate-700"
-                        } transition-smooth`}
-                      >
-                        {fx.status === "active" ? (
-                          <Pause className="h-3 w-3 mr-2" />
-                        ) : (
-                          <Play className="h-3 w-3 mr-2" />
-                        )}
-                        {fx.status === "active" ? "Active" : "Activate"}
-                      </Button>
                     </motion.div>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
 
-        {/* Divine Constellation Alignment */}
+        {/* FX Parameters & Healing Controls */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
         >
+          {/* FX Parameters */}
           <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
             <CardHeader>
               <CardTitle className="text-purple-400 flex items-center">
-                <Orbit className="h-5 w-5 mr-2" />
-                Divine Constellation Alignment
+                <Sparkles className="h-5 w-5 mr-2" />
+                Niagara FX Parameters
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {constellations.map((constellation, index) => (
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {fxParameters.map((param, index) => (
                   <motion.div
-                    key={constellation.name}
+                    key={param.name}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className="p-3 bg-slate-700/50 rounded-lg border border-slate-600"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-3">
-                        <motion.div
-                          animate={constellation.active ? { scale: [1, 1.2, 1] } : {}}
-                          transition={{ duration: 2, repeat: constellation.active ? Number.POSITIVE_INFINITY : 0 }}
-                        >
-                          <Star className={`h-5 w-5 ${getConstellationColor(constellation.color)}`} />
-                        </motion.div>
-                        <span className="font-medium text-white">{constellation.name}</span>
-                      </div>
-                      <Badge variant="outline" className={constellation.active ? "text-green-400" : "text-gray-400"}>
-                        {constellation.active ? "ALIGNED" : "DORMANT"}
-                      </Badge>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-gray-400">{param.name}</span>
+                      <span className="text-white">
+                        {param.value.toFixed(0)}
+                        {param.unit}
+                      </span>
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Alignment</span>
-                        <span>{constellation.alignment.toFixed(1)}%</span>
-                      </div>
-                      <Progress value={constellation.alignment} className="h-1" />
-                    </div>
+                    <Slider
+                      value={[param.value]}
+                      onValueChange={(val) =>
+                        setFxParameters((prev) =>
+                          prev.map((p) => (p.name === param.name ? { ...p, value: val[0] } : p)),
+                        )
+                      }
+                      max={param.max}
+                      min={param.min}
+                      step={1}
+                      className="w-full"
+                    />
                   </motion.div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
 
-              {/* Planetary Overlays */}
-              <div className="mt-6 space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">Planetary FX Overlays</h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {["Earth", "Mars", "Venus"].map((planet) => (
-                    <motion.button
-                      key={planet}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="p-2 bg-slate-700/50 rounded text-xs font-medium text-gray-300 hover:bg-slate-600/50 transition-smooth"
-                    >
-                      {planet}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
+          {/* Healing Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Healing Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Full System Heal
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  Boost Energetic Flow
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  Calibrate Emotional Field
+                </Button>
+              </motion.div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
 
-      {/* Satellite Sync Panel */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-cyan-400 flex items-center">
-              <Target className="h-5 w-5 mr-2" />
-              Satellite Sync Panel
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Live Diagnostics */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">Live Diagnostics</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Satellite Link</span>
-                    <span className="text-green-400">ACTIVE</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Signal Strength</span>
-                    <span className="text-blue-400">94.7%</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Constellation Count</span>
-                    <span className="text-purple-400">4/4</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* API Integration */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">API Integration</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-400">Real-time Status</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-blue-400">Beam Lines Active</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-purple-400">Constellation Pulse</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Visual Feedback */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">Visual Feedback</h3>
-                <div className="relative h-24 bg-slate-900/50 rounded-lg overflow-hidden">
-                  <div className="absolute inset-0 cyber-grid opacity-20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                      className="relative"
-                    >
-                      <div className="w-8 h-8 border-2 border-cyan-400 rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                      </div>
-                    </motion.div>
-                  </div>
-                  <div className="absolute bottom-1 left-2 text-xs text-cyan-400">Sync: 99.7%</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Override Escalation Controls */}
+      {/* Divine Integration & Energetic Transmutation */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-red-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
-            <CardTitle className="text-red-400 flex items-center">
-              <Shield className="h-5 w-5 mr-2" />
-              Override Escalation & Retry Controls
+            <CardTitle className="text-emerald-400 flex items-center">
+              <Waves className="h-5 w-5 mr-2" />
+              Divine Integration & Energetic Transmutation
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => activateFX("OverrideFX")}
-                  className="bg-purple-600 hover:bg-purple-700 transition-smooth"
-                >
-                  <Shield className="h-4 w-4 mr-2" />
-                  Guardian Override
-                </Button>
-              </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Alchemy</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>Transmutes discordant energies into harmonious frequencies</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Infuses healing states with unconditional love energy</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span>Accelerates regeneration through cosmic resonance</span>
+                  </li>
+                </ul>
+              </div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => setRetryCount(0)}
-                  variant="outline"
-                  className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset Retry Count
-                </Button>
-              </motion.div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">✨ Visual Manifestation</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <Lightbulb className="h-4 w-4 text-cyan-400" />
+                  <span>Real-time visualization of energetic healing processes</span>
+                  <li className="flex items-center space-x-2">
+                    <Sparkles className="h-4 w-4 text-orange-400" />
+                    <span>Dynamic FX reflecting system coherence and vitality</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Atom className="h-4 w-4 text-pink-400" />
+                    <span>Cinematic representation of quantum-level repairs</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => activateFX("AuraPulse")}
-                  variant="outline"
-                  className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 transition-smooth bg-transparent"
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Activate Aura Pulse
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => activateFX("GoldenAuraBloom")}
-                  variant="outline"
-                  className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Golden Aura Bloom
-                </Button>
-              </motion.div>
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Symphony of Restoration</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The Niagara FX Healing States module is the visual symphony of restoration within the Thoth Guardian.
+                  It transforms complex energetic and quantum healing processes into a breathtaking display of light,
+                  color, and motion, allowing the Crystal Alchemist to witness the divine transmutation of dissonance
+                  into harmony.
+                </p>
+                <p className="italic text-cyan-400">
+                  "Witness the dance of healing, as light transmutes shadow into pure potential."
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>

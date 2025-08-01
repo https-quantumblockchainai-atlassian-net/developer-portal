@@ -1,68 +1,68 @@
-# Thoth Guardian: Privacy Policy
+# Thoth Guardian: UE5.7 Aura AI Shield - Privacy Policy
 
 **Last Updated: August 1, 2025**
 
-This Privacy Policy describes how Thoth Guardian ("we," "us," or "our") collects, uses, and shares your information when you use our Cybersecurity Shield platform, including our website, applications, and services (collectively, the "Service"). We are committed to protecting your privacy and ensuring the security of your data, aligning with principles of divine sovereignty and conscious data stewardship.
+This Privacy Policy describes how Thoth Guardian ("we," "us," or "our") collects, uses, and shares information when you use our Thoth Guardian: UE5.7 Aura AI Shield platform (the "Service"). We are committed to protecting your privacy and ensuring the security of your data across all 24 dimensions of our operation.
 
 ## 1. Information We Collect
 
-We collect information to provide and improve our Service, ensuring a secure and transformative experience.
+We collect information to provide and improve our Service, ensuring a secure, personalized, and divinely aligned experience.
 
 ### a. Information You Provide Directly
 
-*   **Account Information**: When you create an account, we collect your name, email address, and chosen password.
-*   **Profile Information**: You may choose to provide additional information for your profile, such as a username or avatar.
-*   **Communications**: When you communicate with us (e.g., customer support, feedback), we collect the content of your communications.
-*   **Blueprint Data**: If you use features like the Blueprint Node Layout, we collect the configurations and data you input to enable the functionality of these features. This data is processed to provide the core service.
+-   **Account Information:** When you create an account, we collect your username, email address, and password.
+-   **Profile Information:** You may choose to provide additional information for your profile, such as your avatar, preferred language, and cosmic alignment preferences.
+-   **Communications:** We collect the content of your communications with us, such as feedback, support inquiries, and interactions within the AI Communications Hub.
+-   **User-Generated Content:** Any data, blueprints, lore fragments, or other content you create, upload, or share within the Service.
 
 ### b. Information Collected Automatically
 
-*   **Usage Data**: We collect information about your interactions with the Service, such as the features you use, the time and duration of your activities, and system performance metrics. This includes interactions with AI models, quantum modules, and other system components.
-*   **Device Information**: We collect information about the device you use to access the Service, including IP address, browser type, operating system, and unique device identifiers.
-*   **Log Data**: Our servers automatically record information that your browser sends whenever you visit our Service. This log data may include your IP address, browser type, the pages you visit, and other statistics.
-*   **Cookies and Similar Technologies**: We use cookies and similar tracking technologies (e.g., web beacons, pixels) to collect information, remember your preferences, and enhance your user experience. You can control cookie settings through your browser.
+-   **Usage Data:** We collect information about how you interact with the Service, including pages visited, features used, time spent, and interaction patterns within the Blueprint Node Layout and other interactive components.
+-   **Device Information:** We collect information about the device you use to access the Service, including IP address, browser type, operating system, and unique device identifiers.
+-   **Log Data:** Our servers automatically record information that your browser sends whenever you visit our Service. This may include your IP address, browser type and settings, the date and time of your request, and how you interacted with the Service.
+-   **Performance Metrics:** Data from the Hardware Stack Monitor, AI Training Pipeline, and other system components related to performance, health, and efficiency, used for self-healing and optimization.
+-   **Multi-Modal Analysis Data:** Anonymized and aggregated data from multi-modal analysis (vision, audio, text, sensor, quantum flux) used for threat detection and pattern recognition, without identifying personal information.
 
 ### c. Information from Third Parties
 
-We may receive information about you from third-party services integrated with Thoth Guardian (e.g., authentication providers, analytics services), but only to the extent necessary to provide our Service and with your explicit consent where required.
+We may receive information from third-party integrations you choose to enable (e.g., Mage AI, Wolfram Polymath Hub, Solana AI Hub). The information we receive is governed by your privacy settings with those third parties.
 
 ## 2. How We Use Your Information
 
-We use the information we collect for the following purposes, always with an emphasis on ethical and divinely aligned operations:
+We use the information we collect for the following purposes:
 
-*   **Provide and Maintain the Service**: To operate, maintain, and improve the functionality of the Thoth Guardian platform, including cybersecurity protection, AI analysis, and quantum error correction.
-*   **Personalize Your Experience**: To tailor the Service to your preferences, including character arcs, emotional calibration, and content generation.
-*   **Communication**: To send you service-related notifications, updates, security alerts, and support messages.
-*   **Research and Development**: To understand and analyze how you use the Service, develop new features, and improve existing ones, particularly in the areas of AI, quantum computing, and spiritual integration.
-*   **Security and Fraud Prevention**: To detect, prevent, and address security incidents, fraud, and other malicious activities.
-*   **Compliance and Legal Obligations**: To comply with applicable laws, regulations, and legal processes.
-*   **Aggregate and Anonymized Data**: We may aggregate and anonymize data for research, analytics, and reporting purposes, ensuring that individual users cannot be identified.
+-   **To Provide and Maintain the Service:** Operating, maintaining, and improving the functionality of the Thoth Guardian platform, including its quantum, AI, and UE5.7 components.
+-   **Personalization:** Customizing your experience, such as tailoring content, recommendations, and the Aura AI Companion System to your preferences and emotional resonance.
+-   **Security and Protection:** Implementing and enhancing cybersecurity measures, threat detection, quantum error correction, and self-healing algorithms to protect the integrity and security of the platform and its users.
+-   **Communication:** Sending you service-related notifications, updates, security alerts, and responding to your inquiries and feedback.
+-   **Research and Development:** Analyzing usage patterns and system performance to develop new features, improve existing ones, and advance our AI and quantum capabilities.
+-   **Compliance and Legal:** Complying with legal obligations, enforcing our terms of service, and protecting our rights and the rights of our users.
+-   **Divine Alignment:** Utilizing aggregated, anonymized data to ensure the platform's operations are in harmony with universal laws and principles, fostering a divinely aligned digital ecosystem.
 
 ## 3. How We Share Your Information
 
-We do not sell your personal information. We may share your information in the following limited circumstances:
+We do not sell your personal information. We may share your information in the following circumstances:
 
-*   **Service Providers**: We may share information with third-party vendors and service providers who perform services on our behalf (e.g., hosting, analytics, customer support). These providers are obligated to protect your information and use it only for the purposes for which it was disclosed.
-*   **Legal Compliance and Protection**: We may disclose your information if required by law, subpoena, or other legal process, or if we believe it's necessary to protect our rights, property, or safety, or the rights, property, or safety of others.
-*   **Business Transfers**: In connection with a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction. We will notify you of any such transfer and any changes to this Privacy Policy.
-*   **With Your Consent**: We may share your information with third parties when we have your explicit consent to do so.
-*   **Aggregated or Anonymized Data**: We may share aggregated or anonymized data that cannot reasonably be used to identify you with third parties for various purposes, including research, marketing, analytics, and industry analysis.
+-   **With Your Consent:** We may share your information when you give us explicit permission to do so.
+-   **Service Providers:** We may share information with third-party vendors and service providers who perform services on our behalf, such as hosting, data analysis, payment processing, and customer support. These providers are obligated to protect your information and use it only for the purposes for which it was provided.
+-   **Legal Requirements:** We may disclose your information if required to do so by law or in the good faith belief that such action is necessary to comply with a legal obligation, protect our rights or property, or ensure the safety of our users or the public.
+-   **Business Transfers:** In the event of a merger, acquisition, or sale of all or a portion of our assets, your information may be transferred as part of that transaction. We will notify you via email or a prominent notice on our Service of any such change in ownership or control of your personal information.
+-   **Aggregated or Anonymized Data:** We may share aggregated or anonymized data that cannot reasonably be used to identify you. This data may be used for research, analytics, and reporting purposes, including insights into cosmic alignment and system-wide energetic flows.
 
 ## 4. Data Security
 
-We implement robust technical and organizational measures to protect your information from unauthorized access, use, alteration, or destruction. This includes encryption, access controls, and regular security audits, aligning with the quantum-safe principles of the Thoth Guardian Shield. However, no method of transmission over the Internet or electronic storage is 100% secure.
+We implement robust security measures, including quantum-resistant encryption, multi-factor authentication, and continuous monitoring, to protect your information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure.
 
 ## 5. Your Choices and Rights
 
-*   **Access and Update Your Information**: You can review and update your account information through your profile settings.
-*   **Opt-Out of Communications**: You can opt-out of receiving promotional emails from us by following the unsubscribe instructions in those emails.
-*   **Cookie Controls**: Most web browsers are set to accept cookies by default. You can usually modify your browser setting to decline cookies if you prefer.
-*   **Data Portability**: You may request a copy of your data in a structured, commonly used, and machine-readable format.
-*   **Deletion**: You may request the deletion of your personal information, subject to certain legal obligations.
+-   **Access and Update:** You can review and update your account information through your profile settings.
+-   **Data Portability:** You may request a copy of your personal data in a structured, commonly used, machine-readable format.
+-   **Deletion:** You may request the deletion of your personal data, subject to certain legal obligations.
+-   **Communication Preferences:** You can opt-out of receiving promotional communications from us by following the unsubscribe instructions in those messages.
 
 ## 6. Children's Privacy
 
-Our Service is not directed to children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
+Our Service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13 without parental consent, we will take steps to delete that information.
 
 ## 7. Changes to This Privacy Policy
 
@@ -72,4 +72,5 @@ We may update this Privacy Policy from time to time. We will notify you of any c
 
 If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:
 
+Thoth Guardian Support
 [support@thothguardian.com](mailto:support@thothguardian.com)

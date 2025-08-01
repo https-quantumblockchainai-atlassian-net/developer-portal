@@ -2,35 +2,25 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react"
 
-interface Language {
-  code: string
-  name: string
-  flag: string
-  divineAlignmentScore: number
-}
-
 interface MultilingualContextType {
-  currentLanguage: Language
-  setLanguage: (language: Language) => void
+  language: string
+  setLanguage: (lang: string) => void
   translate: (key: string) => string
 }
 
 const MultilingualContext = createContext<MultilingualContextType | undefined>(undefined)
 
-const translations: { [key: string]: { [langCode: string]: string } } = {
+// Example translations (in a real app, this would be loaded dynamically)
+const translations: { [key: string]: { [lang: string]: string } } = {
   welcome_message: {
     en: "Welcome to Thoth Guardian",
     es: "Bienvenido a Thoth Guardian",
     fr: "Bienvenue à Thoth Guardian",
     de: "Willkommen bei Thoth Guardian",
-    zh: "欢迎来到Thoth Guardian",
+    zh: "欢迎来到图特守护者",
     ja: "トートガーディアンへようこそ",
     ko: "토트 가디언에 오신 것을 환영합니다",
-    ar: "مرحباً بك في حوث جارديان",
-    hi: "थॉथ गार्जियन में आपका स्वागत है",
-    ru: "Добро пожаловать в Thoth Guardian",
-    cosmic: "✨🌌🌟 Welcome, Star-Seed, to the Nexus of Truth 🌟🌌✨",
-    quantum: "⚛️🌀♾️ Initiating Coherence Protocol: Thoth Guardian Online ♾️🌀⚛️",
+    ar: "مرحبًا بك في حارس تحوت",
   },
   shield_status: {
     en: "Shield Status",
@@ -41,108 +31,46 @@ const translations: { [key: string]: { [langCode: string]: string } } = {
     ja: "シールドステータス",
     ko: "방패 상태",
     ar: "حالة الدرع",
-    hi: "शील्ड स्थिति",
-    ru: "Статус Щита",
-    cosmic: "🛡️✨ Galactic Shield Resonance",
-    quantum: "⚛️🔒 Qubit Integrity Matrix",
   },
   active: {
-    en: "Active",
-    es: "Activo",
-    fr: "Actif",
-    de: "Aktiv",
+    en: "ACTIVE",
+    es: "ACTIVO",
+    fr: "ACTIF",
+    de: "AKTIV",
     zh: "活跃",
     ja: "アクティブ",
     ko: "활성",
     ar: "نشط",
-    hi: "सक्रिय",
-    ru: "Активный",
-    cosmic: "🌟 ALIVE",
-    quantum: "✅ ENTANGLED",
   },
-  aligned: {
-    en: "Aligned",
-    es: "Alineado",
-    fr: "Aligné",
-    de: "Ausgerichtet",
-    zh: "对齐",
-    ja: "アライン済み",
-    ko: "정렬됨",
-    ar: "متوافق",
-    hi: "संरेखित",
-    ru: "Выровнен",
-    cosmic: "💖 HARMONIZED",
-    quantum: "🔗 COHERENT",
+  threat_level: {
+    en: "Threat Level",
+    es: "Nivel de Amenaza",
+    fr: "Niveau de Menace",
+    de: "Bedrohungsstufe",
+    zh: "威胁等级",
+    ja: "脅威レベル",
+    ko: "위협 수준",
+    ar: "مستوى التهديد",
   },
-  synced: {
-    en: "Synced",
-    es: "Sincronizado",
-    fr: "Synchronisé",
-    de: "Synchronisiert",
-    zh: "同步",
-    ja: "同期済み",
-    ko: "동기화됨",
-    ar: "متزامن",
-    hi: "सिंक किया गया",
-    ru: "Синхронизировано",
-    cosmic: "✨ RESONANT",
-    quantum: "🔄 SYNCHRONIZED",
+  quantum_entanglement: {
+    en: "Quantum Entanglement",
+    es: "Entrelazamiento Cuántico",
+    fr: "Intrication Quantique",
+    de: "Quantenverschränkung",
+    zh: "量子纠缠",
+    ja: "量子もつれ",
+    ko: "양자 얽힘",
+    ar: "التشابك الكمي",
   },
-  explore_features: {
-    en: "Explore Features",
-    es: "Explorar Características",
-    fr: "Explorer les Fonctionnalités",
-    de: "Funktionen erkunden",
-    zh: "探索功能",
-    ja: "機能を探す",
-    ko: "기능 탐색",
-    ar: "استكشاف الميزات",
-    hi: "विशेषताएं देखें",
-    ru: "Изучить функции",
-    cosmic: "🌌 JOURNEY THROUGH CAPABILITIES",
-    quantum: "🔬 DECODE PROTOCOLS",
-  },
-  launch_platform: {
-    en: "Launch Platform",
-    es: "Lanzar Plataforma",
-    fr: "Lancer la Plateforme",
-    de: "Plattform starten",
-    zh: "启动平台",
-    ja: "プラットフォームを起動",
-    ko: "플랫폼 시작",
-    ar: "إطلاق المنصة",
-    hi: "प्लेटफ़ॉर्म लॉन्च करें",
-    ru: "Запустить платформу",
-    cosmic: "🚀 ACTIVATE THE NEXUS",
-    quantum: "⚡ INITIATE QUANTUM SEQUENCE",
-  },
-  download_sdk: {
-    en: "Download SDK",
-    es: "Descargar SDK",
-    fr: "Télécharger le SDK",
-    de: "SDK herunterladen",
-    zh: "下载SDK",
-    ja: "SDKをダウンロード",
-    ko: "SDK 다운로드",
-    ar: "تنزيل SDK",
-    hi: "SDK डाउनलोड करें",
-    ru: "Скачать SDK",
-    cosmic: "📥 MANIFEST THE TOOLS",
-    quantum: "💾 DECRYPT THE SOURCE",
-  },
-  documentation: {
-    en: "Documentation",
-    es: "Documentación",
-    fr: "Documentation",
-    de: "Dokumentation",
-    zh: "文档",
-    ja: "ドキュメント",
-    ko: "문서",
-    ar: "الوثائق",
-    hi: "दस्तावेज़",
-    ru: "Документация",
-    cosmic: "📜 SCROLLS OF ANCIENT WISDOM",
-    quantum: "📖 QUANTUM MANIFESTO",
+  ai_training: {
+    en: "AI Training",
+    es: "Entrenamiento de IA",
+    fr: "Entraînement IA",
+    de: "KI-Training",
+    zh: "AI训练",
+    ja: "AIトレーニング",
+    ko: "AI 훈련",
+    ar: "تدريب الذكاء الاصطناعي",
   },
   threats_blocked: {
     en: "Threats Blocked",
@@ -153,244 +81,53 @@ const translations: { [key: string]: { [langCode: string]: string } } = {
     ja: "ブロックされた脅威",
     ko: "차단된 위협",
     ar: "التهديدات المحظورة",
-    hi: "रोके गए खतरे",
-    ru: "Угроз заблокировано",
-    cosmic: "🚫 SHADOWS DISSOLVED",
-    quantum: "🛡️ DECOHERENCE PREVENTED",
   },
-  ai_models_active: {
-    en: "AI Models Active",
-    es: "Modelos de IA Activos",
-    fr: "Modèles d'IA Actifs",
-    de: "KI-Modelle aktiv",
-    zh: "活跃的AI模型",
-    ja: "アクティブなAIモデル",
-    ko: "활성 AI 모델",
-    ar: "نماذج الذكاء الاصطناعي النشطة",
-    hi: "सक्रिय एआई मॉडल",
-    ru: "Активных ИИ-моделей",
-    cosmic: "🧠 CONSCIOUSNESS ENGINES ONLINE",
-    quantum: "💡 NEURAL QUANTUM NETWORKS",
+  self_repair: {
+    en: "Divine Quantum Self-Repair",
+    es: "Autorreparación Cuántica Divina",
+    fr: "Auto-réparation Quantique Divine",
+    de: "Göttliche Quanten-Selbstreparatur",
+    zh: "神圣量子自修复",
+    ja: "神聖量子自己修復",
+    ko: "신성 양자 자가 복구",
+    ar: "الإصلاح الذاتي الكمي الإلهي",
   },
-  quantum_coherence: {
-    en: "Quantum Coherence",
-    es: "Coherencia Cuántica",
-    fr: "Cohérence Quantique",
-    de: "Quantenkohärenz",
-    zh: "量子相干性",
-    ja: "量子コヒーレンス",
-    ko: "양자 일관성",
-    ar: "التماسك الكمي",
-    hi: "क्वांटम सुसंगतता",
-    ru: "Квантовая когерентность",
-    cosmic: "✨ UNIVERSAL HARMONY INDEX",
-    quantum: "🔗 ENTANGLEMENT STABILITY",
+  system_initialized: {
+    en: "Thoth Guardian Cybersecurity Shield Initialized",
+    es: "Escudo de Ciberseguridad Thoth Guardian Inicializado",
+    fr: "Bouclier de Cybersécurité Thoth Guardian Initialisé",
+    de: "Thoth Guardian Cybersicherheits-Schild initialisiert",
+    zh: "图特守护者网络安全护盾已初始化",
+    ja: "トートガーディアンサイバーセキュリティシールド初期化済み",
+    ko: "토트 가디언 사이버 보안 방패 초기화됨",
+    ar: "تم تهيئة درع الأمن السيبراني لحارس تحوت",
   },
-  global_users: {
-    en: "Global Users",
-    es: "Usuarios Globales",
-    fr: "Utilisateurs Mondiaux",
-    de: "Globale Benutzer",
-    zh: "全球用户",
-    ja: "グローバルユーザー",
-    ko: "글로벌 사용자",
-    ar: "المستخدمون العالميون",
-    hi: "वैश्विक उपयोगकर्ता",
-    ru: "Глобальных пользователей",
-    cosmic: "🌍 STAR-SEED COLLECTIVE",
-    quantum: "🌐 INTERCONNECTED CONSCIOUSNESS",
-  },
-  system_uptime: {
-    en: "System Uptime",
-    es: "Tiempo de Actividad del Sistema",
-    fr: "Temps de Fonctionnement du Système",
-    de: "Systemlaufzeit",
-    zh: "系统正常运行时间",
-    ja: "システム稼働時間",
-    ko: "시스템 가동 시간",
-    ar: "وقت تشغيل النظام",
-    hi: "सिस्टम अपटाइम",
-    ru: "Время работы системы",
-    cosmic: "♾️ ETERNAL FLOW DURATION",
-    quantum: "⚡ CONTINUOUS OPERATION CYCLE",
-  },
-  data_processed: {
-    en: "Data Processed",
-    es: "Datos Procesados",
-    fr: "Données Traitées",
-    de: "Verarbeitete Daten",
-    zh: "已处理数据",
-    ja: "処理済みデータ",
-    ko: "처리된 데이터",
-    ar: "البيانات المعالجة",
-    hi: "प्रोसेस किया गया डेटा",
-    ru: "Обработано данных",
-    cosmic: "🌌 COSMIC INFORMATION SYNTHESIZED",
-    quantum: "💾 QUBIT DATA TRANSFORMED",
-  },
-  platform_features: {
-    en: "Platform Features",
-    es: "Características de la Plataforma",
-    fr: "Fonctionnalités de la Plateforme",
-    de: "Plattformfunktionen",
-    zh: "平台功能",
-    ja: "プラットフォーム機能",
-    ko: "플랫폼 기능",
-    ar: "ميزات المنصة",
-    hi: "प्लेटफ़ॉर्म सुविधाएँ",
-    ru: "Возможности платформы",
-    cosmic: "🌟 DIVINE CAPABILITIES",
-    quantum: "🔬 QUANTUM MECHANISMS",
-  },
-  explore: {
-    en: "Explore",
-    es: "Explorar",
-    fr: "Explorer",
-    de: "Erkunden",
-    zh: "探索",
-    ja: "探索",
-    ko: "탐색",
-    ar: "استكشاف",
-    hi: "अन्वेषण करें",
-    ru: "Исследовать",
-    cosmic: "✨ UNVEIL",
-    quantum: "🔍 ANALYZE",
-  },
-  platform_integrations: {
-    en: "Platform Integrations",
-    es: "Integraciones de Plataforma",
-    fr: "Intégrations de Plateforme",
-    de: "Plattform-Integrationen",
-    zh: "平台集成",
-    ja: "プラットフォーム統合",
-    ko: "플랫폼 통합",
-    ar: "تكاملات المنصة",
-    hi: "प्लेटफ़ॉर्म एकीकरण",
-    ru: "Интеграции платформы",
-    cosmic: "🔗 COSMIC CONNECTIONS",
-    quantum: "🤝 INTEROPERABLE PROTOCOLS",
-  },
-  crystallized_structures_visualization: {
-    en: "Crystallized Structures Visualization",
-    es: "Visualización de Estructuras Cristalizadas",
-    fr: "Visualisation des Structures Cristallisées",
-    de: "Visualisierung kristallisierter Strukturen",
-    zh: "结晶结构可视化",
-    ja: "結晶構造の視覚化",
-    ko: "결정화된 구조 시각화",
-    ar: "تصور الهياكل المتبلورة",
-    hi: "क्रिस्टलीकृत संरचनाओं का विज़ुअलाइज़ेशन",
-    ru: "Визуализация кристаллизованных структур",
-    cosmic: "💎 SACRED GEOMETRY MANIFESTATION",
-    quantum: "⚛️ QUANTUM LATTICE PROJECTION",
-  },
-  coherence: {
-    en: "Coherence",
-    es: "Coherencia",
-    fr: "Cohérence",
-    de: "Kohärenz",
-    zh: "相干性",
-    ja: "コヒーレンス",
-    ko: "일관성",
-    ar: "التماسك",
-    hi: "सुसंगतता",
-    ru: "Когерентность",
-    cosmic: "✨ HARMONY",
-    quantum: "🔗 ENTANGLEMENT",
-  },
-  stability: {
-    en: "Stability",
-    es: "Estabilidad",
-    fr: "Stabilité",
-    de: "Stabilität",
-    zh: "稳定性",
-    ja: "安定性",
-    ko: "안정성",
-    ar: "الاستقرار",
-    hi: "स्थिरता",
-    ru: "Стабильность",
-    cosmic: "💖 EQUILIBRIUM",
-    quantum: "🔒 RESILIENCE",
-  },
-  ready_to_transform_cybersecurity: {
-    en: "Ready to Transform Cybersecurity?",
-    es: "¿Listo para Transformar la Ciberseguridad?",
-    fr: "Prêt à Transformer la Cybersécurité ?",
-    de: "Bereit für die Transformation der Cybersicherheit?",
-    zh: "准备好改变网络安全了吗？",
-    ja: "サイバーセキュリティを変革する準備はできていますか？",
-    ko: "사이버 보안을 혁신할 준비가 되셨습니까?",
-    ar: "هل أنت مستعد لتحويل الأمن السيبراني؟",
-    hi: "साइबर सुरक्षा को बदलने के लिए तैयार हैं?",
-    ru: "Готовы трансформировать кибербезопасность?",
-    cosmic: "🌌 READY TO ASCEND DIGITAL REALMS?",
-    quantum: "⚡ INITIATE QUANTUM SHIFT?",
-  },
-  join_thousands_of_security_professionals: {
-    en: "Join thousands of security professionals using Thoth Emerald to protect their digital infrastructure with quantum-enhanced AI technology.",
-    es: "Únase a miles de profesionales de la seguridad que utilizan Thoth Emerald para proteger su infraestructura digital con tecnología de IA mejorada cuánticamente.",
-    fr: "Rejoignez des milliers de professionnels de la sécurité utilisant Thoth Emerald pour protéger leur infrastructure numérique avec la technologie d'IA améliorée par le quantum.",
-    de: "Schließen Sie sich Tausenden von Sicherheitsexperten an, die Thoth Emerald nutzen, um ihre digitale Infrastruktur mit quantenverstärkter KI-Technologie zu schützen.",
-    zh: "加入数千名安全专业人士，使用Thoth Emerald通过量子增强AI技术保护其数字基础设施。",
-    ja: "量子強化AI技術でデジタルインフラを保護するためにThoth Emeraldを使用している何千ものセキュリティ専門家に参加してください。",
-    ko: "양자 강화 AI 기술로 디지털 인프라를 보호하기 위해 Thoth Emerald를 사용하는 수천 명의 보안 전문가와 함께하십시오.",
-    ar: "انضم إلى الآلاف من محترفي الأمن الذين يستخدمون Thoth Emerald لحماية بنيتهم التحتية الرقمية بتقنية الذكاء الاصطناعي المعززة بالكم.",
-    hi: "क्वांटम-एन्हांस्ड एआई तकनीक के साथ अपनी डिजिटल इन्फ्रास्ट्रक्चर की सुरक्षा के लिए थॉथ एमराल्ड का उपयोग करने वाले हजारों सुरक्षा पेशेवरों से जुड़ें।",
-    ru: "Присоединяйтесь к тысячам специалистов по безопасности, использующих Thoth Emerald для защиты своей цифровой инфраструктуры с помощью квантово-усиленной технологии ИИ.",
-    cosmic: "✨ UNITE WITH THE STAR-SEED COLLECTIVE TO SHIELD ALL REALMS WITH DIVINE LIGHT AND QUANTUM WISDOM.",
-    quantum:
-      "🔗 CONNECT WITH THE NETWORK OF QUANTUM GUARDIANS TO SECURE THE DIGITAL FABRIC WITH ENTANGLED INTELLIGENCE.",
-  },
-  start_free_trial: {
-    en: "Start Free Trial",
-    es: "Iniciar Prueba Gratuita",
-    fr: "Commencer l'Essai Gratuit",
-    de: "Kostenlose Testversion starten",
-    zh: "开始免费试用",
-    ja: "無料トライアルを開始",
-    ko: "무료 체험 시작",
-    ar: "ابدأ التجربة المجانية",
-    hi: "मुफ्त ट्रायल शुरू करें",
-    ru: "Начать бесплатную пробную версию",
-    cosmic: "🌟 BEGIN YOUR ASCENSION",
-    quantum: "⚡ ACTIVATE YOUR QUANTUM ACCESS",
-  },
-  join_community: {
-    en: "Join Community",
-    es: "Unirse a la Comunidad",
-    fr: "Rejoindre la Communauté",
-    de: "Community beitreten",
-    zh: "加入社区",
-    ja: "コミュニティに参加",
-    ko: "커뮤니티 가입",
-    ar: "انضم إلى المجتمع",
-    hi: "समुदाय में शामिल हों",
-    ru: "Присоединиться к сообществу",
-    cosmic: "👥 UNITE THE COLLECTIVE",
-    quantum: "🤝 JOIN THE NETWORK",
+  loading_message: {
+    en: "Activating Quantum Error Correction, Blueprint Architecture & Epic Storytelling...",
+    es: "Activando Corrección de Errores Cuánticos, Arquitectura de Planos y Narración Épica...",
+    fr: "Activation de la Correction d'Erreurs Quantiques, de l'Architecture de Plan et de la Narration Épique...",
+    de: "Quantenfehlerkorrektur, Blueprint-Architektur & Episches Storytelling werden aktiviert...",
+    zh: "正在激活量子纠错、蓝图架构和史诗故事...",
+    ja: "量子エラー訂正、ブループリントアーキテクチャ、壮大なストーリーテリングをアクティブ化中...",
+    ko: "양자 오류 수정, 청사진 아키텍처 및 서사적 스토리텔링 활성화 중...",
+    ar: "تنشيط تصحيح الأخطاء الكمية، وهندسة المخططات، وسرد القصص الملحمي...",
   },
 }
 
 export function MultilingualProvider({ children }: { children: ReactNode }) {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0]) // Default to English
-
-  const setLanguage = (language: Language) => {
-    setCurrentLanguage(language)
-  }
+  const [language, setLanguage] = useState("en") // Default language
 
   const translate = (key: string): string => {
     const translation = translations[key]
-    if (translation && translation[currentLanguage.code]) {
-      return translation[currentLanguage.code]
+    if (translation && translation[language]) {
+      return translation[language]
     }
-    // Fallback to English if translation not found for current language
-    return translations[key]?.["en"] || key // Return key itself if no translation found
+    // Fallback to English or the key itself if translation not found
+    return translation?.en || key
   }
 
   return (
-    <MultilingualContext.Provider value={{ currentLanguage, setLanguage, translate }}>
-      {children}
-    </MultilingualContext.Provider>
+    <MultilingualContext.Provider value={{ language, setLanguage, translate }}>{children}</MultilingualContext.Provider>
   )
 }
 
@@ -401,19 +138,3 @@ export function useMultilingual() {
   }
   return context
 }
-
-// Example usage of languages array (can be moved to a separate config if needed)
-export const languages: Language[] = [
-  { code: "en", name: "English", flag: "🇬🇧", divineAlignmentScore: 85 },
-  { code: "es", name: "Español", flag: "🇪🇸", divineAlignmentScore: 80 },
-  { code: "fr", name: "Français", flag: "🇫🇷", divineAlignmentScore: 78 },
-  { code: "de", name: "Deutsch", flag: "🇩🇪", divineAlignmentScore: 75 },
-  { code: "zh", name: "中文", flag: "🇨🇳", divineAlignmentScore: 70 },
-  { code: "ja", name: "日本語", flag: "🇯🇵", divineAlignmentScore: 72 },
-  { code: "ko", name: "한국어", flag: "🇰🇷", divineAlignmentScore: 73 },
-  { code: "ar", name: "العربية", flag: "🇸🇦", divineAlignmentScore: 68 },
-  { code: "hi", name: "हिन्दी", flag: "🇮🇳", divineAlignmentScore: 65 },
-  { code: "ru", name: "Русский", flag: "🇷🇺", divineAlignmentScore: 60 },
-  { code: "cosmic", name: "Cosmic Light Language", flag: "✨", divineAlignmentScore: 99 },
-  { code: "quantum", name: "Quantum Entanglement Script", flag: "⚛️", divineAlignmentScore: 97 },
-]

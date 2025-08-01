@@ -1,232 +1,227 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
-import { Play, Pause, Star, Network, Code, Heart, Sparkles, Globe, Music, Users, Map } from "lucide-react"
+import {
+  Globe,
+  Users,
+  Zap,
+  RefreshCcw,
+  CheckCircle,
+  AlertTriangle,
+  Settings,
+  Lightbulb,
+  Waves,
+  Map,
+} from "lucide-react"
 
-interface WorldZone {
+interface RealmStatus {
   id: string
   name: string
-  vibe: string
-  audioTheme: string
-  coreFeature: string
-  isActive: boolean
-  playerCount: number
-  emotionalResonance: number
+  population: number
+  energeticFlow: number // 0-100%
+  stability: "stable" | "fluctuating" | "critical"
+  threatLevel: "none" | "low" | "medium" | "high"
+  lastSync: Date
 }
 
-interface WalkerRole {
-  id: string
+interface EcosystemMetric {
   name: string
-  description: string
-  icon: string
-  abilities: string[]
-  isSelected: boolean
-}
-
-interface MemoryShard {
-  id: string
-  emotion: string
-  track: string
-  location: string
-  seedColor: string
-  memoryType: "visual" | "audio" | "experiential"
-  shared: boolean
-  resonanceLevel: number
+  value: number
+  unit: string
+  threshold: number
+  status: "optimal" | "warning" | "critical"
 }
 
 export default function WalkerWorldEcosystem() {
-  const [worldZones, setWorldZones] = useState<WorldZone[]>([
+  const [realms, setRealms] = useState<RealmStatus[]>([
     {
-      id: "fade",
-      name: "The Fade",
-      vibe: "Lost/Haunting",
-      audioTheme: "Faded",
-      coreFeature: "Disintegrating architecture & fog memory trails",
-      isActive: true,
-      playerCount: 47,
-      emotionalResonance: 0.72,
+      id: "realm-1",
+      name: "Lumina Nexus",
+      population: 150000,
+      energeticFlow: 95.2,
+      stability: "stable",
+      threatLevel: "none",
+      lastSync: new Date(Date.now() - 30000), // 30 secs ago
     },
     {
-      id: "lumina",
-      name: "Lumina Fields",
-      vibe: "Hopeful",
-      audioTheme: "Spectre",
-      coreFeature: "Bioluminescent flora & music-reactive sky",
-      isActive: true,
-      playerCount: 89,
-      emotionalResonance: 0.85,
+      id: "realm-2",
+      name: "Echoing Spires",
+      population: 80000,
+      energeticFlow: 70.1,
+      stability: "fluctuating",
+      threatLevel: "medium",
+      lastSync: new Date(Date.now() - 300000), // 5 mins ago
     },
     {
-      id: "signal",
-      name: "Signal Tower",
-      vibe: "Empowered",
-      audioTheme: "On My Way",
-      coreFeature: "Tower of memory uploads & global story arcs",
-      isActive: false,
-      playerCount: 23,
-      emotionalResonance: 0.63,
+      id: "realm-3",
+      name: "Whispering Glades",
+      population: 200000,
+      energeticFlow: 98.9,
+      stability: "stable",
+      threatLevel: "none",
+      lastSync: new Date(Date.now() - 60000), // 1 min ago
     },
     {
-      id: "pulse",
-      name: "Pulse Basin",
-      vibe: "Love/Unity",
-      audioTheme: "Unity",
-      coreFeature: "Shared player-made zones w/ mood syncing",
-      isActive: true,
-      playerCount: 156,
-      emotionalResonance: 0.91,
+      id: "realm-4",
+      name: "Shadowfell Depths",
+      population: 5000,
+      energeticFlow: 45.0,
+      stability: "critical",
+      threatLevel: "high",
+      lastSync: new Date(Date.now() - 3600000), // 1 hour ago
     },
   ])
 
-  const [walkerRoles, setWalkerRoles] = useState<WalkerRole[]>([
-    {
-      id: "remnants",
-      name: "The Remnants",
-      description: "Discoverers of forgotten architecture / past Walkers",
-      icon: "🔍",
-      abilities: ["Archaeological Vision", "Memory Trace", "Relic Identification"],
-      isSelected: false,
-    },
-    {
-      id: "tuners",
-      name: "The Tuners",
-      description: "Use MetaSound interfaces to tune emotional state of areas",
-      icon: "🎵",
-      abilities: ["Harmonic Resonance", "Frequency Modulation", "Emotional Calibration"],
-      isSelected: true,
-    },
-    {
-      id: "signalers",
-      name: "The Signalers",
-      description: "Spread messages via musical symbols and glyphs",
-      icon: "📡",
-      abilities: ["Symbol Broadcasting", "Network Amplification", "Message Encoding"],
-      isSelected: false,
-    },
-    {
-      id: "formers",
-      name: "The Formers",
-      description: "Builders, designers, and 24D Seed shapers",
-      icon: "🧱",
-      abilities: ["Terrain Shaping", "Seed Cultivation", "Reality Architecture"],
-      isSelected: false,
-    },
+  const [ecosystemMetrics, setEcosystemMetrics] = useState<EcosystemMetric[]>([
+    { name: "Overall Energetic Flow", value: 85.5, unit: "%", threshold: 80, status: "optimal" },
+    { name: "Inter-Realm Coherence", value: 92.1, unit: "%", threshold: 90, status: "optimal" },
+    { name: "Threat Propagation Index", value: 15.3, unit: "%", threshold: 20, status: "optimal" },
+    { name: "Divine Alignment Score", value: 97.0, unit: "%", threshold: 95, status: "optimal" },
   ])
 
-  const [memoryShards, setMemoryShards] = useState<MemoryShard[]>([
-    {
-      id: "1",
-      emotion: "Hope",
-      track: "Faded",
-      location: "The Fade",
-      seedColor: "#303AAE",
-      memoryType: "visual",
-      shared: true,
-      resonanceLevel: 0.78,
-    },
-    {
-      id: "2",
-      emotion: "Longing",
-      track: "Spectre",
-      location: "Lumina Fields",
-      seedColor: "#00D4AA",
-      memoryType: "audio",
-      shared: false,
-      resonanceLevel: 0.65,
-    },
-    {
-      id: "3",
-      emotion: "Unity",
-      track: "Unity",
-      location: "Pulse Basin",
-      seedColor: "#FFD700",
-      memoryType: "experiential",
-      shared: true,
-      resonanceLevel: 0.92,
-    },
-  ])
-
-  const [globalPulseActive, setGlobalPulseActive] = useState(false)
-  const [communityMood, setCommunityMood] = useState([75])
-  const [worldEvolution, setWorldEvolution] = useState([68])
-  const [musicSync, setMusicSync] = useState([82])
-  const [isLiveMixMode, setIsLiveMixMode] = useState(false)
+  const [overallEcosystemStatus, setOverallEcosystemStatus] = useState("stable")
+  const [totalPopulation, setTotalPopulation] = useState(0)
+  const [syncProgress, setSyncProgress] = useState(0)
+  const [isSyncing, setIsSyncing] = useState(false)
+  const [flowRegulation, setFlowRegulation] = useState([70]) // 0-100%
 
   useEffect(() => {
-    // Simulate dynamic world evolution
     const interval = setInterval(() => {
-      setWorldZones((prev) =>
-        prev.map((zone) => ({
-          ...zone,
-          emotionalResonance: Math.max(0.3, Math.min(1.0, zone.emotionalResonance + (Math.random() - 0.5) * 0.1)),
-          playerCount: Math.max(0, zone.playerCount + Math.floor((Math.random() - 0.5) * 10)),
-        })),
+      // Simulate realm fluctuations and self-correction
+      setRealms((prev) =>
+        prev.map((realm) => {
+          let newEnergeticFlow = Math.min(100, Math.max(30, realm.energeticFlow + (Math.random() - 0.5) * 5))
+          let newStability = "stable"
+          let newThreatLevel = "none"
+
+          if (newEnergeticFlow < 70) {
+            newStability = "fluctuating"
+            newThreatLevel = "medium"
+          }
+          if (newEnergeticFlow < 50) {
+            newStability = "critical"
+            newThreatLevel = "high"
+          }
+
+          // Self-healing: auto-stabilize fluctuating/critical realms
+          if (newStability !== "stable" && Math.random() > 0.6) {
+            newEnergeticFlow = Math.min(100, newEnergeticFlow + 10)
+            newStability = "stable"
+            newThreatLevel = "none"
+          }
+
+          return {
+            ...realm,
+            energeticFlow: newEnergeticFlow,
+            stability: newStability,
+            threatLevel: newThreatLevel,
+            lastSync: new Date(),
+          }
+        }),
       )
 
-      setMemoryShards((prev) =>
-        prev.map((shard) => ({
-          ...shard,
-          resonanceLevel: Math.max(0.2, Math.min(1.0, shard.resonanceLevel + (Math.random() - 0.5) * 0.08)),
-        })),
+      // Simulate ecosystem metric fluctuations
+      setEcosystemMetrics((prev) =>
+        prev.map((metric) => {
+          let newValue = Math.min(100, Math.max(70, metric.value + (Math.random() - 0.5) * 2))
+          let newStatus = "optimal"
+
+          if (newValue < metric.threshold) newStatus = "warning"
+
+          // Auto-correct metrics
+          if (newStatus === "warning" && Math.random() > 0.5) {
+            newValue = Math.min(100, newValue + 5)
+            newStatus = "optimal"
+          }
+
+          return { ...metric, value: newValue, status: newStatus }
+        }),
       )
-    }, 3000)
+
+      // Update overall status and population
+      const criticalRealms = realms.filter((r) => r.stability === "critical").length
+      if (criticalRealms > 0) {
+        setOverallEcosystemStatus("critical")
+      } else if (realms.filter((r) => r.stability === "fluctuating").length > 0) {
+        setOverallEcosystemStatus("fluctuating")
+      } else {
+        setOverallEcosystemStatus("stable")
+      }
+
+      setTotalPopulation(realms.reduce((sum, realm) => sum + realm.population, 0))
+
+      // Simulate sync progress
+      if (isSyncing) {
+        setSyncProgress((prev) => {
+          const newProgress = Math.min(100, prev + Math.random() * 10)
+          if (newProgress >= 100) {
+            setIsSyncing(false)
+            setRealms((prevRealms) => prevRealms.map((realm) => ({ ...realm, lastSync: new Date() })))
+            return 100
+          }
+          return newProgress
+        })
+      }
+    }, 4000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [realms, isSyncing])
 
-  const activateZone = (zoneId: string) => {
-    setWorldZones((prev) =>
-      prev.map((zone) => ({
-        ...zone,
-        isActive: zone.id === zoneId ? !zone.isActive : zone.isActive,
-      })),
-    )
+  const initiateFullSync = () => {
+    setIsSyncing(true)
+    setSyncProgress(0)
   }
 
-  const selectRole = (roleId: string) => {
-    setWalkerRoles((prev) =>
-      prev.map((role) => ({
-        ...role,
-        isSelected: role.id === roleId,
-      })),
-    )
-  }
-
-  const triggerGlobalPulse = () => {
-    setGlobalPulseActive(true)
-    setWorldZones((prev) =>
-      prev.map((zone) => ({
-        ...zone,
-        emotionalResonance: Math.min(1.0, zone.emotionalResonance + 0.15),
-      })),
-    )
-    setTimeout(() => setGlobalPulseActive(false), 8000)
-  }
-
-  const getZoneColor = (vibe: string) => {
-    switch (vibe.toLowerCase()) {
-      case "lost/haunting":
-        return "border-purple-500/30 text-purple-400"
-      case "hopeful":
-        return "border-green-500/30 text-green-400"
-      case "empowered":
-        return "border-yellow-500/30 text-yellow-400"
-      case "love/unity":
-        return "border-pink-500/30 text-pink-400"
+  const getRealmStatusColor = (status: string) => {
+    switch (status) {
+      case "stable":
+        return "text-green-400"
+      case "fluctuating":
+        return "text-yellow-400"
+      case "critical":
+        return "text-red-400"
       default:
-        return "border-gray-500/30 text-gray-400"
+        return "text-gray-400"
+    }
+  }
+
+  const getThreatLevelColor = (level: string) => {
+    switch (level) {
+      case "none":
+        return "bg-green-500/20 text-green-400 border-green-500/30"
+      case "low":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30"
+      case "medium":
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+      case "high":
+        return "bg-orange-500/20 text-orange-400 border-orange-500/30"
+      default:
+        return "bg-gray-500/20 text-gray-400 border-gray-500/30"
+    }
+  }
+
+  const getMetricStatusColor = (status: string) => {
+    switch (status) {
+      case "optimal":
+        return "text-green-400"
+      case "warning":
+        return "text-yellow-400"
+      case "critical":
+        return "text-red-400"
+      default:
+        return "text-gray-400"
     }
   }
 
   return (
     <div className="space-y-6">
-      {/* Walker World Header */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -234,10 +229,10 @@ export default function WalkerWorldEcosystem() {
         className="text-center"
       >
         <h1 className="text-3xl font-bold gradient-text mb-2">Walker World Ecosystem</h1>
-        <p className="text-gray-300">AI-Augmented, Emotionally Intelligent Virtual World</p>
+        <p className="text-gray-300">Multi-Realm Energetic Flow & Inter-Dimensional Stability</p>
       </motion.div>
 
-      {/* Global Stats */}
+      {/* Overview Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -247,12 +242,22 @@ export default function WalkerWorldEcosystem() {
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Users className="h-6 w-6 text-emerald-400" />
+              <Globe className="h-6 w-6 text-emerald-400" />
               <div>
-                <div className="text-lg font-bold text-emerald-400">
-                  {worldZones.reduce((sum, zone) => sum + zone.playerCount, 0)}
-                </div>
-                <div className="text-xs text-gray-400">Active Walkers</div>
+                <div className="text-lg font-bold text-emerald-400">{overallEcosystemStatus.toUpperCase()}</div>
+                <div className="text-xs text-gray-400">Ecosystem Status</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Users className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">{totalPopulation.toLocaleString()}</div>
+                <div className="text-xs text-gray-400">Total Population</div>
               </div>
             </div>
           </CardContent>
@@ -261,22 +266,12 @@ export default function WalkerWorldEcosystem() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-purple-400" />
+              <Zap className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">{communityMood[0]}%</div>
-                <div className="text-xs text-gray-400">Community Mood</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Globe className="h-6 w-6 text-cyan-400" />
-              <div>
-                <div className="text-lg font-bold text-cyan-400">{worldEvolution[0]}%</div>
-                <div className="text-xs text-gray-400">World Evolution</div>
+                <div className="text-lg font-bold text-purple-400">
+                  {ecosystemMetrics.find((m) => m.name === "Overall Energetic Flow")?.value.toFixed(1)}%
+                </div>
+                <div className="text-xs text-gray-400">Avg. Energetic Flow</div>
               </div>
             </div>
           </CardContent>
@@ -285,10 +280,12 @@ export default function WalkerWorldEcosystem() {
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Music className="h-6 w-6 text-yellow-400" />
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-yellow-400">{isLiveMixMode ? "LIVE" : "SYNC"}</div>
-                <div className="text-xs text-gray-400">Music Mode</div>
+                <div className="text-lg font-bold text-yellow-400">
+                  {realms.filter((r) => r.threatLevel !== "none").length}
+                </div>
+                <div className="text-xs text-gray-400">Threats Detected</div>
               </div>
             </div>
           </CardContent>
@@ -296,7 +293,7 @@ export default function WalkerWorldEcosystem() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* World Zones */}
+        {/* Realm Status List */}
         <div className="lg:col-span-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -307,72 +304,51 @@ export default function WalkerWorldEcosystem() {
               <CardHeader>
                 <CardTitle className="text-emerald-400 flex items-center">
                   <Map className="h-5 w-5 mr-2" />
-                  World Zones (Themed Biomes)
+                  Multi-Realm Status
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {worldZones.map((zone, index) => (
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {realms.map((realm, index) => (
                     <motion.div
-                      key={zone.id}
+                      key={realm.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`p-4 bg-slate-700/50 rounded-lg border ${getZoneColor(zone.vibe)} hover:border-opacity-60 transition-smooth`}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
-                          <motion.div
-                            animate={zone.isActive ? { scale: [1, 1.2, 1] } : {}}
-                            transition={{
-                              duration: 2,
-                              repeat: zone.isActive ? Number.POSITIVE_INFINITY : 0,
-                            }}
-                          >
-                            <Globe className={`h-5 w-5 ${getZoneColor(zone.vibe).split(" ")[1]}`} />
-                          </motion.div>
+                          <Globe className="h-5 w-5 text-gray-400" />
                           <div>
-                            <h3 className="font-medium text-white">{zone.name}</h3>
-                            <div className="text-xs text-gray-400">{zone.vibe}</div>
+                            <h3 className="font-medium text-white">{realm.name}</h3>
+                            <div className="text-xs text-gray-400">Population: {realm.population.toLocaleString()}</div>
                           </div>
                         </div>
-                        <Badge variant="outline" className={zone.isActive ? "text-green-400" : "text-gray-400"}>
-                          {zone.isActive ? "ACTIVE" : "DORMANT"}
+                        <Badge variant="outline" className={getRealmStatusColor(realm.stability)}>
+                          {realm.stability.toUpperCase()}
                         </Badge>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
                         <div>
-                          <div className="text-gray-400">Audio Theme</div>
-                          <div className={`font-bold ${getZoneColor(zone.vibe).split(" ")[1]}`}>{zone.audioTheme}</div>
+                          <div className="text-gray-400">Energetic Flow</div>
+                          <div className={`font-bold ${getRealmStatusColor(realm.stability)}`}>
+                            {realm.energeticFlow.toFixed(1)}%
+                          </div>
+                          <Progress value={realm.energeticFlow} className="h-1" />
                         </div>
                         <div>
-                          <div className="text-gray-400">Players</div>
-                          <div className={`font-bold ${getZoneColor(zone.vibe).split(" ")[1]}`}>{zone.playerCount}</div>
+                          <div className="text-gray-400">Threat Level</div>
+                          <Badge variant="outline" className={getThreatLevelColor(realm.threatLevel)}>
+                            {realm.threatLevel.toUpperCase()}
+                          </Badge>
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Last Sync</div>
+                          <div className="font-bold text-purple-400">{realm.lastSync.toLocaleTimeString()}</div>
                         </div>
                       </div>
-
-                      <div className="space-y-2 mb-3">
-                        <div className="text-xs text-gray-400">{zone.coreFeature}</div>
-                        <div className="flex justify-between text-xs text-gray-400">
-                          <span>Emotional Resonance</span>
-                          <span>{(zone.emotionalResonance * 100).toFixed(0)}%</span>
-                        </div>
-                        <Progress value={zone.emotionalResonance * 100} className="h-2" />
-                      </div>
-
-                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                        <Button
-                          size="sm"
-                          onClick={() => activateZone(zone.id)}
-                          className={`w-full ${
-                            zone.isActive ? "bg-green-600 hover:bg-green-700" : "bg-slate-600 hover:bg-slate-700"
-                          } transition-smooth`}
-                        >
-                          {zone.isActive ? <Pause className="h-3 w-3 mr-2" /> : <Play className="h-3 w-3 mr-2" />}
-                          {zone.isActive ? "Deactivate" : "Activate"} Zone
-                        </Button>
-                      </motion.div>
                     </motion.div>
                   ))}
                 </div>
@@ -381,310 +357,160 @@ export default function WalkerWorldEcosystem() {
           </motion.div>
         </div>
 
-        {/* Walker Roles & Controls */}
+        {/* Ecosystem Metrics & Controls */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="space-y-6"
         >
-          {/* Walker Roles */}
+          {/* Ecosystem Metrics */}
           <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
             <CardHeader>
               <CardTitle className="text-purple-400 flex items-center">
-                <Users className="h-5 w-5 mr-2" />
-                Walker Roles
+                <Zap className="h-5 w-5 mr-2" />
+                Ecosystem Vitality Metrics
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {walkerRoles.map((role, index) => (
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {ecosystemMetrics.map((metric, index) => (
                   <motion.div
-                    key={role.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`p-3 bg-slate-700/50 rounded-lg border cursor-pointer hover:border-opacity-60 transition-smooth ${
-                      role.isSelected ? "border-purple-500/50" : "border-slate-600"
-                    }`}
-                    onClick={() => selectRole(role.id)}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg">{role.icon}</span>
-                        <span className="font-medium text-white text-sm">{role.name}</span>
-                      </div>
-                      {role.isSelected && (
-                        <Badge variant="outline" className="text-purple-400">
-                          SELECTED
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-400 mb-2">{role.description}</div>
-                    <div className="flex flex-wrap gap-1">
-                      {role.abilities.slice(0, 2).map((ability) => (
-                        <Badge key={ability} variant="outline" className="text-xs">
-                          {ability}
-                        </Badge>
-                      ))}
-                      {role.abilities.length > 2 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{role.abilities.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Community Controls */}
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-cyan-400 flex items-center">
-                <Network className="h-5 w-5 mr-2" />
-                Community Controls
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Community Mood</span>
-                  <span className="text-cyan-400">{communityMood[0]}%</span>
-                </div>
-                <Slider value={communityMood} onValueChange={setCommunityMood} max={100} step={1} className="w-full" />
-              </div>
-
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Music Sync</span>
-                  <span className="text-yellow-400">{musicSync[0]}%</span>
-                </div>
-                <Slider value={musicSync} onValueChange={setMusicSync} max={100} step={1} className="w-full" />
-              </div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => setIsLiveMixMode(!isLiveMixMode)}
-                  className={`w-full ${
-                    isLiveMixMode ? "bg-yellow-600 hover:bg-yellow-700" : "bg-slate-600 hover:bg-slate-700"
-                  } transition-smooth`}
-                >
-                  <Music className="h-4 w-4 mr-2" />
-                  {isLiveMixMode ? "Exit Live Mix" : "Enter Live Mix Mode"}
-                </Button>
-              </motion.div>
-            </CardContent>
-          </Card>
-
-          {/* Memory Shards */}
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-yellow-400 flex items-center">
-                <Sparkles className="h-5 w-5 mr-2" />
-                24D Memory Shards
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {memoryShards.map((shard, index) => (
-                  <motion.div
-                    key={shard.id}
+                    key={metric.name}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className="p-3 bg-slate-700/50 rounded-lg border border-slate-600"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: shard.seedColor }}></div>
-                        <span className="font-medium text-white text-sm">{shard.emotion}</span>
-                      </div>
-                      <Badge variant="outline" className={shard.shared ? "text-green-400" : "text-gray-400"}>
-                        {shard.shared ? "SHARED" : "PRIVATE"}
+                      <span className="font-medium text-white">{metric.name}</span>
+                      <Badge variant="outline" className={getMetricStatusColor(metric.status)}>
+                        {metric.status.toUpperCase()}
                       </Badge>
                     </div>
-                    <div className="text-xs text-gray-400 mb-2">
-                      {shard.track} • {shard.location} • {shard.memoryType}
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Current Value</span>
+                      <span className={getMetricStatusColor(metric.status)}>
+                        {metric.value.toFixed(1)} {metric.unit}
+                      </span>
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Resonance</span>
-                        <span>{(shard.resonanceLevel * 100).toFixed(0)}%</span>
-                      </div>
-                      <Progress value={shard.resonanceLevel * 100} className="h-1" />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Threshold</span>
+                      <span>
+                        {metric.name === "Threat Propagation Index" ? "<" : ">"} {metric.threshold} {metric.unit}
+                      </span>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </CardContent>
           </Card>
+
+          {/* Ecosystem Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Ecosystem Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>Energetic Flow Regulation</span>
+                  <span>{flowRegulation[0]}%</span>
+                </div>
+                <Slider
+                  value={flowRegulation}
+                  onValueChange={setFlowRegulation}
+                  max={100}
+                  min={0}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button onClick={initiateFullSync} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Full Ecosystem Sync
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Lightbulb className="h-4 w-4 mr-2" />
+                  Activate Realm Healing
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
         </motion.div>
       </div>
 
-      {/* Global Pulse Control */}
+      {/* Divine Integration & Cosmic Interconnectedness */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <Globe className="h-5 w-5 mr-2" />
-              Global Walker Pulse
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={triggerGlobalPulse}
-                  disabled={globalPulseActive}
-                  className="bg-emerald-600 hover:bg-emerald-700 transition-smooth"
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  {globalPulseActive ? "Global Pulse Active..." : "Trigger Global Pulse"}
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="outline"
-                  className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth bg-transparent"
-                >
-                  <Network className="h-4 w-4 mr-2" />
-                  Sync All Zones
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="outline"
-                  className="border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
-                >
-                  <Users className="h-4 w-4 mr-2" />
-                  Community Broadcast
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="outline"
-                  className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
-                >
-                  <Music className="h-4 w-4 mr-2" />
-                  Harmonic Alignment
-                </Button>
-              </motion.div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Global Pulse Visualization */}
-      <AnimatePresence>
-        {globalPulseActive && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 bg-gradient-to-br from-emerald-900/20 via-cyan-900/20 to-purple-900/20 backdrop-blur-sm flex items-center justify-center z-50"
-          >
-            <motion.div
-              animate={{ rotate: 360, scale: [1, 1.3, 1] }}
-              transition={{ duration: 8, ease: "easeInOut" }}
-              className="relative"
-            >
-              <div className="w-96 h-96 border-4 border-emerald-400/50 rounded-full flex items-center justify-center">
-                <div className="w-80 h-80 border-2 border-cyan-400/50 rounded-full flex items-center justify-center">
-                  <div className="w-64 h-64 border-2 border-purple-400/50 rounded-full flex items-center justify-center">
-                    <div className="w-48 h-48 bg-gradient-to-br from-emerald-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
-                      <Globe className="h-24 w-24 text-white animate-pulse" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="text-3xl font-bold text-white mb-2">Global Walker Pulse</div>
-                <div className="text-lg text-gray-300">Synchronizing All Zones...</div>
-                <div className="text-sm text-gray-400 mt-2">You Never Walk Alone</div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* System Architecture */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-blue-400 flex items-center">
-              <Code className="h-5 w-5 mr-2" />
-              Walker World Development Toolkit
+              <Waves className="h-5 w-5 mr-2" />
+              Divine Integration & Cosmic Interconnectedness
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🎼 Core Systems</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Web</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Music AI Driver: MetaSounds + Aura AI</span>
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>Ensures harmonious energetic exchange between realms</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>World Evolver: World Partition + PCG</span>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Infuses all interactions with unconditional love energy</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Player Resonance: Gameplay Tags + EQS</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>Memory Shards: Data Assets + JSON</span>
+                    <span>Facilitates collective consciousness evolution</span>
                   </li>
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌍 Features</h3>
+                <h3 className="text-lg font-semibold text-white">✨ Cosmic Alignment</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
+                  <Globe className="h-4 w-4 text-cyan-400" />
+                  <span>System adapts dynamically to cosmic shifts and influences</span>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Music drives emotion state + transitions</span>
+                    <RefreshCcw className="h-4 w-4 text-orange-400" />
+                    <span>Proactive self-healing for energetic imbalances</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Terrain & flora change dynamically</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Community mood affects zones</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Procedural structures from emotion</span>
+                    <CheckCircle className="h-4 w-4 text-pink-400" />
+                    <span>Ensures optimal vitality and stability across all realms</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">🖤 Walker World Vision</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Living Tapestry</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
-                  An AI-augmented, emotionally intelligent virtual world powered by music, mystique, and community —
-                  like a hybrid of Ready Player One, Journey, and Alan Walker's cinematic universe.
+                  The Walker World Ecosystem module is the living tapestry of interconnected realms, where every thread
+                  is woven with energetic flow and divine intention. It's a dynamic, self-regulating system that ensures
+                  harmony, stability, and continuous evolution across all dimensions, reflecting the inherent unity of
+                  the cosmos.
                 </p>
-                <p className="italic text-cyan-400">"You never walk alone." 🌍</p>
+                <p className="italic text-cyan-400">
+                  "We are all threads in the grand tapestry of existence, woven by divine love."
+                </p>
               </div>
             </div>
           </CardContent>

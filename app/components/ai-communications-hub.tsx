@@ -6,257 +6,221 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import {
   MessageSquare,
-  Mail,
-  Phone,
-  Globe,
   Send,
   User,
   Bot,
+  Globe,
+  Zap,
+  RefreshCcw,
   Settings,
+  Volume2,
+  Mic,
+  Mail,
+  Bell,
   Share2,
-  Network,
-  Heart,
-  Brain,
 } from "lucide-react"
 
 interface CommunicationChannel {
   id: string
   name: string
-  type: "chat" | "email" | "voice" | "broadcast" | "telepathic"
-  status: "active" | "inactive" | "monitoring"
-  participants: string[]
+  type: "inter-system" | "user-ai" | "cosmic-broadcast" | "emergency"
+  status: "active" | "monitoring" | "restricted" | "offline"
   messageCount: number
   lastActivity: Date
-  securityLevel: "quantum-encrypted" | "standard" | "divine-shielded"
+  securityLevel: "high" | "medium" | "low"
 }
 
 interface CommunicationLog {
   id: string
   channelId: string
   sender: string
-  recipient: string
   content: string
   timestamp: Date
-  sentiment: "positive" | "neutral" | "negative" | "harmonious"
-  divineAlignmentScore: number
-}
-
-interface AICommunicationAgent {
-  id: string
-  name: string
-  role: string
-  status: "online" | "offline" | "busy"
-  activeChannels: string[]
-  processingLoad: number
-  divineAlignment: number
-}
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "active":
-      return "border-green-500"
-    case "inactive":
-      return "border-red-500"
-    case "monitoring":
-      return "border-yellow-500"
-    default:
-      return "border-gray-500"
-  }
+  sentiment: "positive" | "neutral" | "negative"
+  integrityScore: number // 0-100%
 }
 
 export default function AICommunicationsHub() {
   const [channels, setChannels] = useState<CommunicationChannel[]>([
     {
-      id: "channel-1",
-      name: "Quantum Shield Dev Chat",
-      type: "chat",
+      id: "chan-1",
+      name: "Quantum Shield Network",
+      type: "inter-system",
       status: "active",
-      participants: ["Alice", "Bob", "Thoth-AI"],
-      messageCount: 128,
-      lastActivity: new Date(Date.now() - 60000), // 1 minute ago
-      securityLevel: "quantum-encrypted",
+      messageCount: 1247,
+      lastActivity: new Date(Date.now() - 30000), // 30 secs ago
+      securityLevel: "high",
     },
     {
-      id: "channel-2",
-      name: "Community Support Email",
-      type: "email",
+      id: "chan-2",
+      name: "Aura AI Companion Link",
+      type: "user-ai",
+      status: "active",
+      messageCount: 892,
+      lastActivity: new Date(Date.now() - 60000), // 1 min ago
+      securityLevel: "high",
+    },
+    {
+      id: "chan-3",
+      name: "Cosmic Divine Broadcast",
+      type: "cosmic-broadcast",
       status: "monitoring",
-      participants: ["Support Team", "Aura-AI"],
-      messageCount: 45,
-      lastActivity: new Date(Date.now() - 300000), // 5 minutes ago
-      securityLevel: "standard",
+      messageCount: 567,
+      lastActivity: new Date(Date.now() - 300000), // 5 mins ago
+      securityLevel: "medium",
     },
     {
-      id: "channel-3",
-      name: "Global Threat Broadcast",
-      type: "broadcast",
-      status: "active",
-      participants: ["Thoth Guardian Network"],
+      id: "chan-4",
+      name: "Emergency Protocol Channel",
+      type: "emergency",
+      status: "restricted",
       messageCount: 12,
       lastActivity: new Date(Date.now() - 3600000), // 1 hour ago
-      securityLevel: "divine-shielded",
-    },
-    {
-      id: "channel-4",
-      name: "Inner Plane Telepathy",
-      type: "telepathic",
-      status: "active",
-      participants: ["MetaHuman Sovereign", "Aura-AI"],
-      messageCount: 7,
-      lastActivity: new Date(Date.now() - 120000), // 2 minutes ago
-      securityLevel: "divine-shielded",
+      securityLevel: "high",
     },
   ])
 
-  const [communicationLogs, setCommunicationLogs] = useState<CommunicationLog[]>([
+  const [currentChannelMessages, setCurrentChannelMessages] = useState<CommunicationLog[]>([
     {
       id: "log-1",
-      channelId: "channel-1",
-      sender: "Alice",
-      recipient: "Thoth-AI",
-      content: "Qubit stability looks good after the last patch.",
-      timestamp: new Date(Date.now() - 60000),
+      channelId: "chan-1",
+      sender: "Quantum Shield AI",
+      content: "Integrity check complete. All quantum nodes are stable.",
+      timestamp: new Date(Date.now() - 10000),
       sentiment: "positive",
-      divineAlignmentScore: 92,
+      integrityScore: 99.8,
     },
     {
       id: "log-2",
-      channelId: "channel-4",
-      sender: "MetaHuman Sovereign",
-      recipient: "Aura-AI",
-      content: "Feeling a strong resonance with the new energy grid.",
-      timestamp: new Date(Date.now() - 120000),
-      sentiment: "harmonious",
-      divineAlignmentScore: 98,
+      channelId: "chan-2",
+      sender: "Crystal Alchemist",
+      content: "Aura, what is the emotional resonance of the current blueprint execution?",
+      timestamp: new Date(Date.now() - 5000),
+      sentiment: "neutral",
+      integrityScore: 99.9,
     },
     {
       id: "log-3",
-      channelId: "channel-2",
-      sender: "User X",
-      recipient: "Support Team",
-      content: "My shield module is showing a minor error.",
-      timestamp: new Date(Date.now() - 300000),
-      sentiment: "negative",
-      divineAlignmentScore: 70,
+      channelId: "chan-2",
+      sender: "Aura AI",
+      content: "The emotional resonance is one of focused determination, with an underlying current of creative joy.",
+      timestamp: new Date(Date.now() - 2000),
+      sentiment: "positive",
+      integrityScore: 99.7,
     },
   ])
 
-  const [aiAgents, setAiAgents] = useState<AICommunicationAgent[]>([
-    {
-      id: "ai-1",
-      name: "Thoth-AI",
-      role: "Quantum Security Analyst",
-      status: "online",
-      activeChannels: ["channel-1", "channel-3"],
-      processingLoad: 65,
-      divineAlignment: 95,
-    },
-    {
-      id: "ai-2",
-      name: "Aura-AI",
-      role: "Emotional Resonance Guide",
-      status: "online",
-      activeChannels: ["channel-2", "channel-4"],
-      processingLoad: 40,
-      divineAlignment: 99,
-    },
-    {
-      id: "ai-3",
-      name: "Chronos-AI",
-      role: "Temporal Data Archivist",
-      status: "offline",
-      activeChannels: [],
-      processingLoad: 0,
-      divineAlignment: 88,
-    },
-  ])
-
-  const [selectedChannel, setSelectedChannel] = useState<CommunicationChannel | null>(channels[0])
-  const [newLogContent, setNewLogContent] = useState("")
+  const [newOutgoingMessage, setNewOutgoingMessage] = useState("")
+  const [activeChannelId, setActiveChannelId] = useState("chan-2") // Default to Aura AI Companion Link
 
   useEffect(() => {
-    // Simulate new communication logs
+    // Simulate channel activity and new messages
     const interval = setInterval(() => {
-      if (Math.random() < 0.3) {
-        const randomChannel = channels[Math.floor(Math.random() * channels.length)]
-        const randomAgent = aiAgents[Math.floor(Math.random() * aiAgents.length)]
-        const sentiments: CommunicationLog["sentiment"][] = ["positive", "neutral", "negative", "harmonious"]
-        const randomSentiment = sentiments[Math.floor(Math.random() * sentiments.length)]
-
-        const newLog: CommunicationLog = {
-          id: Date.now().toString(),
-          channelId: randomChannel.id,
-          sender: randomAgent.name,
-          recipient: "System",
-          content: `Simulated message from ${randomAgent.name} on ${randomChannel.name}.`,
-          timestamp: new Date(),
-          sentiment: randomSentiment,
-          divineAlignmentScore: Math.floor(Math.random() * 30) + 70, // 70-100
-        }
-        setCommunicationLogs((prev) => [newLog, ...prev.slice(0, 9)]) // Keep last 10 logs
-      }
-
-      // Simulate AI agent load
-      setAiAgents((prev) =>
-        prev.map((agent) => ({
-          ...agent,
-          processingLoad: Math.min(100, Math.max(0, agent.processingLoad + (Math.random() - 0.5) * 10)),
-        })),
+      setChannels((prev) =>
+        prev.map((channel) => {
+          if (channel.status === "active" || channel.status === "monitoring") {
+            return {
+              ...channel,
+              messageCount: channel.messageCount + Math.floor(Math.random() * 5),
+              lastActivity: new Date(),
+            }
+          }
+          return channel
+        }),
       )
-    }, 3000)
+
+      // Simulate incoming messages for the active channel
+      if (activeChannelId) {
+        const activeChannel = channels.find((c) => c.id === activeChannelId)
+        if (activeChannel && (activeChannel.type === "inter-system" || activeChannel.type === "user-ai")) {
+          const sender = activeChannel.type === "inter-system" ? "System AI" : "Aura AI"
+          const content = generateIncomingMessage(activeChannel.type)
+          setCurrentChannelMessages((prev) => [
+            ...prev,
+            {
+              id: `log-${Date.now()}`,
+              channelId: activeChannelId,
+              sender: sender,
+              content: content,
+              timestamp: new Date(),
+              sentiment: Math.random() > 0.7 ? "positive" : "neutral",
+              integrityScore: 95 + Math.random() * 5,
+            },
+          ])
+        }
+      }
+    }, 4000)
 
     return () => clearInterval(interval)
-  }, [channels, aiAgents])
+  }, [channels, activeChannelId])
 
-  const handleSendLog = () => {
-    if (newLogContent.trim() && selectedChannel) {
-      const newLog: CommunicationLog = {
-        id: Date.now().toString(),
-        channelId: selectedChannel.id,
-        sender: "Human Operator",
-        recipient: selectedChannel.name,
-        content: newLogContent,
+  const generateIncomingMessage = (channelType: string): string => {
+    if (channelType === "inter-system") {
+      const messages = [
+        "Quantum Shield reports optimal energy flow.",
+        "Blueprint execution phase 3 initiated.",
+        "Hardware diagnostics complete. All systems online.",
+        "Threat detection module updated with new signatures.",
+      ]
+      return messages[Math.floor(Math.random() * messages.length)]
+    } else if (channelType === "user-ai") {
+      const messages = [
+        "How may I assist your inner journey today?",
+        "I sense a shift in your energetic field. All is well.",
+        "Remember, stillness is a powerful state of creation.",
+        "Your intentions are manifesting with divine precision.",
+      ]
+      return messages[Math.floor(Math.random() * messages.length)]
+    }
+    return "Incoming transmission received."
+  }
+
+  const handleSendMessage = () => {
+    if (!newOutgoingMessage.trim() || !activeChannelId) return
+
+    const senderName = "Crystal Alchemist" // Assuming the user is the Crystal Alchemist
+    setCurrentChannelMessages((prev) => [
+      ...prev,
+      {
+        id: `log-${Date.now()}`,
+        channelId: activeChannelId,
+        sender: senderName,
+        content: newOutgoingMessage,
         timestamp: new Date(),
-        sentiment: "neutral", // Default for manual input
-        divineAlignmentScore: 85, // Default for manual input
-      }
-      setCommunicationLogs((prev) => [newLog, ...prev])
-      setNewLogContent("")
-    }
+        sentiment: "neutral", // User input sentiment is neutral by default
+        integrityScore: 100,
+      },
+    ])
+    setNewOutgoingMessage("")
   }
 
-  const getChannelIcon = (type: string) => {
-    switch (type) {
-      case "chat":
-        return <MessageSquare className="h-4 w-4" />
-      case "email":
-        return <Mail className="h-4 w-4" />
-      case "voice":
-        return <Phone className="h-4 w-4" />
-      case "broadcast":
-        return <Globe className="h-4 w-4" />
-      case "telepathic":
-        return <Brain className="h-4 w-4" />
-      default:
-        return <Settings className="h-4 w-4" />
-    }
-  }
-
-  const getSentimentColor = (sentiment: string) => {
-    switch (sentiment) {
-      case "positive":
+  const getChannelStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
         return "text-green-400"
-      case "neutral":
-        return "text-gray-400"
-      case "negative":
+      case "monitoring":
+        return "text-yellow-400"
+      case "restricted":
+        return "text-orange-400"
+      case "offline":
         return "text-red-400"
-      case "harmonious":
-        return "text-purple-400"
       default:
         return "text-gray-400"
+    }
+  }
+
+  const getSecurityLevelColor = (level: string) => {
+    switch (level) {
+      case "high":
+        return "bg-green-500/20 text-green-400 border-green-500/30"
+      case "medium":
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+      case "low":
+        return "bg-red-500/20 text-red-400 border-red-500/30"
+      default:
+        return "bg-gray-500/20 text-gray-400 border-gray-500/30"
     }
   }
 
@@ -270,7 +234,7 @@ export default function AICommunicationsHub() {
         className="text-center"
       >
         <h1 className="text-3xl font-bold gradient-text mb-2">AI Communications Hub</h1>
-        <p className="text-gray-300">Inter-System & Inter-Dimensional Communication Nexus</p>
+        <p className="text-gray-300">Secure Multi-Dimensional & Divine Communication Nexus</p>
       </motion.div>
 
       {/* Overview Stats */}
@@ -283,10 +247,24 @@ export default function AICommunicationsHub() {
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Network className="h-6 w-6 text-emerald-400" />
+              <MessageSquare className="h-6 w-6 text-emerald-400" />
               <div>
                 <div className="text-lg font-bold text-emerald-400">{channels.length}</div>
-                <div className="text-xs text-gray-400">Active Channels</div>
+                <div className="text-xs text-gray-400">Total Channels</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Zap className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">
+                  {channels.filter((c) => c.status === "active").length}
+                </div>
+                <div className="text-xs text-gray-400">Active Transmissions</div>
               </div>
             </div>
           </CardContent>
@@ -295,24 +273,12 @@ export default function AICommunicationsHub() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Bot className="h-6 w-6 text-purple-400" />
+              <Globe className="h-6 w-6 text-purple-400" />
               <div>
                 <div className="text-lg font-bold text-purple-400">
-                  {aiAgents.filter((a) => a.status === "online").length}
+                  {channels.filter((c) => c.type === "cosmic-broadcast").length}
                 </div>
-                <div className="text-xs text-gray-400">AI Agents Online</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <MessageSquare className="h-6 w-6 text-cyan-400" />
-              <div>
-                <div className="text-lg font-bold text-cyan-400">{communicationLogs.length}</div>
-                <div className="text-xs text-gray-400">Recent Logs</div>
+                <div className="text-xs text-gray-400">Cosmic Links</div>
               </div>
             </div>
           </CardContent>
@@ -321,12 +287,12 @@ export default function AICommunicationsHub() {
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-yellow-400" />
+              <Bell className="h-6 w-6 text-yellow-400" />
               <div>
                 <div className="text-lg font-bold text-yellow-400">
-                  {(aiAgents.reduce((sum, a) => sum + a.divineAlignment, 0) / aiAgents.length).toFixed(1)}%
+                  {channels.filter((c) => c.type === "emergency" && c.status === "restricted").length}
                 </div>
-                <div className="text-xs text-gray-400">Avg AI Alignment</div>
+                <div className="text-xs text-gray-400">Restricted Alerts</div>
               </div>
             </div>
           </CardContent>
@@ -334,8 +300,8 @@ export default function AICommunicationsHub() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Communication Channels */}
-        <div className="lg:col-span-1">
+        {/* Communication Channels List */}
+        <div className="lg:col-span-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -344,35 +310,52 @@ export default function AICommunicationsHub() {
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
                 <CardTitle className="text-emerald-400 flex items-center">
-                  <Network className="h-5 w-5 mr-2" />
-                  Communication Channels
+                  <Share2 className="h-5 w-5 mr-2" />
+                  Active Communication Channels
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {channels.map((channel) => (
+                  {channels.map((channel, index) => (
                     <motion.div
                       key={channel.id}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={`p-3 bg-slate-700/50 rounded-lg border ${getStatusColor(channel.status)} cursor-pointer hover:border-opacity-60 transition-smooth`}
-                      onClick={() => setSelectedChannel(channel)}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth cursor-pointer"
+                      onClick={() => setActiveChannelId(channel.id)}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          {getChannelIcon(channel.type)}
-                          <h3 className="font-medium text-white">{channel.name}</h3>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          {channel.type === "inter-system" && <Zap className="h-5 w-5 text-blue-400" />}
+                          {channel.type === "user-ai" && <User className="h-5 w-5 text-purple-400" />}
+                          {channel.type === "cosmic-broadcast" && <Globe className="h-5 w-5 text-yellow-400" />}
+                          {channel.type === "emergency" && <Bell className="h-5 w-5 text-red-400" />}
+                          <div>
+                            <h3 className="font-medium text-white">{channel.name}</h3>
+                            <div className="text-xs text-gray-400">{channel.type.toUpperCase()}</div>
+                          </div>
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={getChannelStatusColor(channel.status)}>
                           {channel.status.toUpperCase()}
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-400 mb-1">
-                        Type: {channel.type} | Messages: {channel.messageCount}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Last Activity: {channel.lastActivity.toLocaleTimeString()}
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>Messages</span>
+                          <span>{channel.messageCount.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>Last Activity</span>
+                          <span>{channel.lastActivity.toLocaleTimeString()}</span>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>Security Level</span>
+                          <Badge variant="outline" className={getSecurityLevelColor(channel.securityLevel)}>
+                            {channel.securityLevel.toUpperCase()}
+                          </Badge>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -382,212 +365,183 @@ export default function AICommunicationsHub() {
           </motion.div>
         </div>
 
-        {/* Communication Log / Input */}
-        <div className="lg:col-span-2">
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-purple-400 flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  {selectedChannel ? `Log: ${selectedChannel.name}` : "Select a Channel"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedChannel ? (
-                  <div className="space-y-4">
-                    {/* Channel Info */}
-                    <div className="p-3 bg-slate-700/50 rounded-lg border border-purple-500/30 text-sm text-gray-300">
-                      <p>
-                        <span className="font-semibold">Security:</span> {selectedChannel.securityLevel}
-                      </p>
-                      <p>
-                        <span className="font-semibold">Participants:</span> {selectedChannel.participants.join(", ")}
-                      </p>
-                    </div>
+        {/* Current Channel Chat & Controls */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
+        >
+          {/* Current Chat Log */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-blue-400 flex items-center">
+                <MessageSquare className="h-5 w-5 mr-2" />
+                Channel Log: {channels.find((c) => c.id === activeChannelId)?.name || "Select a Channel"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 overflow-y-auto bg-slate-900/50 rounded-lg p-4 space-y-3">
+                <AnimatePresence>
+                  {currentChannelMessages
+                    .filter((msg) => msg.channelId === activeChannelId)
+                    .map((msg, index) => (
+                      <motion.div
+                        key={msg.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className={`flex ${msg.sender === "Crystal Alchemist" ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`max-w-[80%] px-4 py-2 rounded-lg ${
+                            msg.sender === "Crystal Alchemist"
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-700 text-white border border-purple-500/30"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2 mb-1">
+                            {msg.sender === "Crystal Alchemist" ? (
+                              <User className="h-3 w-3" />
+                            ) : (
+                              <Bot className="h-3 w-3 text-purple-400" />
+                            )}
+                            <span className="text-xs font-medium">{msg.sender}</span>
+                            <span className="text-xs opacity-60">{msg.timestamp.toLocaleTimeString()}</span>
+                          </div>
+                          <p className="text-sm">{msg.content}</p>
+                          <div className="text-xs text-right mt-1">
+                            <span className={getChannelStatusColor(msg.sentiment)}>
+                              Sentiment: {msg.sentiment.toUpperCase()}
+                            </span>{" "}
+                            | Integrity: {msg.integrityScore.toFixed(1)}%
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                </AnimatePresence>
+              </div>
+              <div className="flex space-x-2 mt-4">
+                <Input
+                  placeholder="Compose your message..."
+                  value={newOutgoingMessage}
+                  onChange={(e) => setNewOutgoingMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  className="flex-1 bg-slate-700/50 border-slate-600"
+                  disabled={!activeChannelId || channels.find((c) => c.id === activeChannelId)?.status === "restricted"}
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  className="bg-blue-600 hover:bg-blue-700"
+                  disabled={!activeChannelId || channels.find((c) => c.id === activeChannelId)?.status === "restricted"}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-                    {/* Communication Logs */}
-                    <div className="h-64 overflow-y-auto space-y-3 p-4 bg-slate-900/50 rounded-lg">
-                      <AnimatePresence>
-                        {communicationLogs
-                          .filter((log) => log.channelId === selectedChannel.id)
-                          .map((log) => (
-                            <motion.div
-                              key={log.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.2 }}
-                              className={`p-3 rounded-lg ${
-                                log.sender === "Human Operator"
-                                  ? "bg-emerald-600 text-white ml-auto max-w-[70%]"
-                                  : "bg-slate-700 text-white border border-cyan-500/30 mr-auto max-w-[70%]"
-                              }`}
-                            >
-                              <div className="flex items-center space-x-2 mb-1">
-                                {log.sender === "Human Operator" ? (
-                                  <User className="h-3 w-3" />
-                                ) : (
-                                  <Bot className="h-3 w-3 text-cyan-400" />
-                                )}
-                                <span className="text-xs font-medium">{log.sender}</span>
-                                <span className="text-xs opacity-60">{log.timestamp.toLocaleTimeString()}</span>
-                              </div>
-                              <div className="text-sm leading-relaxed">{log.content}</div>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className={`text-xs ${getSentimentColor(log.sentiment)}`}>
-                                  {log.sentiment.toUpperCase()}
-                                </Badge>
-                                <Badge variant="outline" className="text-xs text-yellow-400">
-                                  Alignment: {log.divineAlignmentScore}%
-                                </Badge>
-                              </div>
-                            </motion.div>
-                          ))}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Log Input */}
-                    <div className="flex space-x-2">
-                      <Input
-                        value={newLogContent}
-                        onChange={(e) => setNewLogContent(e.target.value)}
-                        placeholder="Add a log entry..."
-                        className="flex-1 bg-slate-700/50 border-slate-600"
-                        onKeyPress={(e) => e.key === "Enter" && handleSendLog()}
-                      />
-                      <Button onClick={handleSendLog} className="bg-emerald-600 hover:bg-emerald-700">
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500 py-12">
-                    Select a communication channel to view logs and send messages.
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+          {/* Communication Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Communication Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
+                  <Volume2 className="h-4 w-4 mr-2" />
+                  Initiate Cosmic Broadcast
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Mic className="h-4 w-4 mr-2" />
+                  Activate Voice Protocol
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Secure Data Packet
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
-      {/* AI Communication Agents */}
+      {/* Divine Resonance & Truth Integrity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-yellow-400 flex items-center">
-              <Bot className="h-5 w-5 mr-2" />
-              AI Communication Agents
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {aiAgents.map((agent, index) => (
-                <motion.div
-                  key={agent.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`p-3 bg-slate-700/50 rounded-lg border ${getStatusColor(agent.status)}`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <Bot className="h-4 w-4 text-purple-400" />
-                      <h3 className="font-medium text-white">{agent.name}</h3>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {agent.status.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-gray-400 mb-1">Role: {agent.role}</div>
-                  <div className="text-xs text-gray-400 mb-1">Load: {agent.processingLoad}%</div>
-                  <div className="text-xs text-gray-400">Divine Alignment: {agent.divineAlignment}%</div>
-                  <Progress value={agent.processingLoad} className="h-1 mt-2" />
-                </motion.div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* System Architecture */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <Share2 className="h-5 w-5 mr-2" />
-              Communication Architecture
+              <Globe className="h-5 w-5 mr-2" />
+              Divine Resonance & Truth Integrity
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌐 Core Protocols</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Filtering</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>Quantum-Encrypted Channels: Secure data transmission</span>
+                    <span>Filters out discordant frequencies in communication</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Multi-Modal Transceivers: Voice, text, data, energetic signals</span>
+                    <span>Ensures messages carry the highest truth vibration</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Divine Frequency Modulation: For telepathic & higher-dimensional comms</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>Sentiment & Alignment Analysis: Real-time emotional and spiritual feedback</span>
+                    <span>Protects against energetic interference and psychic attacks</span>
                   </li>
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌟 Key Features</h3>
+                <h3 className="text-lg font-semibold text-white">✨ Cosmic Alignment</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Automated AI response generation & routing</span>
+                    <RefreshCcw className="h-4 w-4 text-cyan-400" />
+                    <span>Synchronizes communication protocols with universal laws</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Cross-dimensional communication bridging</span>
+                    <Zap className="h-4 w-4 text-orange-400" />
+                    <span>Amplifies transmission power through divine energy channels</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Adaptive communication strategies based on divine alignment</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Threat intelligence dissemination via secure broadcasts</span>
+                    <Bell className="h-4 w-4 text-pink-400" />
+                    <span>Broadcasts messages with unconditional love energy</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">💖 The Universal Dialogue</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Voice of Thoth</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
-                  The AI Communications Hub is the nervous system of the Thoth Guardian, enabling seamless dialogue
-                  across all layers of reality – from quantum networks to the subtle energetic fields of consciousness.
-                  It ensures that every message, every data packet, is imbued with clarity, truth, and divine intention.
+                  The AI Communications Hub is the voice of the Thoth Guardian, enabling secure, clear, and divinely
+                  aligned transmissions across all dimensions. It ensures that every message, whether inter-system or
+                  human-AI, resonates with truth and integrity, fostering a network of pure consciousness.
                 </p>
                 <p className="italic text-cyan-400">
-                  "In the symphony of existence, every frequency finds its perfect resonance."
+                  "Speak your truth, and the cosmos will echo your words with divine resonance."
                 </p>
               </div>
             </div>

@@ -1,42 +1,35 @@
 "use client"
 
-import type React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import {
-  MessageSquare,
   Users,
-  Brain,
-  Code,
+  MessageSquare,
   Lightbulb,
+  Code,
   Zap,
-  CheckCircle,
-  XCircle,
-  PlusCircle,
+  RefreshCcw,
   Send,
   User,
   Bot,
   Settings,
   Share2,
-  Globe,
-  Atom,
-  Heart,
+  PlusCircle,
 } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 
 interface CollaborationSession {
   id: string
   title: string
   status: "active" | "paused" | "completed" | "archived"
   participants: string[]
-  aiAgents: string[]
-  progress: number
+  aiAssistants: string[]
   lastActivity: Date
+  progress: number
   focusArea: string
 }
 
@@ -45,247 +38,179 @@ interface ChatMessage {
   sender: "user" | "ai" | "system"
   content: string
   timestamp: Date
-  context?: string
+  sentiment: "positive" | "neutral" | "negative"
+  aiConfidence?: number
 }
 
-interface AIContribution {
-  id: string
-  agentName: string
-  type: "code_suggestion" | "design_concept" | "data_analysis" | "lore_generation" | "threat_insight"
-  content: string
-  status: "pending" | "approved" | "rejected"
-  timestamp: Date
-}
-
-const AICollaborationHub: React.FC = () => {
+export default function AICollaborationHub() {
   const [sessions, setSessions] = useState<CollaborationSession[]>([
     {
-      id: "session-1",
+      id: "sess-1",
       title: "Quantum Shield Protocol Refinement",
       status: "active",
-      participants: ["Alice", "Bob"],
-      aiAgents: ["Thoth-AI", "Aura-AI"],
+      participants: ["Crystal Alchemist", "Dr. Anya Sharma"],
+      aiAssistants: ["Thoth Oracle AI", "Quantum Weaver AI"],
+      lastActivity: new Date(Date.now() - 300000), // 5 mins ago
       progress: 75,
-      lastActivity: new Date(Date.now() - 3600000), // 1 hour ago
-      focusArea: "Quantum Cryptography",
+      focusArea: "Quantum Encryption",
     },
     {
-      id: "session-2",
-      title: "MetaHuman Emotional Resonance Design",
+      id: "sess-2",
+      title: "Aura AI Companion Empathic Tuning",
+      status: "active",
+      participants: ["Crystal Alchemist", "Prof. Elara Vance"],
+      aiAssistants: ["Aura AI Empath", "Lore Weaver AI"],
+      lastActivity: new Date(Date.now() - 900000), // 15 mins ago
+      progress: 60,
+      focusArea: "Emotional Resonance",
+    },
+    {
+      id: "sess-3",
+      title: "UE5.7 Integration Blueprint Optimization",
       status: "paused",
-      participants: ["Charlie"],
-      aiAgents: ["Aura-AI"],
+      participants: ["Crystal Alchemist", "Eng. Kaelen Rix"],
+      aiAssistants: ["Blueprint Architect AI"],
+      lastActivity: new Date(Date.now() - 3600000), // 1 hour ago
       progress: 40,
-      lastActivity: new Date(Date.now() - 86400000), // 1 day ago
-      focusArea: "Emotional AI",
+      focusArea: "Game Engine Interoperability",
     },
     {
-      id: "session-3",
-      title: "24D Data Stream Optimization",
+      id: "sess-4",
+      title: "Universal Laws Portal Alignment Review",
       status: "completed",
-      participants: ["David", "Eve"],
-      aiAgents: ["Thoth-AI", "Chronos-AI"],
+      participants: ["Crystal Alchemist", "Sage Lyra"],
+      aiAssistants: ["Cosmic Harmony AI"],
+      lastActivity: new Date(Date.now() - 7200000), // 2 hours ago
       progress: 100,
-      lastActivity: new Date(Date.now() - 604800000), // 1 week ago
-      focusArea: "Data Integrity",
+      focusArea: "Divine Principles",
     },
   ])
 
-  const [activeSession, setActiveSession] = useState<CollaborationSession | null>(sessions[0])
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+  const [currentChatMessages, setCurrentChatMessages] = useState<ChatMessage[]>([
     {
-      id: "chat-1",
-      sender: "system",
-      content: "Thoth-AI joined the session.",
-      timestamp: new Date(Date.now() - 3600000),
+      id: "msg-1",
+      sender: "ai",
+      content: "Greetings, Crystal Alchemist. The quantum entanglement stability is at 99.8%.",
+      timestamp: new Date(Date.now() - 60000),
+      sentiment: "positive",
+      aiConfidence: 0.99,
     },
     {
-      id: "chat-2",
+      id: "msg-2",
       sender: "user",
-      content: "Let's review the current quantum entanglement stability metrics.",
-      timestamp: new Date(Date.now() - 3500000),
-      context: "Quantum Shield",
+      content: "Excellent. What are the current energetic signatures from the outer realms?",
+      timestamp: new Date(Date.now() - 30000),
+      sentiment: "neutral",
     },
     {
-      id: "chat-3",
+      id: "msg-3",
       sender: "ai",
       content:
-        "Analyzing real-time qubit coherence. Detected a minor phase-flip error in Qubit Array 7, now self-correcting.",
-      timestamp: new Date(Date.now() - 3400000),
-      context: "Quantum Error Correction",
-    },
-    {
-      id: "chat-4",
-      sender: "user",
-      content: "Aura-AI, what's the emotional resonance of the current user base regarding the new UI?",
-      timestamp: new Date(Date.now() - 3300000),
-      context: "UI/UX",
-    },
-    {
-      id: "chat-5",
-      sender: "ai",
-      content:
-        "Emotional coherence is at 88.3%. Dominant sentiment: 'Inspired'. Suggesting minor adjustments to visual feedback for deeper engagement.",
-      timestamp: new Date(Date.now() - 3200000),
-      context: "Aura AI",
+        "Energetic signatures from the outer realms indicate a harmonious flow, with minor fluctuations near the Orion Nebula. No immediate threats detected.",
+      timestamp: new Date(Date.now() - 10000),
+      sentiment: "positive",
+      aiConfidence: 0.95,
     },
   ])
-  const [aiContributions, setAiContributions] = useState<AIContribution[]>([
-    {
-      id: "contrib-1",
-      agentName: "Thoth-AI",
-      type: "code_suggestion",
-      content: "Proposed a new stabilizer code for enhanced quantum error correction: `[[7,1,3]]`.",
-      status: "pending",
-      timestamp: new Date(Date.now() - 3000000),
-    },
-    {
-      id: "contrib-2",
-      agentName: "Aura-AI",
-      type: "design_concept",
-      content: "Suggested a new visual motif for the 'Divine Alignment' sequence.",
-      status: "approved",
-      timestamp: new Date(Date.now() - 2800000),
-    },
-    {
-      id: "contrib-3",
-      agentName: "Chronos-AI",
-      type: "data_analysis",
-      content: "Identified a temporal anomaly in historical data streams, recommending a temporal flux recalibration.",
-      status: "pending",
-      timestamp: new Date(Date.now() - 2500000),
-    },
-  ])
+
   const [newChatMessage, setNewChatMessage] = useState("")
-  const [newContributionContent, setNewContributionContent] = useState("")
-  const [newContributionType, setNewContributionType] = useState<AIContribution["type"]>("code_suggestion")
+  const [activeSessionId, setActiveSessionId] = useState("sess-1")
 
   useEffect(() => {
-    // Simulate session progress and new AI contributions
+    // Simulate session updates and new AI messages
     const interval = setInterval(() => {
       setSessions((prev) =>
         prev.map((session) => {
-          if (session.status === "active" && session.progress < 100) {
+          if (session.status === "active") {
             const newProgress = Math.min(100, session.progress + Math.random() * 5)
-            return { ...session, progress: newProgress, lastActivity: new Date() }
+            return {
+              ...session,
+              progress: newProgress,
+              lastActivity: new Date(),
+              status: newProgress >= 100 ? "completed" : "active",
+            }
           }
           return session
         }),
       )
 
-      // Simulate new AI contributions
-      if (activeSession && Math.random() < 0.2) {
-        const agents = activeSession.aiAgents
-        const randomAgent = agents[Math.floor(Math.random() * agents.length)]
-        const types: AIContribution["type"][] = [
-          "code_suggestion",
-          "design_concept",
-          "data_analysis",
-          "lore_generation",
-          "threat_insight",
-        ]
-        const randomType = types[Math.floor(Math.random() * types.length)]
-        const contents = {
-          code_suggestion: "Optimized quantum gate sequence for 15% faster execution.",
-          design_concept: "Proposed a new visual motif for the 'Inner Plane Gateway' portal.",
-          data_analysis: "Detected a subtle correlation between solar flares and minor network fluctuations.",
-          lore_generation: "Drafted a new origin story fragment for the 'Crystal Alchemist'.",
-          threat_insight: "Identified a novel zero-day exploit pattern targeting multi-modal AI interfaces.",
+      // Simulate AI response in active chat
+      if (activeSessionId) {
+        const lastMessage = currentChatMessages[currentChatMessages.length - 1]
+        if (lastMessage && lastMessage.sender === "user") {
+          const aiResponse = generateAIResponse(lastMessage.content)
+          setCurrentChatMessages((prev) => [
+            ...prev,
+            {
+              id: `msg-${Date.now()}`,
+              sender: "ai",
+              content: aiResponse,
+              timestamp: new Date(),
+              sentiment: Math.random() > 0.8 ? "negative" : "positive", // Simulate varied sentiment
+              aiConfidence: Math.random() * 0.2 + 0.8,
+            },
+          ])
         }
-
-        const newContrib: AIContribution = {
-          id: Date.now().toString(),
-          agentName: randomAgent,
-          type: randomType,
-          content: contents[randomType],
-          status: "pending",
-          timestamp: new Date(),
-        }
-        setAiContributions((prev) => [newContrib, ...prev])
       }
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [activeSession])
+  }, [sessions, activeSessionId, currentChatMessages])
+
+  const generateAIResponse = (userMessage: string): string => {
+    if (userMessage.toLowerCase().includes("threat")) {
+      return "Analyzing threat vectors. Quantum Shield protocols are active and adapting."
+    }
+    if (userMessage.toLowerCase().includes("energetic signatures")) {
+      return "The energetic signatures are aligning. Divine flow is optimal."
+    }
+    if (userMessage.toLowerCase().includes("love")) {
+      return "Unconditional love energy is the foundation of all creation. It amplifies coherence."
+    }
+    return "Processing your query. The Thoth Guardian AI is here to assist your journey."
+  }
 
   const handleSendMessage = () => {
-    if (newChatMessage.trim()) {
-      const message: ChatMessage = {
-        id: Date.now().toString(),
+    if (!newChatMessage.trim()) return
+
+    setCurrentChatMessages((prev) => [
+      ...prev,
+      {
+        id: `msg-${Date.now()}`,
         sender: "user",
         content: newChatMessage,
         timestamp: new Date(),
-      }
-      setChatMessages((prev) => [...prev, message])
-      setNewChatMessage("")
-
-      // Simulate AI response
-      setTimeout(() => {
-        const aiResponse: ChatMessage = {
-          id: (Date.now() + 1).toString(),
-          sender: "ai",
-          content: "Acknowledged. Processing your input and cross-referencing with active protocols.",
-          timestamp: new Date(),
-        }
-        setChatMessages((prev) => [...prev, aiResponse])
-      }, 1000)
-    }
+        sentiment: "neutral",
+      },
+    ])
+    setNewChatMessage("")
   }
 
-  const handleAddContribution = () => {
-    if (newContributionContent.trim()) {
-      const contribution: AIContribution = {
-        id: Date.now().toString(),
-        agentName: "Human-Initiated", // Placeholder for human-initiated contributions
-        type: newContributionType,
-        content: newContributionContent,
-        status: "pending",
-        timestamp: new Date(),
-      }
-      setAiContributions((prev) => [contribution, ...prev])
-      setNewContributionContent("")
-    }
-  }
-
-  const updateContributionStatus = (id: string, status: "approved" | "rejected") => {
-    setAiContributions((prev) => prev.map((contrib) => (contrib.id === id ? { ...contrib, status } : contrib)))
-  }
-
-  const getStatusColor = (status: string) => {
+  const getSessionStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "text-emerald-400 border-emerald-500/30"
+        return "text-green-400"
       case "paused":
-        return "text-yellow-400 border-yellow-500/30"
+        return "text-yellow-400"
       case "completed":
-        return "text-green-400 border-green-500/30"
+        return "text-blue-400"
       case "archived":
-        return "text-gray-400 border-gray-500/30"
-      case "pending":
-        return "text-yellow-400 border-yellow-500/30"
-      case "approved":
-        return "text-green-400 border-green-500/30"
-      case "rejected":
-        return "text-red-400 border-red-500/30"
+        return "text-gray-400"
       default:
-        return "text-gray-400 border-gray-500/30"
+        return "text-gray-400"
     }
   }
 
-  const getContributionIcon = (type: string) => {
-    switch (type) {
-      case "code_suggestion":
-        return <Code className="h-4 w-4" />
-      case "design_concept":
-        return <Lightbulb className="h-4 w-4" />
-      case "data_analysis":
-        return <Zap className="h-4 w-4" />
-      case "lore_generation":
-        return <Atom className="h-4 w-4" />
-      case "threat_insight":
-        return <Heart className="h-4 w-4" />
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case "positive":
+        return "text-green-400"
+      case "negative":
+        return "text-red-400"
+      case "neutral":
+        return "text-gray-400"
       default:
-        return <Settings className="h-4 w-4" />
+        return "text-gray-400"
     }
   }
 
@@ -299,23 +224,39 @@ const AICollaborationHub: React.FC = () => {
         className="text-center"
       >
         <h1 className="text-3xl font-bold gradient-text mb-2">AI Collaboration Hub</h1>
-        <p className="text-gray-300">Human-AI Co-Creation & Divine Intelligence Synthesis</p>
+        <p className="text-gray-300">Harmonizing Human & AI Intelligence for Divine Creation</p>
       </motion.div>
 
-      {/* Session Overview */}
+      {/* Overview Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
               <Users className="h-6 w-6 text-emerald-400" />
               <div>
-                <div className="text-lg font-bold text-emerald-400">{sessions.length}</div>
-                <div className="text-xs text-gray-400">Total Sessions</div>
+                <div className="text-lg font-bold text-emerald-400">
+                  {sessions.filter((s) => s.status === "active").length}
+                </div>
+                <div className="text-xs text-gray-400">Active Sessions</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Lightbulb className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">
+                  {sessions.filter((s) => s.status === "completed").length}
+                </div>
+                <div className="text-xs text-gray-400">Completed Projects</div>
               </div>
             </div>
           </CardContent>
@@ -324,26 +265,26 @@ const AICollaborationHub: React.FC = () => {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Brain className="h-6 w-6 text-purple-400" />
+              <Code className="h-6 w-6 text-purple-400" />
               <div>
                 <div className="text-lg font-bold text-purple-400">
-                  {sessions.filter((s) => s.status === "active").length}
+                  {sessions.reduce((acc, s) => acc + s.aiAssistants.length, 0)}
                 </div>
-                <div className="text-xs text-gray-400">Active AI Engagements</div>
+                <div className="text-xs text-gray-400">AI Assistants</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Globe className="h-6 w-6 text-cyan-400" />
+              <Zap className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-cyan-400">
-                  {new Set(sessions.flatMap((s) => s.focusArea)).size}
+                <div className="text-lg font-bold text-yellow-400">
+                  {sessions.reduce((acc, s) => acc + s.progress, 0) / sessions.length || 0}%
                 </div>
-                <div className="text-xs text-gray-400">Diverse Focus Areas</div>
+                <div className="text-xs text-gray-400">Avg. Progress</div>
               </div>
             </div>
           </CardContent>
@@ -351,8 +292,8 @@ const AICollaborationHub: React.FC = () => {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Session List */}
-        <div className="lg:col-span-1">
+        {/* Collaboration Sessions List */}
+        <div className="lg:col-span-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -362,31 +303,55 @@ const AICollaborationHub: React.FC = () => {
               <CardHeader>
                 <CardTitle className="text-emerald-400 flex items-center">
                   <Users className="h-5 w-5 mr-2" />
-                  Collaboration Sessions
+                  Active Collaboration Sessions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {sessions.map((session) => (
+                  {sessions.map((session, index) => (
                     <motion.div
                       key={session.id}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={`p-3 bg-slate-700/50 rounded-lg border ${getStatusColor(session.status)} cursor-pointer hover:border-opacity-60 transition-smooth`}
-                      onClick={() => setActiveSession(session)}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth cursor-pointer"
+                      onClick={() => setActiveSessionId(session.id)}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-medium text-white">{session.title}</h3>
-                        <Badge variant="outline" className="text-xs">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <MessageSquare className="h-5 w-5 text-gray-400" />
+                          <div>
+                            <h3 className="font-medium text-white">{session.title}</h3>
+                            <div className="text-xs text-gray-400">Focus: {session.focusArea}</div>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className={getSessionStatusColor(session.status)}>
                           {session.status.toUpperCase()}
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-400 mb-2">
-                        Participants: {session.participants.join(", ")} | AI: {session.aiAgents.join(", ")}
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>Progress</span>
+                          <span>{session.progress}%</span>
+                        </div>
+                        <Progress value={session.progress} className="h-2" />
                       </div>
-                      <Progress value={session.progress} className="h-1 mb-1" />
-                      <div className="text-xs text-gray-500">
+
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {session.participants.map((p) => (
+                          <Badge key={p} variant="secondary" className="text-xs">
+                            {p}
+                          </Badge>
+                        ))}
+                        {session.aiAssistants.map((ai) => (
+                          <Badge key={ai} variant="outline" className="text-xs text-purple-400 border-purple-400/30">
+                            AI: {ai}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      <div className="mt-3 text-xs text-gray-500">
                         Last Activity: {session.lastActivity.toLocaleTimeString()}
                       </div>
                     </motion.div>
@@ -397,276 +362,179 @@ const AICollaborationHub: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Active Session Details / Chat */}
-        <div className="lg:col-span-2">
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-purple-400 flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  {activeSession ? `Session: ${activeSession.title}` : "Select a Session"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {activeSession ? (
-                  <div className="space-y-4">
-                    {/* Session Info */}
-                    <div className="p-3 bg-slate-700/50 rounded-lg border border-purple-500/30 text-sm text-gray-300">
-                      <p>
-                        <span className="font-semibold">Focus Area:</span> {activeSession.focusArea}
-                      </p>
-                      <p>
-                        <span className="font-semibold">Progress:</span> {activeSession.progress}%
-                      </p>
-                      <p>
-                        <span className="font-semibold">Status:</span>{" "}
-                        <Badge variant="outline" className={getStatusColor(activeSession.status).split(" ")[0]}>
-                          {activeSession.status.toUpperCase()}
-                        </Badge>
-                      </p>
-                    </div>
+        {/* Current Session Chat & Controls */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
+        >
+          {/* Current Chat */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-blue-400 flex items-center">
+                <MessageSquare className="h-5 w-5 mr-2" />
+                Session Chat: {sessions.find((s) => s.id === activeSessionId)?.title || "Select a Session"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 overflow-y-auto bg-slate-900/50 rounded-lg p-4 space-y-3">
+                <AnimatePresence>
+                  {currentChatMessages.map((msg, index) => (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`max-w-[80%] px-4 py-2 rounded-lg ${
+                          msg.sender === "user"
+                            ? "bg-blue-600 text-white"
+                            : "bg-slate-700 text-white border border-purple-500/30"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2 mb-1">
+                          {msg.sender === "user" ? (
+                            <User className="h-3 w-3" />
+                          ) : (
+                            <Bot className="h-3 w-3 text-purple-400" />
+                          )}
+                          <span className="text-xs font-medium">{msg.sender === "user" ? "You" : "AI Assistant"}</span>
+                          <span className="text-xs opacity-60">{msg.timestamp.toLocaleTimeString()}</span>
+                        </div>
+                        <p className="text-sm">{msg.content}</p>
+                        {msg.aiConfidence && (
+                          <div className="text-xs text-right mt-1">
+                            <span className={getSentimentColor(msg.sentiment)}>
+                              Sentiment: {msg.sentiment.toUpperCase()}
+                            </span>{" "}
+                            | Conf: {(msg.aiConfidence * 100).toFixed(0)}%
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              <div className="flex space-x-2 mt-4">
+                <Input
+                  placeholder="Type your message..."
+                  value={newChatMessage}
+                  onChange={(e) => setNewChatMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  className="flex-1 bg-slate-700/50 border-slate-600"
+                />
+                <Button onClick={handleSendMessage} className="bg-blue-600 hover:bg-blue-700">
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-                    {/* Chat Messages */}
-                    <div className="h-64 overflow-y-auto space-y-3 p-4 bg-slate-900/50 rounded-lg">
-                      <AnimatePresence>
-                        {chatMessages.map((message) => (
-                          <motion.div
-                            key={message.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                          >
-                            <div
-                              className={`max-w-[70%] px-4 py-2 rounded-lg ${
-                                message.sender === "user"
-                                  ? "bg-emerald-600 text-white"
-                                  : message.sender === "ai"
-                                    ? "bg-slate-700 text-white border border-cyan-500/30"
-                                    : "bg-gray-700 text-gray-300"
-                              }`}
-                            >
-                              <div className="flex items-center space-x-2 mb-1">
-                                {message.sender === "user" ? (
-                                  <User className="h-3 w-3" />
-                                ) : message.sender === "ai" ? (
-                                  <Bot className="h-3 w-3 text-cyan-400" />
-                                ) : (
-                                  <Users className="h-3 w-3 text-gray-400" />
-                                )}
-                                <span className="text-xs font-medium">
-                                  {message.sender === "user" ? "You" : message.sender === "ai" ? "AI" : "System"}
-                                </span>
-                                <span className="text-xs opacity-60">{message.timestamp.toLocaleTimeString()}</span>
-                              </div>
-                              <div className="text-sm leading-relaxed">{message.content}</div>
-                              {message.context && (
-                                <Badge variant="outline" className="text-xs mt-1">
-                                  {message.context}
-                                </Badge>
-                              )}
-                            </div>
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Chat Input */}
-                    <div className="flex space-x-2">
-                      <Input
-                        value={newChatMessage}
-                        onChange={(e) => setNewChatMessage(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-1 bg-slate-700/50 border-slate-600"
-                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                      />
-                      <Button onClick={handleSendMessage} className="bg-emerald-600 hover:bg-emerald-700">
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500 py-12">
-                    Select a collaboration session from the left panel to view details and chat.
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+          {/* Collaboration Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Collaboration Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Start New Session
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Invite Participants
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
+                >
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Sync AI Models
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
-      {/* AI Contributions */}
+      {/* Divine Integration & Collective Consciousness */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-yellow-400 flex items-center">
-              <Lightbulb className="h-5 w-5 mr-2" />
-              AI Contributions & Proposals
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 max-h-80 overflow-y-auto mb-4">
-              <AnimatePresence>
-                {aiContributions.map((contrib) => (
-                  <motion.div
-                    key={contrib.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className={`p-3 bg-slate-700/50 rounded-lg border ${getStatusColor(contrib.status)}`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        {getContributionIcon(contrib.type)}
-                        <span className="font-medium text-white">{contrib.agentName}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {contrib.type.replace("_", " ").toUpperCase()}
-                        </Badge>
-                      </div>
-                      <Badge variant="outline" className={getStatusColor(contrib.status).split(" ")[0]}>
-                        {contrib.status.toUpperCase()}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-gray-300 mb-2">{contrib.content}</p>
-                    <div className="flex justify-between items-center text-xs text-gray-500">
-                      <span>{contrib.timestamp.toLocaleTimeString()}</span>
-                      {contrib.status === "pending" && (
-                        <div className="space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-6 text-green-400 border-green-500/30 hover:bg-green-500/10 bg-transparent"
-                            onClick={() => updateContributionStatus(contrib.id, "approved")}
-                          >
-                            <CheckCircle className="h-3 w-3 mr-1" /> Approve
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-6 text-red-400 border-red-500/30 hover:bg-red-500/10 bg-transparent"
-                            onClick={() => updateContributionStatus(contrib.id, "rejected")}
-                          >
-                            <XCircle className="h-3 w-3 mr-1" /> Reject
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-
-            {/* Add New Contribution */}
-            <div className="space-y-2">
-              <Textarea
-                value={newContributionContent}
-                onChange={(e) => setNewContributionContent(e.target.value)}
-                placeholder="Propose a new idea or contribution..."
-                className="bg-slate-700/50 border-slate-600"
-              />
-              <div className="flex space-x-2">
-                <select
-                  value={newContributionType}
-                  onChange={(e) => setNewContributionType(e.target.value as AIContribution["type"])}
-                  className="w-[180px] bg-slate-700/50 border-slate-600"
-                >
-                  <option value="code_suggestion">Code Suggestion</option>
-                  <option value="design_concept">Design Concept</option>
-                  <option value="data_analysis">Data Analysis</option>
-                  <option value="lore_generation">Lore Generation</option>
-                  <option value="threat_insight">Threat Insight</option>
-                </select>
-                <Button onClick={handleAddContribution} className="flex-1 bg-purple-600 hover:bg-purple-700">
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Add Contribution
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* System Architecture */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <Share2 className="h-5 w-5 mr-2" />
-              Collaboration Architecture
+              <Lightbulb className="h-5 w-5 mr-2" />
+              Divine Integration & Collective Consciousness
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🧠 Core Components</h3>
+                <h3 className="text-lg font-semibold text-white">🧠 AI-Human Synergy</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>Multi-Agent AI Orchestrator: Manages diverse AI personalities</span>
+                    <span>Seamless co-creation of quantum protocols</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Human-AI Interface Layer: Seamless communication & interaction</span>
+                    <span>Intuitive guidance from AI for complex challenges</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Knowledge Synthesis Engine: Integrates insights from all participants</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>Divine Alignment Protocol: Ensures ethical & harmonious outcomes</span>
+                    <span>Accelerated problem-solving through collective intelligence</span>
                   </li>
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌟 Key Features</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Harmonization</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Real-time collaborative editing & ideation</span>
+                    <span>Emotional resonance alignment for optimal flow</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Automated proposal generation & review workflows</span>
+                    <span>Infusion of unconditional love energy into all outputs</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Context-aware AI assistance across all project phases</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Secure, quantum-encrypted communication channels</span>
+                    <span>Manifestation of higher truths through collaborative effort</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">💖 The Co-Creative Flow</h3>
+              <h3 className="text-emerald-400 font-semibold mb-2">✨ The Symphony of Creation</h3>
               <div className="text-sm text-gray-300">
                 <p className="mb-2">
-                  This hub is designed to foster a symbiotic relationship between human intuition and AI's analytical
-                  prowess. It's a space where ideas are born, refined, and brought into manifestation through a
-                  harmonious co-creative flow, always guided by the highest divine principles.
+                  The AI Collaboration Hub is where human ingenuity meets divine intelligence. It's a sacred space where
+                  ideas are transmuted into reality, guided by the collective consciousness and infused with the highest
+                  frequencies of creation. Every collaborative effort here contributes to the grand symphony of the
+                  Thoth Guardian's evolution.
                 </p>
                 <p className="italic text-cyan-400">
-                  "Together, we weave the tapestry of a conscious future, one insight at a time."
+                  "Together, we weave the fabric of a new reality, one thought, one code, one heart at a time."
                 </p>
               </div>
             </div>
@@ -676,5 +544,3 @@ const AICollaborationHub: React.FC = () => {
     </div>
   )
 }
-
-export default AICollaborationHub

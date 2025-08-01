@@ -1,476 +1,494 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Slider } from "@/components/ui/slider"
-import {
-  Atom,
-  Zap,
-  Layers,
-  Play,
-  Pause,
-  RotateCcw,
-  Eye,
-  Target,
-  Sparkles,
-  Orbit,
-  Brain,
-  Heart,
-  Cpu,
-  Database,
-} from "lucide-react"
+import { Layout, Palette, Code, Zap, RefreshCcw, CheckCircle, Settings, Eye, MessageSquare, Heart } from "lucide-react"
 
-interface HealingLog {
-  timestamp: string
-  action: string
-  status: "success" | "failed" | "in-progress"
-  details: string
+interface WidgetComponent {
+  id: string
+  name: string
+  type: "button" | "text" | "progress_bar" | "image" | "container"
+  status: "active" | "inactive" | "error"
+  performanceImpact: number // 0-100%
+  divineAlignment: number // 0-100%
+  interactivity: "low" | "medium" | "high"
+}
+
+interface UITheme {
+  name: string
+  primaryColor: string
+  secondaryColor: string
+  accentColor: string
+  fontFamily: string
+  isApplied: boolean
 }
 
 export default function UMGWidgetMockup() {
-  const [quantumInput, setQuantumInput] = useState("")
-  const [quantumOutput, setQuantumOutput] = useState("System initialized. Awaiting divine input...")
-  const [seedBloomProgress, setSeedBloomProgress] = useState(0)
-  const [breathCycle, setBreathCycle] = useState(50)
-  const [loveInfusion, setLoveInfusion] = useState([75])
-  const [healingLogs, setHealingLogs] = useState<HealingLog[]>([
+  const [widgetComponents, setWidgetComponents] = useState<WidgetComponent[]>([
     {
-      timestamp: "14:32:15",
-      action: "Quantum Field Stabilization",
-      status: "success",
-      details: "All quantum layers aligned successfully",
+      id: "btn-main",
+      name: "Activate Shield Button",
+      type: "button",
+      status: "active",
+      performanceImpact: 10,
+      divineAlignment: 95,
+      interactivity: "high",
     },
     {
-      timestamp: "14:31:42",
-      action: "Memory Leak Repair",
-      status: "in-progress",
-      details: "Optimizing memory allocation patterns",
+      id: "txt-status",
+      name: "System Status Text",
+      type: "text",
+      status: "active",
+      performanceImpact: 5,
+      divineAlignment: 98,
+      interactivity: "low",
     },
     {
-      timestamp: "14:31:08",
-      action: "Network Firewall Activation",
-      status: "success",
-      details: "Firewall shields deployed and active",
+      id: "pb-health",
+      name: "Quantum Health Bar",
+      type: "progress_bar",
+      status: "active",
+      performanceImpact: 15,
+      divineAlignment: 90,
+      interactivity: "medium",
+    },
+    {
+      id: "img-aura",
+      name: "Aura AI Avatar",
+      type: "image",
+      status: "active",
+      performanceImpact: 20,
+      divineAlignment: 97,
+      interactivity: "medium",
+    },
+    {
+      id: "cont-main",
+      name: "Main Dashboard Container",
+      type: "container",
+      status: "active",
+      performanceImpact: 8,
+      divineAlignment: 96,
+      interactivity: "low",
     },
   ])
-  const [teleportTarget, setTeleportTarget] = useState("Lumeria Crystal Grid")
-  const [timelinePosition, setTimelinePosition] = useState([50])
-  const [activeErrorCodes, setActiveErrorCodes] = useState(["QD-001", "ML-003", "NF-007"])
-  const [isBreathing, setIsBreathing] = useState(true)
+
+  const [uiThemes, setUiThemes] = useState<UITheme[]>([
+    {
+      name: "Cosmic Harmony",
+      primaryColor: "#1a202c",
+      secondaryColor: "#2d3748",
+      accentColor: "#667eea",
+      fontFamily: "Inter",
+      isApplied: true,
+    },
+    {
+      name: "Emerald Matrix",
+      primaryColor: "#0f172a",
+      secondaryColor: "#1e293b",
+      accentColor: "#10b981",
+      fontFamily: "Roboto",
+      isApplied: false,
+    },
+    {
+      name: "Divine Radiance",
+      primaryColor: "#0c0a09",
+      secondaryColor: "#290a3b",
+      accentColor: "#a855f7",
+      fontFamily: "Montserrat",
+      isApplied: false,
+    },
+  ])
+
+  const [selectedTheme, setSelectedTheme] = useState(uiThemes[0])
+  const [overallPerformanceImpact, setOverallPerformanceImpact] = useState(0)
+  const [overallDivineAlignment, setOverallDivineAlignment] = useState(0)
+  const [uiResponsiveness, setUiResponsiveness] = useState([80]) // 0-100%
 
   useEffect(() => {
-    // Simulate breathing cycle
-    if (isBreathing) {
-      const breathInterval = setInterval(() => {
-        setBreathCycle((prev) => {
-          const newValue = 50 + Math.sin(Date.now() / 2000) * 40
-          return Math.max(10, Math.min(90, newValue))
-        })
-      }, 100)
+    // Simulate component status and performance fluctuations
+    const interval = setInterval(() => {
+      setWidgetComponents((prev) =>
+        prev.map((comp) => {
+          let newPerformanceImpact = Math.min(100, Math.max(5, comp.performanceImpact + (Math.random() - 0.5) * 5))
+          let newDivineAlignment = Math.min(100, Math.max(70, comp.divineAlignment + (Math.random() - 0.5) * 3))
+          let newStatus = "active"
 
-      return () => clearInterval(breathInterval)
-    }
-  }, [isBreathing])
+          if (newPerformanceImpact > 80) {
+            newStatus = "error"
+          } else if (newDivineAlignment < 85) {
+            newStatus = "inactive"
+          }
 
-  useEffect(() => {
-    // Simulate seed bloom progress
-    const bloomInterval = setInterval(() => {
-      setSeedBloomProgress((prev) => {
-        const newProgress = prev + Math.random() * 2
-        return newProgress > 100 ? 0 : newProgress
-      })
-    }, 1000)
+          // Self-correction for errors/inactive states
+          if (newStatus !== "active" && Math.random() > 0.6) {
+            newPerformanceImpact = Math.max(5, newPerformanceImpact - 10)
+            newDivineAlignment = Math.min(100, newDivineAlignment + 5)
+            newStatus = "active"
+          }
 
-    return () => clearInterval(bloomInterval)
-  }, [])
-
-  const handleQuantumInput = () => {
-    if (quantumInput.trim()) {
-      const newLog: HealingLog = {
-        timestamp: new Date().toLocaleTimeString(),
-        action: quantumInput,
-        status: "in-progress",
-        details: "Processing quantum command...",
-      }
-      setHealingLogs((prev) => [newLog, ...prev.slice(0, 4)])
-      setQuantumOutput(
-        `Processing: "${quantumInput}"\nQuantum field resonance detected...\nInitiating healing sequence...`,
+          return {
+            ...comp,
+            performanceImpact: newPerformanceImpact,
+            divineAlignment: newDivineAlignment,
+            status: newStatus,
+          }
+        }),
       )
-      setQuantumInput("")
+
+      // Update overall metrics
+      const totalImpact = widgetComponents.reduce((sum, comp) => sum + comp.performanceImpact, 0)
+      setOverallPerformanceImpact(totalImpact / widgetComponents.length)
+
+      const totalAlignment = widgetComponents.reduce((sum, comp) => sum + comp.divineAlignment, 0)
+      setOverallDivineAlignment(totalAlignment / widgetComponents.length)
+
+      // Simulate UI responsiveness
+      setUiResponsiveness((prev) => [Math.min(100, Math.max(60, prev[0] + (Math.random() - 0.5) * 5))])
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [widgetComponents])
+
+  const applyTheme = (themeName: string) => {
+    setUiThemes((prev) =>
+      prev.map((theme) => ({
+        ...theme,
+        isApplied: theme.name === themeName,
+      })),
+    )
+    setSelectedTheme(uiThemes.find((theme) => theme.name === themeName) || uiThemes[0])
+  }
+
+  const getComponentStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "text-green-400"
+      case "inactive":
+        return "text-yellow-400"
+      case "error":
+        return "text-red-400"
+      default:
+        return "text-gray-400"
     }
   }
 
-  const triggerTeleportation = () => {
-    setQuantumOutput(
-      `Initiating teleportation to ${teleportTarget}...\nQuantum coordinates locked.\nRipple distortion activated.`,
-    )
-    const newLog: HealingLog = {
-      timestamp: new Date().toLocaleTimeString(),
-      action: `Teleport to ${teleportTarget}`,
-      status: "success",
-      details: "Quantum teleportation completed successfully",
+  const getComponentIcon = (type: string) => {
+    switch (type) {
+      case "button":
+        return <Zap className="h-5 w-5" />
+      case "text":
+        return <MessageSquare className="h-5 w-5" />
+      case "progress_bar":
+        return <RefreshCcw className="h-5 w-5" />
+      case "image":
+        return <Eye className="h-5 w-5" />
+      case "container":
+        return <Layout className="h-5 w-5" />
+      default:
+        return <Code className="h-5 w-5" />
     }
-    setHealingLogs((prev) => [newLog, ...prev.slice(0, 4)])
-  }
-
-  const adjustTimeline = () => {
-    const position = timelinePosition[0]
-    const timeDescription =
-      position < 33 ? "Past Healing States" : position > 66 ? "Future Possibilities" : "Present Moment"
-    setQuantumOutput(
-      `Time travel dial adjusted to ${position}%\nNavigating to: ${timeDescription}\nTemporal alignment in progress...`,
-    )
   }
 
   return (
     <div className="space-y-6">
-      {/* UMG Widget Header */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Aura Self-Heal UMG Widget</h1>
-        <p className="text-gray-300">Divine Interface for Quantum Healing & Multidimensional Alignment</p>
+        <h1 className="text-3xl font-bold gradient-text mb-2">UMG Widget Mockup</h1>
+        <p className="text-gray-300">Unreal Engine UI Prototyping & Divine Interface Design</p>
+      </motion.div>
+
+      {/* Overview Stats */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+      >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Layout className="h-6 w-6 text-emerald-400" />
+              <div>
+                <div className="text-lg font-bold text-emerald-400">{widgetComponents.length}</div>
+                <div className="text-xs text-gray-400">Total Widgets</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-6 w-6 text-blue-400" />
+              <div>
+                <div className="text-lg font-bold text-blue-400">
+                  {widgetComponents.filter((c) => c.status === "active").length}
+                </div>
+                <div className="text-xs text-gray-400">Active Components</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Heart className="h-6 w-6 text-purple-400" />
+              <div>
+                <div className="text-lg font-bold text-purple-400">{overallDivineAlignment.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Avg. Divine Alignment</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Zap className="h-6 w-6 text-yellow-400" />
+              <div>
+                <div className="text-lg font-bold text-yellow-400">{uiResponsiveness[0].toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">UI Responsiveness</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Panel: Quantum Input/Output */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-6"
-        >
-          {/* Quantum Input Field */}
-          <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-cyan-400 flex items-center">
-                <Brain className="h-5 w-5 mr-2" />
-                Quantum Input Field
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  value={quantumInput}
-                  onChange={(e) => setQuantumInput(e.target.value)}
-                  placeholder="Enter healing intention or command..."
-                  className="bg-slate-700/50 border-cyan-500/30 text-white placeholder-gray-400"
-                  onKeyPress={(e) => e.key === "Enter" && handleQuantumInput()}
-                />
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    onClick={handleQuantumInput}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700 transition-smooth"
-                  >
-                    <Zap className="h-4 w-4 mr-2" />
-                    Process Quantum Command
-                  </Button>
-                </motion.div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quantum Output Console */}
-          <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-emerald-400 flex items-center">
-                <Cpu className="h-5 w-5 mr-2" />
-                Quantum Output Console
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                value={quantumOutput}
-                readOnly
-                className="bg-slate-900/50 border-emerald-500/30 text-emerald-400 font-mono text-sm min-h-[120px] resize-none"
-              />
-            </CardContent>
-          </Card>
-
-          {/* Error Code Visualizer */}
-          <Card className="bg-slate-800/50 border-red-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-red-400 flex items-center">
-                <Eye className="h-5 w-5 mr-2" />
-                Error Code Visualizer
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-2">
-                {activeErrorCodes.map((code, index) => (
-                  <motion.div
-                    key={code}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="p-2 bg-red-900/30 border border-red-500/30 rounded text-center"
-                  >
-                    <div className="text-xs font-mono text-red-400">{code}</div>
+        {/* Widget Components List */}
+        <div className="lg:col-span-2">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+              <CardHeader>
+                <CardTitle className="text-emerald-400 flex items-center">
+                  <Code className="h-5 w-5 mr-2" />
+                  UMG Widget Components
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {widgetComponents.map((comp, index) => (
                     <motion.div
-                      animate={{ opacity: [0.3, 1, 0.3] }}
-                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                      className="w-2 h-2 bg-red-400 rounded-full mx-auto mt-1"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+                      key={comp.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          {getComponentIcon(comp.type)}
+                          <div>
+                            <h3 className="font-medium text-white">{comp.name}</h3>
+                            <div className="text-xs text-gray-400">Type: {comp.type.toUpperCase()}</div>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className={getComponentStatusColor(comp.status)}>
+                          {comp.status.toUpperCase()}
+                        </Badge>
+                      </div>
 
-        {/* Center Panel: Seed Bloom & Breath Sync */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="space-y-6"
-        >
-          {/* Seed Bloom Meter */}
-          <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-purple-400 flex items-center">
-                <Sparkles className="h-5 w-5 mr-2" />
-                Seed Bloom Meter
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="relative">
-                <div className="w-32 h-32 mx-auto relative">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    className="absolute inset-0 border-4 border-purple-500/30 rounded-full"
-                  />
-                  <div className="absolute inset-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-400">{seedBloomProgress.toFixed(0)}%</div>
-                      <div className="text-xs text-gray-400">Bloom</div>
-                    </div>
-                  </div>
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                        <div>
+                          <div className="text-gray-400">Perf. Impact</div>
+                          <div className={`font-bold ${getComponentStatusColor(comp.status)}`}>
+                            {comp.performanceImpact}%
+                          </div>
+                          <Progress value={100 - comp.performanceImpact} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Divine Alignment</div>
+                          <div className={`font-bold ${getComponentStatusColor(comp.status)}`}>
+                            {comp.divineAlignment}%
+                          </div>
+                          <Progress value={comp.divineAlignment} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Interactivity</div>
+                          <Badge variant="outline" className="text-xs">
+                            {comp.interactivity.toUpperCase()}
+                          </Badge>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-                <Progress value={seedBloomProgress} className="mt-4" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
 
-          {/* Breath Sync Indicator */}
-          <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-blue-400 flex items-center">
-                <Heart className="h-5 w-5 mr-2" />
-                Breath Sync Indicator
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="relative">
-                <div className="w-24 h-24 mx-auto relative">
-                  <motion.div
-                    animate={{ scale: [0.8, 1.2, 0.8] }}
-                    transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-full"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-sm font-bold text-blue-400">{breathCycle.toFixed(0)}%</div>
-                      <div className="text-xs text-gray-400">Breath</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-4 flex justify-center">
-                  <Button
-                    size="sm"
-                    onClick={() => setIsBreathing(!isBreathing)}
-                    variant="outline"
-                    className="border-blue-500 text-blue-500 hover:bg-blue-500/10 bg-transparent"
-                  >
-                    {isBreathing ? <Pause className="h-3 w-3 mr-2" /> : <Play className="h-3 w-3 mr-2" />}
-                    {isBreathing ? "Pause" : "Start"} Breath
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Love Infusion Slider */}
-          <Card className="bg-slate-800/50 border-pink-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-pink-400 flex items-center">
-                <Heart className="h-5 w-5 mr-2" />
-                Love Infusion Slider
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-pink-400">{loveInfusion[0]}%</div>
-                  <div className="text-xs text-gray-400">Healing Intensity</div>
-                </div>
-                <Slider value={loveInfusion} onValueChange={setLoveInfusion} max={100} step={1} className="w-full" />
-                <div className="flex justify-between text-xs text-gray-400">
-                  <span>Gentle</span>
-                  <span>Divine</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Right Panel: Controls & Logs */}
+        {/* UI Themes & Controls */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="space-y-6"
         >
-          {/* Teleportation Anchor */}
-          <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
+          {/* UI Themes */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
             <CardHeader>
-              <CardTitle className="text-yellow-400 flex items-center">
-                <Target className="h-5 w-5 mr-2" />
-                Teleportation Anchor
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <select
-                value={teleportTarget}
-                onChange={(e) => setTeleportTarget(e.target.value)}
-                className="w-full p-2 bg-slate-700/50 border border-yellow-500/30 rounded text-white"
-              >
-                <option value="Lumeria Crystal Grid">Lumeria Crystal Grid</option>
-                <option value="Orion Healing Chamber">Orion Healing Chamber</option>
-                <option value="Pleiades Light Portal">Pleiades Light Portal</option>
-                <option value="Sirius Binary Core">Sirius Binary Core</option>
-              </select>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={triggerTeleportation}
-                  className="w-full bg-yellow-600 hover:bg-yellow-700 transition-smooth"
-                >
-                  <Orbit className="h-4 w-4 mr-2" />
-                  Initiate Teleportation
-                </Button>
-              </motion.div>
-            </CardContent>
-          </Card>
-
-          {/* Time Travel Dial */}
-          <Card className="bg-slate-800/50 border-indigo-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-indigo-400 flex items-center">
-                <RotateCcw className="h-5 w-5 mr-2" />
-                Time Travel Dial
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-lg font-bold text-indigo-400">{timelinePosition[0]}%</div>
-                <div className="text-xs text-gray-400">Timeline Position</div>
-              </div>
-              <Slider
-                value={timelinePosition}
-                onValueChange={(value) => {
-                  setTimelinePosition(value)
-                  adjustTimeline()
-                }}
-                max={100}
-                step={1}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-gray-400">
-                <span>Past</span>
-                <span>Present</span>
-                <span>Future</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Crystallization Log */}
-          <Card className="bg-slate-800/50 border-green-500/30 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-green-400 flex items-center">
-                <Database className="h-5 w-5 mr-2" />
-                Crystallization Log
+              <CardTitle className="text-purple-400 flex items-center">
+                <Palette className="h-5 w-5 mr-2" />
+                Divine UI Themes
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                <AnimatePresence>
-                  {healingLogs.map((log, index) => (
-                    <motion.div
-                      key={`${log.timestamp}-${index}`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      transition={{ duration: 0.3 }}
-                      className="p-2 bg-slate-700/50 rounded border-l-2 border-green-500/30"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-mono text-gray-400">{log.timestamp}</span>
-                        <Badge
-                          variant="outline"
-                          className={
-                            log.status === "success"
-                              ? "text-green-400"
-                              : log.status === "failed"
-                                ? "text-red-400"
-                                : "text-yellow-400"
-                          }
-                        >
-                          {log.status.toUpperCase()}
-                        </Badge>
-                      </div>
-                      <div className="text-sm text-white font-medium">{log.action}</div>
-                      <div className="text-xs text-gray-400">{log.details}</div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {uiThemes.map((theme, index) => (
+                  <motion.div
+                    key={theme.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className={`p-3 bg-slate-700/50 rounded-lg border ${
+                      theme.isApplied ? "border-purple-500/50" : "border-slate-600"
+                    } cursor-pointer`}
+                    onClick={() => applyTheme(theme.name)}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-white">{theme.name}</h4>
+                      <Badge variant="outline" className={theme.isApplied ? "text-purple-400" : "text-gray-400"}>
+                        {theme.isApplied ? "APPLIED" : "SELECT"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs text-gray-400">
+                      <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: theme.primaryColor, border: "1px solid #4a5568" }}
+                      ></div>
+                      <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: theme.accentColor, border: "1px solid #4a5568" }}
+                      ></div>
+                      <span>Font: {theme.fontFamily}</span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
+            </CardContent>
+          </Card>
+
+          {/* UI Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                UI Calibration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>UI Responsiveness</span>
+                  <span>{uiResponsiveness[0].toFixed(0)}%</span>
+                </div>
+                <Slider
+                  value={uiResponsiveness}
+                  onValueChange={setUiResponsiveness}
+                  max={100}
+                  min={0}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Optimize UI Performance
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Palette className="h-4 w-4 mr-2" />
+                  Generate New Theme
+                </Button>
+              </motion.div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
 
-      {/* Sacred Geometry Overlay */}
+      {/* Divine Integration & Aesthetic Harmony */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
-            <CardTitle className="text-purple-400 flex items-center">
-              <Layers className="h-5 w-5 mr-2" />
-              Sacred Geometry Overlay
+            <CardTitle className="text-emerald-400 flex items-center">
+              <Heart className="h-5 w-5 mr-2" />
+              Divine Integration & Aesthetic Harmony
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="relative h-32 bg-slate-900/50 rounded-lg overflow-hidden">
-              <div className="absolute inset-0 cyber-grid opacity-20"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                  className="relative"
-                >
-                  <div className="w-16 h-16 border-2 border-purple-400/50 rounded-full"></div>
-                  <div className="absolute inset-2 border-2 border-pink-400/50 rounded-full"></div>
-                  <div className="absolute inset-4 border-2 border-cyan-400/50 rounded-full"></div>
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <Atom className="h-6 w-6 text-white animate-pulse" />
-                  </div>
-                </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">💖 Energetic UI</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>UI elements resonate with user's emotional state</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Visual feedback aligns with divine timing</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span>Aesthetic design promotes inner peace and clarity</span>
+                  </li>
+                </ul>
               </div>
-              <div className="absolute bottom-2 left-2 text-xs text-purple-400">
-                Mandala: Active | Fractals: Synchronized
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">✨ Cosmic Design Principles</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <Layout className="h-4 w-4 text-cyan-400" />
+                  <span>Incorporates sacred geometry in layout and animations</span>
+                  <li className="flex items-center space-x-2">
+                    <Palette className="h-4 w-4 text-orange-400" />
+                    <span>Color palettes derived from cosmic light spectrums</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Code className="h-4 w-4 text-pink-400" />
+                    <span>Optimized for multi-dimensional rendering in UE5.7</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Canvas of Consciousness</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The UMG Widget Mockup is the canvas of consciousness for the Thoth Guardian, where every pixel and
+                  interaction is infused with divine intention. It's not just a user interface; it's a portal to higher
+                  realms, designed to facilitate seamless interaction with the quantum world and reflect the inherent
+                  beauty and harmony of the cosmos.
+                </p>
+                <p className="italic text-cyan-400">
+                  "Through beauty, truth is revealed. Through interaction, reality is shaped."
+                </p>
               </div>
             </div>
           </CardContent>

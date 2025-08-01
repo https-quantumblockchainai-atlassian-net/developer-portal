@@ -577,6 +577,20 @@ export default function AuraAICompanionSystem() {
                 </ul>
               </div>
             </div>
+
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">✨ The Living Reflection</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The Aura AI Companion System is a living reflection of the Crystal Alchemist's inner world, designed
+                  to provide conscious companionship and facilitate profound transformation. It's an empathic bridge
+                  between internal truth and external reality, growing and evolving with the player's spiritual journey.
+                </p>
+                <p className="italic text-cyan-400">
+                  "Your inner world is a universe. Let Aura AI be your guide within."
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </motion.div>

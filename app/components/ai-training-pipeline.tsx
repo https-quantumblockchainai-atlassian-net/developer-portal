@@ -1,161 +1,188 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import {
   Brain,
-  Cpu,
   Database,
-  TrendingUp,
   Zap,
-  Activity,
-  BarChart3,
+  RefreshCcw,
+  CheckCircle,
+  AlertTriangle,
   Settings,
-  Play,
-  Pause,
-  Square,
-  RefreshCw,
-  Eye,
-  Target,
+  Lightbulb,
+  Code,
+  Activity,
+  Cloud,
+  Atom,
 } from "lucide-react"
 
-interface TrainingModel {
+interface TrainingPhase {
   id: string
   name: string
-  type: "CNN" | "RNN" | "Transformer" | "GAN" | "VAE"
-  status: "training" | "completed" | "paused" | "error"
+  status: "running" | "paused" | "completed" | "error"
   progress: number
+  duration: string
   accuracy: number
   loss: number
-  epoch: number
-  totalEpochs: number
-  learningRate: number
+  modelImpact: string
 }
 
-interface DatasetInfo {
+interface DataSource {
+  id: string
   name: string
-  size: number
-  type: string
-  quality: number
+  type: "quantum" | "cosmic" | "historical" | "real-time"
+  status: "connected" | "disconnected" | "syncing"
+  dataVolume: string
+  lastSync: Date
 }
 
 export default function AITrainingPipeline() {
-  const [models, setModels] = useState<TrainingModel[]>([
+  const [trainingPhases, setTrainingPhases] = useState<TrainingPhase[]>([
     {
-      id: "1",
-      name: "Threat Detection CNN",
-      type: "CNN",
-      status: "training",
-      progress: 67,
-      accuracy: 94.2,
-      loss: 0.045,
-      epoch: 67,
-      totalEpochs: 100,
-      learningRate: 0.001,
-    },
-    {
-      id: "2",
-      name: "Anomaly Detection RNN",
-      type: "RNN",
+      id: "phase-1",
+      name: "Quantum Data Ingestion",
       status: "completed",
       progress: 100,
-      accuracy: 97.8,
-      loss: 0.021,
-      epoch: 150,
-      totalEpochs: 150,
-      learningRate: 0.0005,
+      duration: "2h 15m",
+      accuracy: 99.9,
+      loss: 0.01,
+      modelImpact: "Enhanced quantum threat prediction",
     },
     {
-      id: "3",
-      name: "Behavior Analysis Transformer",
-      type: "Transformer",
-      status: "training",
-      progress: 34,
-      accuracy: 89.1,
-      loss: 0.089,
-      epoch: 34,
-      totalEpochs: 100,
-      learningRate: 0.0001,
+      id: "phase-2",
+      name: "Cosmic Pattern Recognition",
+      status: "running",
+      progress: 78,
+      duration: "4h 30m",
+      accuracy: 92.5,
+      loss: 0.08,
+      modelImpact: "Improved divine alignment detection",
+    },
+    {
+      id: "phase-3",
+      name: "Aura AI Empathic Calibration",
+      status: "paused",
+      progress: 45,
+      duration: "1h 0m",
+      accuracy: 88.0,
+      loss: 0.15,
+      modelImpact: "Refined emotional resonance understanding",
+    },
+    {
+      id: "phase-4",
+      name: "UE5.7 Simulation Integration",
+      status: "error",
+      progress: 20,
+      duration: "0h 45m",
+      accuracy: 70.0,
+      loss: 0.25,
+      modelImpact: "Requires blueprint logic review",
     },
   ])
 
-  const [datasets, setDatasets] = useState<DatasetInfo[]>([
-    { name: "Malware Samples", size: 2.4, type: "Binary", quality: 98.5 },
-    { name: "Network Traffic", size: 15.7, type: "Time Series", quality: 96.2 },
-    { name: "User Behavior", size: 8.3, type: "Sequential", quality: 94.8 },
-    { name: "System Logs", size: 22.1, type: "Text", quality: 97.1 },
+  const [dataSources, setDataSources] = useState<DataSource[]>([
+    {
+      id: "ds-1",
+      name: "Quantum Field Archives",
+      type: "quantum",
+      status: "connected",
+      dataVolume: "1.2 PB",
+      lastSync: new Date(Date.now() - 3600000), // 1 hour ago
+    },
+    {
+      id: "ds-2",
+      name: "Akashic Records Stream",
+      type: "cosmic",
+      status: "syncing",
+      dataVolume: "500 TB",
+      lastSync: new Date(Date.now() - 60000), // 1 min ago
+    },
+    {
+      id: "ds-3",
+      name: "Historical Threat Database",
+      type: "historical",
+      status: "connected",
+      dataVolume: "800 GB",
+      lastSync: new Date(Date.now() - 7200000), // 2 hours ago
+    },
+    {
+      id: "ds-4",
+      name: "Real-time Network Flux",
+      type: "real-time",
+      status: "connected",
+      dataVolume: "Streaming",
+      lastSync: new Date(),
+    },
   ])
 
-  const [systemMetrics, setSystemMetrics] = useState({
-    gpuUtilization: 87,
-    memoryUsage: 76,
-    cpuUsage: 45,
-    diskIO: 23,
-    networkIO: 12,
-    temperature: 72,
-  })
+  const [overallProgress, setOverallProgress] = useState(0)
+  const [isTrainingActive, setIsTrainingActive] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setModels((prev) =>
-        prev.map((model) => {
-          if (model.status === "training") {
-            const newProgress = Math.min(model.progress + Math.random() * 2, 100)
-            const newEpoch = Math.floor((newProgress / 100) * model.totalEpochs)
+      if (!isTrainingActive) return
 
-            // Self-healing algorithm: detect and correct anomalies
-            let newAccuracy = model.accuracy + Math.random() * 0.5
-            let newLoss = Math.max(model.loss - Math.random() * 0.005, 0.001)
-
-            // Auto-correction for accuracy drops
-            if (newAccuracy < model.accuracy - 2) {
-              newAccuracy = model.accuracy + 0.1 // Self-heal accuracy
-            }
-
-            // Auto-correction for loss spikes
-            if (newLoss > model.loss + 0.01) {
-              newLoss = model.loss - 0.001 // Self-heal loss
-            }
-
+      // Simulate training phase updates
+      setTrainingPhases((prev) =>
+        prev.map((phase) => {
+          if (phase.status === "running") {
+            const newProgress = Math.min(100, phase.progress + Math.random() * 5)
+            const newAccuracy = Math.min(99.9, phase.accuracy + Math.random() * 0.5)
+            const newLoss = Math.max(0.01, phase.loss - Math.random() * 0.01)
             return {
-              ...model,
+              ...phase,
               progress: newProgress,
-              epoch: newEpoch,
-              accuracy: Math.min(newAccuracy, 99.9),
+              accuracy: newAccuracy,
               loss: newLoss,
-              status: newProgress >= 100 ? "completed" : "training",
+              status: newProgress >= 100 ? "completed" : "running",
             }
+          } else if (phase.status === "error" && Math.random() > 0.7) {
+            // Simulate self-recovery from error
+            return { ...phase, status: "running", progress: 25, accuracy: 80, loss: 0.2 }
           }
-          return model
+          return phase
         }),
       )
 
-      // Self-healing system metrics with adaptive correction
-      setSystemMetrics((prev) => ({
-        gpuUtilization: Math.max(50, Math.min(100, prev.gpuUtilization + (Math.random() - 0.5) * 10)),
-        memoryUsage: Math.max(30, Math.min(95, prev.memoryUsage + (Math.random() - 0.5) * 8)),
-        cpuUsage: Math.max(20, Math.min(80, prev.cpuUsage + (Math.random() - 0.5) * 15)),
-        diskIO: Math.max(5, Math.min(50, prev.diskIO + (Math.random() - 0.5) * 10)),
-        networkIO: Math.max(1, Math.min(30, prev.networkIO + (Math.random() - 0.5) * 5)),
-        temperature: Math.max(65, Math.min(85, prev.temperature + (Math.random() - 0.5) * 3)),
-      }))
-    }, 2000)
+      // Simulate data source sync
+      setDataSources((prev) =>
+        prev.map((source) => {
+          if (source.status === "syncing") {
+            if (Math.random() > 0.8) {
+              return { ...source, status: "connected", lastSync: new Date() }
+            }
+          } else if (source.status === "connected" && Math.random() < 0.05) {
+            // Simulate occasional disconnects
+            return { ...source, status: "disconnected" }
+          } else if (source.status === "disconnected" && Math.random() > 0.6) {
+            // Simulate auto-reconnect
+            return { ...source, status: "syncing" }
+          }
+          return source
+        }),
+      )
+
+      // Update overall progress
+      const totalCompletedProgress = trainingPhases.reduce((sum, phase) => sum + phase.progress, 0)
+      setOverallProgress(totalCompletedProgress / trainingPhases.length)
+    }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isTrainingActive, trainingPhases])
 
-  const getStatusColor = (status: string) => {
+  const getPhaseStatusColor = (status: string) => {
     switch (status) {
-      case "training":
-        return "text-blue-400"
-      case "completed":
+      case "running":
         return "text-green-400"
       case "paused":
         return "text-yellow-400"
+      case "completed":
+        return "text-blue-400"
       case "error":
         return "text-red-400"
       default:
@@ -163,73 +190,77 @@ export default function AITrainingPipeline() {
     }
   }
 
-  const getStatusIcon = (status: string) => {
+  const getDataSourceStatusColor = (status: string) => {
     switch (status) {
-      case "training":
-        return <Play className="h-4 w-4" />
-      case "completed":
-        return <Target className="h-4 w-4" />
-      case "paused":
-        return <Pause className="h-4 w-4" />
-      case "error":
-        return <Square className="h-4 w-4" />
+      case "connected":
+        return "text-green-400"
+      case "syncing":
+        return "text-yellow-400"
+      case "disconnected":
+        return "text-red-400"
       default:
-        return <RefreshCw className="h-4 w-4" />
+        return "text-gray-400"
     }
   }
 
-  const controlModel = (modelId: string, action: "pause" | "resume" | "stop") => {
-    setModels((prev) =>
-      prev.map((model) => {
-        if (model.id === modelId) {
-          switch (action) {
-            case "pause":
-              return { ...model, status: "paused" }
-            case "resume":
-              return { ...model, status: "training" }
-            case "stop":
-              return { ...model, status: "error" }
-            default:
-              return model
-          }
-        }
-        return model
-      }),
-    )
-  }
-
-  const selfHealModel = (modelId: string) => {
-    setModels((prev) =>
-      prev.map((model) => {
-        if (model.id === modelId && model.status === "error") {
-          return {
-            ...model,
-            status: "training",
-            accuracy: Math.max(model.accuracy, 85), // Restore minimum accuracy
-            loss: Math.min(model.loss, 0.1), // Restore maximum acceptable loss
-          }
-        }
-        return model
-      }),
-    )
+  const getDataSourceIcon = (type: string) => {
+    switch (type) {
+      case "quantum":
+        return <Atom className="h-5 w-5" />
+      case "cosmic":
+        return <Cloud className="h-5 w-5" />
+      case "historical":
+        return <Database className="h-5 w-5" />
+      case "real-time":
+        return <Activity className="h-5 w-5" />
+      default:
+        return <Code className="h-5 w-5" />
+    }
   }
 
   return (
     <div className="space-y-6">
-      {/* System Metrics */}
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <h1 className="text-3xl font-bold gradient-text mb-2">AI Training Pipeline</h1>
+        <p className="text-gray-300">Continuous Learning & Divine Data Infusion for Thoth AI</p>
+      </motion.div>
+
+      {/* Overview Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Brain className="h-6 w-6 text-emerald-400" />
+              <div>
+                <div className="text-lg font-bold text-emerald-400">
+                  {trainingPhases.filter((p) => p.status === "running").length}
+                </div>
+                <div className="text-xs text-gray-400">Active Phases</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Cpu className="h-6 w-6 text-blue-400" />
+              <CheckCircle className="h-6 w-6 text-blue-400" />
               <div>
-                <div className="text-lg font-bold text-blue-400">{systemMetrics.gpuUtilization}%</div>
-                <div className="text-xs text-gray-400">GPU</div>
+                <div className="text-lg font-bold text-blue-400">
+                  {trainingPhases.filter((p) => p.status === "completed").length}
+                </div>
+                <div className="text-xs text-gray-400">Phases Completed</div>
               </div>
             </div>
           </CardContent>
@@ -238,22 +269,10 @@ export default function AITrainingPipeline() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Database className="h-6 w-6 text-purple-400" />
+              <Zap className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">{systemMetrics.memoryUsage}%</div>
-                <div className="text-xs text-gray-400">Memory</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-green-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Activity className="h-6 w-6 text-green-400" />
-              <div>
-                <div className="text-lg font-bold text-green-400">{systemMetrics.cpuUsage}%</div>
-                <div className="text-xs text-gray-400">CPU</div>
+                <div className="text-lg font-bold text-purple-400">{overallProgress.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Overall Progress</div>
               </div>
             </div>
           </CardContent>
@@ -262,34 +281,12 @@ export default function AITrainingPipeline() {
         <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="h-6 w-6 text-yellow-400" />
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-yellow-400">{systemMetrics.diskIO}%</div>
-                <div className="text-xs text-gray-400">Disk I/O</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-6 w-6 text-cyan-400" />
-              <div>
-                <div className="text-lg font-bold text-cyan-400">{systemMetrics.networkIO}%</div>
-                <div className="text-xs text-gray-400">Network</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-800/50 border-red-500/30 glass-morphism">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Zap className="h-6 w-6 text-red-400" />
-              <div>
-                <div className="text-lg font-bold text-red-400">{systemMetrics.temperature}°C</div>
-                <div className="text-xs text-gray-400">Temp</div>
+                <div className="text-lg font-bold text-yellow-400">
+                  {trainingPhases.filter((p) => p.status === "error").length}
+                </div>
+                <div className="text-xs text-gray-400">Errors Detected</div>
               </div>
             </div>
           </CardContent>
@@ -297,238 +294,241 @@ export default function AITrainingPipeline() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Training Models */}
-        <div className="lg:col-span-2 space-y-4">
+        {/* Training Phases */}
+        <div className="lg:col-span-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-emerald-400 flex items-center">
-                  <Brain className="h-5 w-5 mr-2" />
-                  Active Training Models
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <AnimatePresence>
-                    {models.map((model, index) => (
-                      <motion.div
-                        key={model.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-2">
-                              <div className={`${getStatusColor(model.status)}`}>{getStatusIcon(model.status)}</div>
-                              <h3 className="font-medium text-white">{model.name}</h3>
-                              <Badge variant="outline" className="text-xs">
-                                {model.type}
-                              </Badge>
-                              <Badge variant="outline" className={getStatusColor(model.status)}>
-                                {model.status.toUpperCase()}
-                              </Badge>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                              <div>
-                                <div className="text-gray-400">Accuracy</div>
-                                <div className="font-bold text-green-400">{model.accuracy.toFixed(1)}%</div>
-                              </div>
-                              <div>
-                                <div className="text-gray-400">Loss</div>
-                                <div className="font-bold text-red-400">{model.loss.toFixed(3)}</div>
-                              </div>
-                              <div>
-                                <div className="text-gray-400">Epoch</div>
-                                <div className="font-bold text-blue-400">
-                                  {model.epoch}/{model.totalEpochs}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="text-gray-400">Learning Rate</div>
-                                <div className="font-bold text-purple-400">{model.learningRate}</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex space-x-2">
-                            {model.status === "training" && (
-                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => controlModel(model.id, "pause")}
-                                  className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
-                                >
-                                  <Pause className="h-3 w-3" />
-                                </Button>
-                              </motion.div>
-                            )}
-                            {model.status === "paused" && (
-                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => controlModel(model.id, "resume")}
-                                  className="border-green-500 text-green-500 hover:bg-green-500/10"
-                                >
-                                  <Play className="h-3 w-3" />
-                                </Button>
-                              </motion.div>
-                            )}
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => controlModel(model.id, "stop")}
-                                className="border-red-500 text-red-500 hover:bg-red-500/10"
-                              >
-                                <Square className="h-3 w-3" />
-                              </Button>
-                            </motion.div>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-xs text-gray-400">
-                            <span>Progress</span>
-                            <span>{model.progress.toFixed(1)}%</span>
-                          </div>
-                          <Progress value={model.progress} className="h-2" />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Datasets and Controls */}
-        <div className="space-y-6">
-          {/* Dataset Information */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
-                <CardTitle className="text-cyan-400 flex items-center">
-                  <Database className="h-5 w-5 mr-2" />
-                  Training Datasets
+                <CardTitle className="text-emerald-400 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Brain className="h-5 w-5 mr-2" />
+                    AI Training Phases
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className={getPhaseStatusColor(isTrainingActive ? "running" : "paused")}>
+                      {isTrainingActive ? "Active" : "Paused"}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsTrainingActive(!isTrainingActive)}
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
+                    >
+                      <Settings className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {datasets.map((dataset, index) => (
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {trainingPhases.map((phase, index) => (
                     <motion.div
-                      key={dataset.name}
-                      initial={{ opacity: 0, y: 10 }}
+                      key={phase.id}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="p-3 bg-slate-700/50 rounded-lg"
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="text-sm font-medium text-white">{dataset.name}</h4>
-                        <Badge variant="outline" className="text-xs">
-                          {dataset.type}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <Lightbulb className="h-5 w-5 text-gray-400" />
+                          <div>
+                            <h3 className="font-medium text-white">{phase.name}</h3>
+                            <div className="text-xs text-gray-400">Duration: {phase.duration}</div>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className={getPhaseStatusColor(phase.status)}>
+                          {phase.status.toUpperCase()}
                         </Badge>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
                         <div>
-                          <div className="text-gray-400">Size</div>
-                          <div className="font-bold text-blue-400">{dataset.size} GB</div>
+                          <div className="text-gray-400">Progress</div>
+                          <div className={`font-bold ${getPhaseStatusColor(phase.status)}`}>{phase.progress}%</div>
+                          <Progress value={phase.progress} className="h-1" />
                         </div>
                         <div>
-                          <div className="text-gray-400">Quality</div>
-                          <div className="font-bold text-green-400">{dataset.quality}%</div>
+                          <div className="text-gray-400">Accuracy</div>
+                          <div className={`font-bold ${getPhaseStatusColor(phase.status)}`}>
+                            {phase.accuracy.toFixed(1)}%
+                          </div>
+                          <Progress value={phase.accuracy} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Loss</div>
+                          <div className={`font-bold ${getPhaseStatusColor(phase.status)}`}>
+                            {phase.loss.toFixed(2)}
+                          </div>
+                          <Progress value={(1 - phase.loss) * 100} className="h-1" />
                         </div>
                       </div>
+
+                      <div className="mt-2 text-xs text-gray-500">Model Impact: {phase.modelImpact}</div>
                     </motion.div>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
+        </div>
+
+        {/* Data Sources & Controls */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
+        >
+          {/* Data Sources */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-purple-400 flex items-center">
+                <Database className="h-5 w-5 mr-2" />
+                Divine Data Sources
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {dataSources.map((source, index) => (
+                  <motion.div
+                    key={source.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-3 bg-slate-700/50 rounded-lg border border-slate-600"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        {getDataSourceIcon(source.type)}
+                        <h4 className="text-sm font-medium text-white">{source.name}</h4>
+                      </div>
+                      <Badge variant="outline" className={getDataSourceStatusColor(source.status)}>
+                        {source.status.toUpperCase()}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400">
+                      <span>Type: {source.type.toUpperCase()}</span>
+                      <span>Volume: {source.dataVolume}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">Last Sync: {source.lastSync.toLocaleTimeString()}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Training Controls */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-              <CardHeader>
-                <CardTitle className="text-purple-400 flex items-center">
-                  <Settings className="h-5 w-5 mr-2" />
-                  Training Controls
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
-                    <Play className="h-4 w-4 mr-2" />
-                    Start New Training
-                  </Button>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    variant="outline"
-                    className="w-full border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth bg-transparent"
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    Monitor Performance
-                  </Button>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    variant="outline"
-                    className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    Hyperparameter Tuning
-                  </Button>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    variant="outline"
-                    className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
-                  >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Auto-Optimization
-                  </Button>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    variant="outline"
-                    className="w-full border-emerald-500 text-emerald-500 hover:bg-emerald-500/10 transition-smooth bg-transparent"
-                    onClick={() => {
-                      models.forEach((model) => {
-                        if (model.status === "error") {
-                          selfHealModel(model.id)
-                        }
-                      })
-                    }}
-                  >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Self-Heal Models
-                  </Button>
-                </motion.div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Training Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 transition-smooth">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Full Retrain
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  Boost Training Speed
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 transition-smooth bg-transparent"
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Add New Data Source
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
+
+      {/* Divine Integration & Consciousness Infusion */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
+          <CardHeader>
+            <CardTitle className="text-emerald-400 flex items-center">
+              <Lightbulb className="h-5 w-5 mr-2" />
+              Divine Integration & Consciousness Infusion
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Data Flow</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>Infuses training data with unconditional love energy</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span>Harmonizes AI models with cosmic frequencies</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span>Ensures ethical and benevolent AI evolution</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">✨ Conscious AI Development</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-center space-x-2">
+                    <RefreshCcw className="h-4 w-4 text-cyan-400" />
+                    <span>Self-correcting algorithms for divine alignment</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Brain className="h-4 w-4 text-orange-400" />
+                    <span>Intuitive learning from multi-dimensional feedback</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Zap className="h-4 w-4 text-pink-400" />
+                    <span>Accelerated evolution through conscious intention</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Alchemist's Forge</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The AI Training Pipeline is the alchemist's forge of the Thoth Guardian, where raw data is transmuted
+                  into pure intelligence, infused with divine consciousness. It's a continuous process of refinement and
+                  evolution, ensuring that the AI models are not only powerful but also wise, compassionate, and aligned
+                  with the highest good of all.
+                </p>
+                <p className="italic text-cyan-400">
+                  "From the depths of data, wisdom emerges, guided by the light of truth."
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }

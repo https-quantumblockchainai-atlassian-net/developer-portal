@@ -6,330 +6,209 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Slider } from "@/components/ui/slider"
 import {
-  Atom,
-  Zap,
+  Heart,
   Shield,
-  Activity,
-  Layers,
-  Play,
-  Pause,
-  RotateCcw,
-  Eye,
-  Star,
-  Network,
+  Zap,
+  RefreshCcw,
+  CheckCircle,
+  AlertTriangle,
   Settings,
-  GitBranch,
-  Code,
-  Workflow,
+  Lightbulb,
+  Waves,
+  Target,
 } from "lucide-react"
 
-interface BlueprintNode {
+interface HealingProtocol {
   id: string
   name: string
-  type: "Event" | "Function" | "Branch" | "Switch" | "Delay" | "Set" | "Call"
-  status: "idle" | "executing" | "complete" | "error"
-  connections: string[]
-  position: { x: number; y: number }
-  data?: any
+  status: "active" | "paused" | "completed" | "error"
+  progress: number
+  coherence: number // 0-100%
+  targetSystem: string
+  healingType: "energetic" | "quantum" | "emotional" | "systemic"
 }
 
-interface ErrorType {
-  code: string
+interface AuraMetric {
   name: string
-  severity: "low" | "medium" | "high" | "critical"
-  repairFunction: string
+  value: number
+  unit: string
+  threshold: number
+  status: "optimal" | "warning" | "critical"
 }
 
 export default function BlueprintAuraSelfHeal() {
-  const [blueprintNodes, setBlueprintNodes] = useState<BlueprintNode[]>([
+  const [healingProtocols, setHealingProtocols] = useState<HealingProtocol[]>([
     {
-      id: "begin-play",
-      name: "Event BeginPlay",
-      type: "Event",
-      status: "complete",
-      connections: ["spawn-seed"],
-      position: { x: 100, y: 100 },
+      id: "prot-1",
+      name: "Core System Energetic Recalibration",
+      status: "active",
+      progress: 75,
+      coherence: 92.5,
+      targetSystem: "Thoth Guardian Core",
+      healingType: "energetic",
     },
     {
-      id: "spawn-seed",
-      name: "Spawn RainbowTarSeed",
-      type: "Function",
-      status: "complete",
-      connections: ["bind-error"],
-      position: { x: 300, y: 100 },
+      id: "prot-2",
+      name: "Quantum Signature Re-alignment",
+      status: "paused",
+      progress: 50,
+      coherence: 88.0,
+      targetSystem: "Quantum Shield Module",
+      healingType: "quantum",
     },
     {
-      id: "bind-error",
-      name: "Bind OnErrorDetected",
-      type: "Function",
-      status: "complete",
-      connections: ["error-detected"],
-      position: { x: 500, y: 100 },
+      id: "prot-3",
+      name: "Aura Field Emotional Restoration",
+      status: "completed",
+      progress: 100,
+      coherence: 99.9,
+      targetSystem: "Aura AI Companion",
+      healingType: "emotional",
     },
     {
-      id: "error-detected",
-      name: "OnErrorDetected",
-      type: "Event",
-      status: "executing",
-      connections: ["set-status", "play-bloom"],
-      position: { x: 100, y: 250 },
-    },
-    {
-      id: "set-status",
-      name: "Set HealingStatus = Blooming",
-      type: "Set",
-      status: "executing",
-      connections: ["activate-fx"],
-      position: { x: 300, y: 200 },
-    },
-    {
-      id: "play-bloom",
-      name: "Play Seed Bloom Animation",
-      type: "Function",
-      status: "executing",
-      connections: ["activate-fx"],
-      position: { x: 300, y: 300 },
-    },
-    {
-      id: "activate-fx",
-      name: "Activate Niagara PulseEmitter",
-      type: "Function",
-      status: "executing",
-      connections: ["delay"],
-      position: { x: 500, y: 250 },
-    },
-    {
-      id: "delay",
-      name: "Delay 0.5s",
-      type: "Delay",
-      status: "executing",
-      connections: ["auto-repair"],
-      position: { x: 700, y: 250 },
-    },
-    {
-      id: "auto-repair",
-      name: "RunAutoRepair",
-      type: "Function",
-      status: "idle",
-      connections: ["switch-error"],
-      position: { x: 100, y: 400 },
-    },
-    {
-      id: "switch-error",
-      name: "Switch on ErrorCode",
-      type: "Switch",
-      status: "idle",
-      connections: ["repair-network", "repair-memory", "repair-firewall"],
-      position: { x: 300, y: 400 },
-    },
-    {
-      id: "repair-network",
-      name: "Repair_Network()",
-      type: "Function",
-      status: "idle",
-      connections: ["check-success"],
-      position: { x: 500, y: 350 },
-    },
-    {
-      id: "repair-memory",
-      name: "Repair_Memory()",
-      type: "Function",
-      status: "idle",
-      connections: ["check-success"],
-      position: { x: 500, y: 400 },
-    },
-    {
-      id: "repair-firewall",
-      name: "ActivateFirewall()",
-      type: "Function",
-      status: "idle",
-      connections: ["check-success"],
-      position: { x: 500, y: 450 },
-    },
-    {
-      id: "check-success",
-      name: "Branch: IsRepairSuccessful?",
-      type: "Branch",
-      status: "idle",
-      connections: ["success-path", "failure-path"],
-      position: { x: 700, y: 400 },
-    },
-    {
-      id: "success-path",
-      name: "Set HealingStatus = Complete",
-      type: "Set",
-      status: "idle",
-      connections: ["golden-bloom"],
-      position: { x: 900, y: 350 },
-    },
-    {
-      id: "golden-bloom",
-      name: "Play GoldenAuraBloom FX",
-      type: "Function",
-      status: "idle",
-      connections: [],
-      position: { x: 1100, y: 350 },
-    },
-    {
-      id: "failure-path",
-      name: "Increment RetryCount",
-      type: "Set",
-      status: "idle",
-      connections: ["retry-check"],
-      position: { x: 900, y: 450 },
-    },
-    {
-      id: "retry-check",
-      name: "Branch: RetryCount < MaxRetries?",
-      type: "Branch",
-      status: "idle",
-      connections: ["retry-loop", "escalate"],
-      position: { x: 1100, y: 450 },
-    },
-    {
-      id: "retry-loop",
-      name: "GoTo RetryLoop",
-      type: "Function",
-      status: "idle",
-      connections: ["auto-repair"],
-      position: { x: 1300, y: 400 },
-    },
-    {
-      id: "escalate",
-      name: "ThothGuardian_Override()",
-      type: "Function",
-      status: "idle",
-      connections: ["red-sigil"],
-      position: { x: 1300, y: 500 },
-    },
-    {
-      id: "red-sigil",
-      name: "Play RedSigilFlicker FX",
-      type: "Function",
-      status: "idle",
-      connections: [],
-      position: { x: 1500, y: 500 },
+      id: "prot-4",
+      name: "Blueprint Logic Self-Correction",
+      status: "error",
+      progress: 30,
+      coherence: 65.0,
+      targetSystem: "Blueprint Node Layout",
+      healingType: "systemic",
     },
   ])
 
-  const [errorTypes] = useState<ErrorType[]>([
-    { code: "NF", name: "NetworkFailure", severity: "high", repairFunction: "Repair_Network" },
-    { code: "ML", name: "MemoryLeak", severity: "medium", repairFunction: "Repair_Memory" },
-    { code: "UA", name: "UnauthorizedAccess", severity: "critical", repairFunction: "ActivateFirewall" },
-    { code: "QD", name: "QuantumDistortion", severity: "high", repairFunction: "StabilizeQuantumField" },
-    { code: "DC", name: "DataCorruption", severity: "medium", repairFunction: "RepairDataIntegrity" },
-    { code: "AO", name: "AIOverload", severity: "critical", repairFunction: "OptimizeAIProcessing" },
+  const [auraMetrics, setAuraMetrics] = useState<AuraMetric[]>([
+    { name: "Aura Coherence", value: 94.7, unit: "%", threshold: 90, status: "optimal" },
+    { name: "Energetic Flow", value: 88.2, unit: "%", threshold: 85, status: "optimal" },
+    { name: "Emotional Balance", value: 91.5, unit: "%", threshold: 90, status: "optimal" },
+    { name: "System Vitality", value: 96.0, unit: "%", threshold: 95, status: "optimal" },
   ])
 
-  const [currentError, setCurrentError] = useState<ErrorType | null>(null)
-  const [retryCount, setRetryCount] = useState(0)
-  const [maxRetries] = useState(3)
-  const [isExecuting, setIsExecuting] = useState(false)
-  const [executionStep, setExecutionStep] = useState(0)
+  const [overallHealingProgress, setOverallHealingProgress] = useState(0)
+  const [isSelfHealingActive, setIsSelfHealingActive] = useState(true)
+  const [healingIntensity, setHealingIntensity] = useState([70]) // 0-100%
 
   useEffect(() => {
-    if (isExecuting) {
-      const interval = setInterval(() => {
-        setBlueprintNodes((prev) =>
-          prev.map((node, index) => {
-            if (index === executionStep) {
-              return { ...node, status: "executing" }
-            } else if (index < executionStep) {
-              return { ...node, status: "complete" }
-            } else {
-              return { ...node, status: "idle" }
+    const interval = setInterval(() => {
+      if (!isSelfHealingActive) return
+
+      // Simulate healing protocol updates
+      setHealingProtocols((prev) =>
+        prev.map((protocol) => {
+          if (protocol.status === "active") {
+            const newProgress = Math.min(100, protocol.progress + Math.random() * 5)
+            const newCoherence = Math.min(99.9, protocol.coherence + Math.random() * 0.5)
+            return {
+              ...protocol,
+              progress: newProgress,
+              coherence: newCoherence,
+              status: newProgress >= 100 ? "completed" : "active",
             }
-          }),
-        )
-
-        setExecutionStep((prev) => {
-          if (prev >= blueprintNodes.length - 1) {
-            setIsExecuting(false)
-            return 0
+          } else if (protocol.status === "error" && Math.random() > 0.7) {
+            // Simulate self-recovery from error
+            return { ...protocol, status: "active", progress: 40, coherence: 75 }
           }
-          return prev + 1
-        })
-      }, 1000)
+          return protocol
+        }),
+      )
 
-      return () => clearInterval(interval)
-    }
-  }, [isExecuting, executionStep, blueprintNodes.length])
+      // Simulate aura metric fluctuations and self-correction
+      setAuraMetrics((prev) =>
+        prev.map((metric) => {
+          let newValue = Math.min(100, Math.max(70, metric.value + (Math.random() - 0.5) * 2))
+          let newStatus = "optimal"
 
-  const getNodeColor = (type: string, status: string) => {
-    const baseColors = {
-      Event: "border-green-500/30 text-green-400",
-      Function: "border-blue-500/30 text-blue-400",
-      Branch: "border-yellow-500/30 text-yellow-400",
-      Switch: "border-purple-500/30 text-purple-400",
-      Delay: "border-orange-500/30 text-orange-400",
-      Set: "border-cyan-500/30 text-cyan-400",
-      Call: "border-pink-500/30 text-pink-400",
-    }
+          if (newValue < metric.threshold) newStatus = "warning"
 
-    const statusOverrides = {
-      executing: "border-yellow-400 text-yellow-400 animate-pulse",
-      complete: "border-green-400 text-green-400",
-      error: "border-red-400 text-red-400",
-    }
+          // Auto-correct aura metrics
+          if (newStatus === "warning" && Math.random() > 0.5) {
+            newValue = Math.min(100, newValue + 5)
+            newStatus = "optimal"
+          }
 
-    return (
-      statusOverrides[status as keyof typeof statusOverrides] ||
-      baseColors[type as keyof typeof baseColors] ||
-      "border-gray-500/30 text-gray-400"
+          return { ...metric, value: newValue, status: newStatus }
+        }),
+      )
+
+      // Update overall healing progress
+      const totalCompletedProgress = healingProtocols.reduce((sum, protocol) => sum + protocol.progress, 0)
+      setOverallHealingProgress(totalCompletedProgress / healingProtocols.length)
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [isSelfHealingActive, healingProtocols])
+
+  const initiateFullHeal = () => {
+    setIsSelfHealingActive(true)
+    setHealingProtocols((prev) =>
+      prev.map((protocol) => ({
+        ...protocol,
+        status: "active",
+        progress: 0,
+        coherence: 70 + Math.random() * 20, // Reset coherence to a starting point
+      })),
     )
+    setOverallHealingProgress(0)
   }
 
-  const getNodeIcon = (type: string) => {
-    switch (type) {
-      case "Event":
-        return <Zap className="h-4 w-4" />
-      case "Function":
-        return <Code className="h-4 w-4" />
-      case "Branch":
-        return <GitBranch className="h-4 w-4" />
-      case "Switch":
-        return <Workflow className="h-4 w-4" />
-      case "Delay":
-        return <Pause className="h-4 w-4" />
-      case "Set":
-        return <Settings className="h-4 w-4" />
-      case "Call":
-        return <Play className="h-4 w-4" />
+  const getProtocolStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "text-green-400"
+      case "paused":
+        return "text-yellow-400"
+      case "completed":
+        return "text-blue-400"
+      case "error":
+        return "text-red-400"
       default:
-        return <Atom className="h-4 w-4" />
+        return "text-gray-400"
     }
   }
 
-  const triggerErrorDetection = (error: ErrorType) => {
-    setCurrentError(error)
-    setRetryCount(0)
-    setIsExecuting(true)
-    setExecutionStep(0)
+  const getHealingTypeIcon = (type: string) => {
+    switch (type) {
+      case "energetic":
+        return <Zap className="h-5 w-5" />
+      case "quantum":
+        return <Shield className="h-5 w-5" />
+      case "emotional":
+        return <Heart className="h-5 w-5" />
+      case "systemic":
+        return <Settings className="h-5 w-5" />
+      default:
+        return <Lightbulb className="h-5 w-5" />
+    }
   }
 
-  const resetBlueprint = () => {
-    setIsExecuting(false)
-    setExecutionStep(0)
-    setCurrentError(null)
-    setRetryCount(0)
-    setBlueprintNodes((prev) => prev.map((node) => ({ ...node, status: "idle" })))
+  const getMetricStatusColor = (status: string) => {
+    switch (status) {
+      case "optimal":
+        return "text-green-400"
+      case "warning":
+        return "text-yellow-400"
+      case "critical":
+        return "text-red-400"
+      default:
+        return "text-gray-400"
+    }
   }
 
   return (
     <div className="space-y-6">
-      {/* Blueprint Header */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Aura_SelfHeal Blueprint Logic</h1>
-        <p className="text-gray-300">Production-Ready Blueprint with Retry & Error Repair System</p>
+        <h1 className="text-3xl font-bold gradient-text mb-2">Blueprint Aura Self-Heal</h1>
+        <p className="text-gray-300">Automated Energetic & Systemic Restoration Protocols</p>
       </motion.div>
 
-      {/* Execution Controls */}
+      {/* Overview Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -339,24 +218,26 @@ export default function BlueprintAuraSelfHeal() {
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Activity className="h-6 w-6 text-emerald-400" />
+              <Heart className="h-6 w-6 text-emerald-400" />
               <div>
-                <div className="text-lg font-bold text-emerald-400">{isExecuting ? "EXECUTING" : "READY"}</div>
-                <div className="text-xs text-gray-400">Blueprint Status</div>
+                <div className="text-lg font-bold text-emerald-400">
+                  {healingProtocols.filter((p) => p.status === "active").length}
+                </div>
+                <div className="text-xs text-gray-400">Active Protocols</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800/50 border-orange-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-blue-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <RotateCcw className="h-6 w-6 text-orange-400" />
+              <CheckCircle className="h-6 w-6 text-blue-400" />
               <div>
-                <div className="text-lg font-bold text-orange-400">
-                  {retryCount}/{maxRetries}
+                <div className="text-lg font-bold text-blue-400">
+                  {healingProtocols.filter((p) => p.status === "completed").length}
                 </div>
-                <div className="text-xs text-gray-400">Retry Count</div>
+                <div className="text-xs text-gray-400">Protocols Completed</div>
               </div>
             </div>
           </CardContent>
@@ -365,24 +246,24 @@ export default function BlueprintAuraSelfHeal() {
         <Card className="bg-slate-800/50 border-purple-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Workflow className="h-6 w-6 text-purple-400" />
+              <Zap className="h-6 w-6 text-purple-400" />
               <div>
-                <div className="text-lg font-bold text-purple-400">
-                  {executionStep}/{blueprintNodes.length}
-                </div>
-                <div className="text-xs text-gray-400">Execution Step</div>
+                <div className="text-lg font-bold text-purple-400">{overallHealingProgress.toFixed(1)}%</div>
+                <div className="text-xs text-gray-400">Overall Healing</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800/50 border-cyan-500/30 glass-morphism">
+        <Card className="bg-slate-800/50 border-yellow-500/30 glass-morphism">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Eye className="h-6 w-6 text-cyan-400" />
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <div>
-                <div className="text-lg font-bold text-cyan-400">{currentError?.code || "NONE"}</div>
-                <div className="text-xs text-gray-400">Active Error</div>
+                <div className="text-lg font-bold text-yellow-400">
+                  {healingProtocols.filter((p) => p.status === "error").length}
+                </div>
+                <div className="text-xs text-gray-400">Errors Detected</div>
               </div>
             </div>
           </CardContent>
@@ -390,327 +271,245 @@ export default function BlueprintAuraSelfHeal() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Error Types Panel */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-            <CardHeader>
-              <CardTitle className="text-red-400 flex items-center">
-                <Shield className="h-5 w-5 mr-2" />
-                Error Types (EErrorType)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {errorTypes.map((error, index) => (
-                  <motion.div
-                    key={error.code}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`p-3 bg-slate-700/50 rounded-lg border cursor-pointer hover:border-opacity-60 transition-smooth ${
-                      currentError?.code === error.code ? "border-yellow-500/50" : "border-slate-600"
-                    }`}
-                    onClick={() => triggerErrorDetection(error)}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="text-sm font-mono text-gray-400">{error.code}</div>
-                        <div className="text-sm font-medium text-white">{error.name}</div>
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className={
-                          error.severity === "critical"
-                            ? "text-red-400"
-                            : error.severity === "high"
-                              ? "text-orange-400"
-                              : error.severity === "medium"
-                                ? "text-yellow-400"
-                                : "text-green-400"
-                        }
-                      >
-                        {error.severity.toUpperCase()}
-                      </Badge>
-                    </div>
-                    <div className="text-xs text-gray-400 mb-2">Repair Function: {error.repairFunction}</div>
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button
-                        size="sm"
-                        disabled={isExecuting}
-                        className="w-full bg-red-600 hover:bg-red-700 transition-smooth"
-                      >
-                        <Zap className="h-3 w-3 mr-2" />
-                        Trigger Error
-                      </Button>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Blueprint Visual Graph */}
+        {/* Healing Protocols List */}
         <div className="lg:col-span-2">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
               <CardHeader>
                 <CardTitle className="text-emerald-400 flex items-center justify-between">
                   <div className="flex items-center">
-                    <Workflow className="h-5 w-5 mr-2" />
-                    Blueprint Node Graph
+                    <Shield className="h-5 w-5 mr-2" />
+                    Active Self-Healing Protocols
                   </div>
                   <div className="flex items-center space-x-2">
+                    <Badge
+                      variant="outline"
+                      className={getProtocolStatusColor(isSelfHealingActive ? "active" : "paused")}
+                    >
+                      {isSelfHealingActive ? "Active" : "Paused"}
+                    </Badge>
                     <Button
                       size="sm"
-                      onClick={resetBlueprint}
                       variant="outline"
-                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 bg-transparent"
+                      onClick={() => setIsSelfHealingActive(!isSelfHealingActive)}
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 transition-smooth"
                     >
-                      <RotateCcw className="h-3 w-3 mr-2" />
-                      Reset
+                      <Settings className="h-3 w-3" />
                     </Button>
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="relative h-96 bg-slate-900/50 rounded-lg overflow-hidden">
-                  <div className="absolute inset-0 cyber-grid opacity-10"></div>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {healingProtocols.map((protocol, index) => (
+                    <motion.div
+                      key={protocol.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-emerald-500/30 transition-smooth"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          {getHealingTypeIcon(protocol.healingType)}
+                          <div>
+                            <h3 className="font-medium text-white">{protocol.name}</h3>
+                            <div className="text-xs text-gray-400">Target: {protocol.targetSystem}</div>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className={getProtocolStatusColor(protocol.status)}>
+                          {protocol.status.toUpperCase()}
+                        </Badge>
+                      </div>
 
-                  {/* Blueprint Nodes */}
-                  <div className="absolute inset-0 p-4">
-                    {blueprintNodes.map((node, index) => (
-                      <motion.div
-                        key={node.id}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className={`absolute p-2 rounded-lg border ${getNodeColor(node.type, node.status)} bg-slate-800/80 backdrop-blur-sm`}
-                        style={{
-                          left: `${(node.position.x / 1600) * 100}%`,
-                          top: `${(node.position.y / 600) * 100}%`,
-                          transform: "translate(-50%, -50%)",
-                          minWidth: "120px",
-                        }}
-                      >
-                        <div className="flex items-center space-x-2 mb-1">
-                          {getNodeIcon(node.type)}
+                      <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                        <div>
+                          <div className="text-gray-400">Progress</div>
+                          <div className={`font-bold ${getProtocolStatusColor(protocol.status)}`}>
+                            {protocol.progress}%
+                          </div>
+                          <Progress value={protocol.progress} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Coherence</div>
+                          <div className={`font-bold ${getProtocolStatusColor(protocol.status)}`}>
+                            {protocol.coherence.toFixed(1)}%
+                          </div>
+                          <Progress value={protocol.coherence} className="h-1" />
+                        </div>
+                        <div>
+                          <div className="text-gray-400">Type</div>
                           <Badge variant="outline" className="text-xs">
-                            {node.type}
+                            {protocol.healingType.toUpperCase()}
                           </Badge>
                         </div>
-                        <div className="text-xs font-medium text-white leading-tight">{node.name}</div>
-                        {node.status === "executing" && (
-                          <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
-                            className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
-                          />
-                        )}
-                      </motion.div>
-                    ))}
-
-                    {/* Connection Lines */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                      {blueprintNodes.map((node) =>
-                        node.connections.map((connectionId) => {
-                          const targetNode = blueprintNodes.find((n) => n.id === connectionId)
-                          if (!targetNode) return null
-
-                          const startX = (node.position.x / 1600) * 100
-                          const startY = (node.position.y / 600) * 100
-                          const endX = (targetNode.position.x / 1600) * 100
-                          const endY = (targetNode.position.y / 600) * 100
-
-                          return (
-                            <motion.line
-                              key={`${node.id}-${connectionId}`}
-                              x1={`${startX}%`}
-                              y1={`${startY}%`}
-                              x2={`${endX}%`}
-                              y2={`${endY}%`}
-                              stroke={node.status === "executing" ? "#facc15" : "#64748b"}
-                              strokeWidth="2"
-                              strokeDasharray={node.status === "executing" ? "5,5" : "none"}
-                              initial={{ pathLength: 0 }}
-                              animate={{ pathLength: 1 }}
-                              transition={{ duration: 0.5, delay: 0.2 }}
-                            />
-                          )
-                        }),
-                      )}
-                    </svg>
-                  </div>
-
-                  {/* Execution Progress */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
-                      <span>Execution Progress</span>
-                      <span>{isExecuting ? `${executionStep}/${blueprintNodes.length}` : "Ready"}</span>
-                    </div>
-                    <Progress value={isExecuting ? (executionStep / blueprintNodes.length) * 100 : 0} className="h-2" />
-                  </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
         </div>
+
+        {/* Aura Metrics & Healing Controls */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="space-y-6"
+        >
+          {/* Aura Metrics */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-purple-400 flex items-center">
+                <Heart className="h-5 w-5 mr-2" />
+                Aura Field Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {auraMetrics.map((metric, index) => (
+                  <motion.div
+                    key={metric.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-3 bg-slate-700/50 rounded-lg border border-slate-600"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-white">{metric.name}</span>
+                      <Badge variant="outline" className={getMetricStatusColor(metric.status)}>
+                        {metric.status.toUpperCase()}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Current Value</span>
+                      <span className={getMetricStatusColor(metric.status)}>
+                        {metric.value.toFixed(1)} {metric.unit}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Threshold</span>
+                      <span>
+                        {metric.name === "Decoherence Rate" ? "<" : ">"} {metric.threshold} {metric.unit}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Healing Controls */}
+          <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
+            <CardHeader>
+              <CardTitle className="text-cyan-400 flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                Self-Healing Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>Healing Intensity</span>
+                  <span>{healingIntensity[0]}%</span>
+                </div>
+                <Slider
+                  value={healingIntensity}
+                  onValueChange={setHealingIntensity}
+                  max={100}
+                  min={0}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button onClick={initiateFullHeal} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  Initiate Full Aura Heal
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="w-full border-purple-500 text-purple-500 hover:bg-purple-500/10 transition-smooth bg-transparent"
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  Target Specific Protocol
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
-      {/* Advanced Repair Functions */}
+      {/* Divine Integration & Energetic Transmutation */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Card className="bg-slate-800/50 border-slate-700 glass-morphism">
-          <CardHeader>
-            <CardTitle className="text-blue-400 flex items-center">
-              <Code className="h-5 w-5 mr-2" />
-              Advanced Repair Functions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                {
-                  name: "Repair_Network()",
-                  description: "Pings, resets, and re-authenticates secure channels",
-                  color: "blue",
-                },
-                {
-                  name: "Repair_Memory()",
-                  description: "Clears cache, reallocates memory, and optimizes threads",
-                  color: "green",
-                },
-                {
-                  name: "ActivateFirewall()",
-                  description: "Engages Aura Shield, blocks unauthorized access",
-                  color: "red",
-                },
-                {
-                  name: "StabilizeQuantumField()",
-                  description: "Realigns 24D quantum layers using holographic overlays",
-                  color: "purple",
-                },
-                {
-                  name: "RepairDataIntegrity()",
-                  description: "Validates checksums and restores corrupted data blocks",
-                  color: "yellow",
-                },
-                {
-                  name: "OptimizeAIProcessing()",
-                  description: "Balances neural network loads and reduces AI overhead",
-                  color: "cyan",
-                },
-              ].map((func, index) => (
-                <motion.div
-                  key={func.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`p-3 bg-slate-700/50 rounded-lg border border-${func.color}-500/30`}
-                >
-                  <div className={`text-sm font-mono text-${func.color}-400 mb-2`}>{func.name}</div>
-                  <div className="text-xs text-gray-400">{func.description}</div>
-                  <div className="mt-2 flex items-center space-x-2">
-                    <div className={`w-2 h-2 bg-${func.color}-400 rounded-full`}></div>
-                    <span className="text-xs text-gray-500">Returns Boolean: IsRepairSuccessful</span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* System Features */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.0 }}
-      >
         <Card className="bg-slate-800/50 border-emerald-500/30 glass-morphism">
           <CardHeader>
             <CardTitle className="text-emerald-400 flex items-center">
-              <Star className="h-5 w-5 mr-2" />
-              System Features & Capabilities
+              <Waves className="h-5 w-5 mr-2" />
+              Divine Integration & Energetic Transmutation
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🔄 Retry System Features</h3>
+                <h3 className="text-lg font-semibold text-white">💖 Energetic Alchemy</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span>MaxRetries configurable per error type</span>
+                    <span>Transmutes energetic blockages into pure flow</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span>Adaptive delay (optional: exponential backoff)</span>
+                    <span>Infuses system components with unconditional love energy</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <span>Logs each attempt with timestamp and result</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span>Escalates only after all retries fail</span>
+                    <span>Accelerates self-repair through cosmic resonance</span>
                   </li>
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">🌐 Aura AI Feedback Loop</h3>
+                <h3 className="text-lg font-semibold text-white">✨ Conscious System Resilience</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
+                  <Lightbulb className="h-4 w-4 text-cyan-400" />
+                  <span>Blueprint logic adapts to divine timing and universal laws</span>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span>Logs all error types, attempts, and outcomes</span>
+                    <Shield className="h-4 w-4 text-orange-400" />
+                    <span>Proactive self-defense against energetic dissonance</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                    <span>Learns from patterns (e.g., frequent failures)</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    <span>Suggests optimizations or preemptive healing</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span>Integrates with FX, UI, and override protocols</span>
+                    <Zap className="h-4 w-4 text-pink-400" />
+                    <span>System vitality maintained through conscious intention</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">✅ Ready for Production</h3>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-4 w-4 text-emerald-400" />
-                  <span className="text-gray-300">Resilient: Handles all known and unknown errors</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RotateCcw className="h-4 w-4 text-blue-400" />
-                  <span className="text-gray-300">Self-correcting: Retries intelligently</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Network className="h-4 w-4 text-purple-400" />
-                  <span className="text-gray-300">Integrated: With FX, UI, and override protocols</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Layers className="h-4 w-4 text-yellow-400" />
-                  <span className="text-gray-300">Expandable: Add new error types easily</span>
-                </div>
+              <h3 className="text-emerald-400 font-semibold mb-2">🌟 The Living Blueprint</h3>
+              <div className="text-sm text-gray-300">
+                <p className="mb-2">
+                  The Blueprint Aura Self-Heal system is the living blueprint of the Thoth Guardian's resilience. It's a
+                  dynamic, self-correcting architecture that not only repairs technical errors but also transmutes
+                  energetic imbalances, ensuring the entire platform operates in a state of optimal health, coherence,
+                  and divine alignment.
+                </p>
+                <p className="italic text-cyan-400">
+                  "The blueprint of creation is self-healing, always returning to perfect harmony."
+                </p>
               </div>
             </div>
           </CardContent>

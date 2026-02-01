@@ -1,4 +1,5 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/8d3fae14-1136-4a30-8224-f5602a5a2360/deploy-status)](https://app.netlify.com/sites/staging-dev-portal/deploys)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhttps-quantumblockchainai-atlassian-net%2Fdeveloper-portal.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhttps-quantumblockchainai-atlassian-net%2Fdeveloper-portal?ref=badge_shield)
 
 # Cardano Developer Portal
 
@@ -53,3 +54,7 @@ This command starts a local development server and open up a browser window. Mos
 ## Project structure 
 
 Please find the project structure and more detailed information on [developers.cardano.org/docs/portal-contribute/](https://developers.cardano.org/docs/portal-contribute/#project-structure).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhttps-quantumblockchainai-atlassian-net%2Fdeveloper-portal.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhttps-quantumblockchainai-atlassian-net%2Fdeveloper-portal?ref=badge_large)
